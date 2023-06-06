@@ -5,7 +5,7 @@ from merchants.models import MerchantStore
 
 class Product(models.Model):
     merchant_store = models.ForeignKey(MerchantStore, on_delete=models.CASCADE, related_name="products")
-    department = models.ForeignKey(Department, on_delete=models.CASCADE, related_name="products")
+    department = models.ForeignKey(Department, on_delete=models.SET_NULL, related_name="products", null=True)
     department_section = models.ForeignKey(DepartmentSection, on_delete=models.SET_NULL, related_name="products", blank=True, null=True)
     department_sub_section = models.ForeignKey(DepartmentSubSection, on_delete=models.SET_NULL, related_name="products", blank=True, null=True)
     uid = models.CharField(max_length=20, blank=False, unique=True)
