@@ -20,7 +20,6 @@ env = os.getenv
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
@@ -30,7 +29,26 @@ SECRET_KEY = env('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    '192.168.1.235',
+    '192.168.1.235:3000',
+    '192.168.1.235:3001',
+    '192.168.1.235:3002'
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    'http://192.168.1.235:3000',   
+    'http://192.168.1.235:3001',   
+    'http://192.168.1.235:3002'   
+]
+
+CORS_ALLOW_CREDENTIALS = True
+CORS_ORIGIN_ALLOW_ALL = False
+CORS_ORIGIN_WHITELIST = (
+    'http://192.168.1.235:3000',   
+    'http://192.168.1.235:3001',   
+    'http://192.168.1.235:3002'   
+)
 
 
 # Application definition
@@ -45,6 +63,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
