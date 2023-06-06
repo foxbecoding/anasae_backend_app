@@ -27,22 +27,40 @@ class UserProfileImage(models.Model):
     updated = models.DateTimeField(auto_now_add=True, null=True)
     deleted = models.DateTimeField(null=True)
 
-class UserGenderChoice(models.Model):
+class UserGender(models.Model):
     gender = models.CharField(blank=False)
     is_active = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True, null=True)
     updated = models.DateTimeField(auto_now_add=True, null=True)
     deleted = models.DateTimeField(null=True)
 
-class UserGenderChoiceSelected(models.Model):
-    user_gender_choice = models.ForeignKey(UserGenderChoice, on_delete=models.CASCADE, related_name="choices_selected")
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="gender_choice_selected")
+class UserGenderChoice(models.Model):
+    user_gender = models.ForeignKey(UserGender, on_delete=models.CASCADE, related_name="choices", default="")
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="gender_choice", default="")
+    created = models.DateTimeField(auto_now_add=True, null=True)
+    updated = models.DateTimeField(auto_now_add=True, null=True)
+    deleted = models.DateTimeField(null=True)
+
+class UserCountry(models.Model):
+    name  = models.CharField(max_length=200, blank=False, null=False, unique=True)
+    code = models.CharField(max_length=10, blank=False, null=False)
+    is_active = models.BooleanField(default=False)
+    created = models.DateTimeField(auto_now_add=True, null=True)
+    updated = models.DateTimeField(auto_now_add=True, null=True)
+    deleted = models.DateTimeField(null=True)
+
+class UserCountryState(models.Model):
+    user_country = models.ForeignKey(UserCountry, on_delete=models.CASCADE, related_name="states")
+    name = models.CharField(max_length=200, blank=False, null=False)
+    code = models.CharField(max_length=10, blank=False, null=False)
+    is_active = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True, null=True)
     updated = models.DateTimeField(auto_now_add=True, null=True)
     deleted = models.DateTimeField(null=True)
 
 class UserAddress(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="addresses")
+    user_country_state = models.ForeignKey(UserCountryState, on_delete=models.SET_NULL, related_name="addresses", null=True)
     full_name = models.CharField(blank=False)
     phone_number = models.CharField(blank=False)
     street_address = models.CharField(max_length=1000, blank=False)
@@ -54,7 +72,7 @@ class UserAddress(models.Model):
     deleted = models.DateTimeField(null=True)
 
 class UserLogin(models.Model):
-    user = models.ForeignKey( User, on_delete=models.CASCADE, related_name='logins')
+    user = models.ForeignKey( User, on_delete=models.CASCADE, related_name="logins")
     ip_address = models.CharField(blank=True, null=True)
     latitude = models.FloatField(blank=True, null=True)
     longitude = models.FloatField(blank=True, null=True)
