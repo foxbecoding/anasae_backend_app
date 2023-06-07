@@ -2,10 +2,10 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from utils.helpers import create_uid
 
+
 class User(AbstractUser):
     uid = models.CharField(max_length=20, blank=True, unique=True)
     agreed_to_toa = models.BooleanField(default=False)
-    date_of_birth = models.DateField(blank=False)
     stripe_customer_id = models.CharField(max_length=200, blank=False)
     created = models.DateTimeField(auto_now_add=True, null=True)
     updated = models.DateTimeField(auto_now_add=True, null=True)
