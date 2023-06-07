@@ -20,7 +20,7 @@ class OrderItem(models.Model):
 
 class OrderItemFulfillment(models.Model):
   order_item = models.OneToOneField(OrderItem, on_delete=models.CASCADE, related_name="items")
-  shipping_label = models.CharField(blank=True, null=True)
+  shipping_label = models.CharField(max_length=200, blank=True, null=True)
   is_shipped = models.BooleanField(default=False)
   created = models.DateTimeField(auto_now_add=True, null=True)
   updated = models.DateTimeField(auto_now_add=True, null=True)
