@@ -7,7 +7,7 @@ class TestModels(TestCase):
     def setUp(self):
         date_time_str = '12/31/1990'
         date_time_obj = datetime.strptime(date_time_str, '%m/%d/%Y')
-        # print(date_time_obj)
+    
         self.user = User.objects.create(
             first_name = "Desmond",
             last_name = 'Fox',
