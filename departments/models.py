@@ -1,4 +1,5 @@
 from django.db import models
+from utils.helpers import create_uid
 
 class Department(models.Model):
     uid = models.CharField(max_length=20, blank=False, unique=True)
@@ -9,9 +10,12 @@ class Department(models.Model):
     updated = models.DateTimeField(auto_now_add=True, null=True)
     deleted = models.DateTimeField(null=True)
 
+    def save(self, *args, **kwargs):
+        self.uid = create_uid('d-')
+        super(Department, self).save(*args, **kwargs)
+
 class DepartmentCoverImage(models.Model):
     department = models.ForeignKey(Department, on_delete=models.CASCADE, related_name="cover_images")
-    uid = models.CharField(max_length=20, blank=False, unique=True)
     cover_image = models.ImageField(upload_to="images/department_media/main/cover_images/")
     is_active = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True, null=True)
@@ -20,7 +24,6 @@ class DepartmentCoverImage(models.Model):
 
 class DepartmentBannerImage(models.Model):
     department = models.ForeignKey(Department, on_delete=models.CASCADE, related_name="banner_images")
-    uid = models.CharField(max_length=20, blank=False, unique=True)
     banner_image = models.ImageField(upload_to="images/department_media/main/banner_images/")
     is_active = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True, null=True)
@@ -37,9 +40,12 @@ class DepartmentSection(models.Model):
     updated = models.DateTimeField(auto_now_add=True, null=True)
     deleted = models.DateTimeField(null=True)
 
+    def save(self, *args, **kwargs):
+        self.uid = create_uid('ds-')
+        super(Department, self).save(*args, **kwargs)
+
 class DepartmentSectionCoverImage(models.Model):
     department_section = models.ForeignKey(DepartmentSection, on_delete=models.CASCADE, related_name="cover_images")
-    uid = models.CharField(max_length=20, blank=False, unique=True)
     cover_image = models.ImageField(upload_to="images/department_media/sections/cover_images/")
     is_active = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True, null=True)
@@ -48,7 +54,6 @@ class DepartmentSectionCoverImage(models.Model):
 
 class DepartmentSectionBannerImage(models.Model):
     department_section = models.ForeignKey(DepartmentSection, on_delete=models.CASCADE, related_name="banner_images")
-    uid = models.CharField(max_length=20, blank=False, unique=True)
     banner_image = models.ImageField(upload_to="images/department_media/sections/banner_images/")
     is_active = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True, null=True)
@@ -65,9 +70,12 @@ class DepartmentSubSection(models.Model):
     updated = models.DateTimeField(auto_now_add=True, null=True)
     deleted = models.DateTimeField(null=True)
 
+    def save(self, *args, **kwargs):
+        self.uid = create_uid('dss-')
+        super(DepartmentSubSection, self).save(*args, **kwargs)
+
 class DepartmentSubSectionCoverImage(models.Model):
     department_sub_section = models.ForeignKey(DepartmentSubSection, on_delete=models.CASCADE, related_name="cover_images", blank=True, null=True)
-    uid = models.CharField(max_length=20, blank=False, unique=True)
     cover_image = models.ImageField(upload_to="images/department_media/sub_sections/cover_images/")
     is_active = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True, null=True)
@@ -76,7 +84,6 @@ class DepartmentSubSectionCoverImage(models.Model):
 
 class DepartmentSubSectionBannerImage(models.Model):
     department_sub_section = models.ForeignKey(DepartmentSubSection, on_delete=models.CASCADE, related_name="banner_images")
-    uid = models.CharField(max_length=20, blank=False, unique=True)
     banner_image = models.ImageField(upload_to="images/department_media/sub_sections/banner_images/")
     is_active = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True, null=True)
@@ -93,7 +100,6 @@ class DepartmentView(models.Model):
 
 class DepartmentProductSpecification(models.Model):
     department = models.OneToOneField(Department, on_delete=models.CASCADE, related_name="specification")
-    uid = models.CharField(max_length=20, blank=False, unique=True)
     is_active = models.BooleanField(default=True)
     created = models.DateTimeField(auto_now_add=True, null=True)
     updated = models.DateTimeField(auto_now_add=True, null=True)
@@ -116,7 +122,6 @@ class DepartmentProductSpecificationItemOption(models.Model):
 
 class DepartmentSectionProductSpecification(models.Model):
     department_section = models.OneToOneField(DepartmentSection, on_delete=models.CASCADE, related_name="specification")
-    uid = models.CharField(max_length=20, blank=False, unique=True)
     is_active = models.BooleanField(default=True)
     created = models.DateTimeField(auto_now_add=True, null=True)
     updated = models.DateTimeField(auto_now_add=True, null=True)
@@ -139,7 +144,6 @@ class DepartmentSectionProductSpecificationItemOption(models.Model):
 
 class DepartmentSubSectionProductSpecification(models.Model):
     department_sub_section = models.OneToOneField(DepartmentSubSection, on_delete=models.CASCADE, related_name="specification")
-    uid = models.CharField(max_length=20, blank=False, unique=True)
     is_active = models.BooleanField(default=True)
     created = models.DateTimeField(auto_now_add=True, null=True)
     updated = models.DateTimeField(auto_now_add=True, null=True)

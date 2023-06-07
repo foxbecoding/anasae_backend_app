@@ -2,6 +2,7 @@ from django.db import models
 from users.models import User
 from departments.models import Department, DepartmentSection, DepartmentSubSection
 from merchants.models import MerchantStore
+from utils.helpers import create_uid
 
 class Product(models.Model):
     merchant_store = models.ForeignKey(MerchantStore, on_delete=models.CASCADE, related_name="products")
@@ -18,6 +19,10 @@ class Product(models.Model):
     created = models.DateTimeField(auto_now_add=True, null=True)
     updated = models.DateTimeField(auto_now_add=True, null=True)
     deleted = models.DateTimeField(null=True)
+
+    def save(self, *args, **kwargs):
+        self.uid = create_uid('p-')
+        super(Product, self).save(*args, **kwargs)
 
 class ProductSpecification(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="specifications")
@@ -82,7 +87,6 @@ class ProductVariantItemSpecification(models.Model):
 
 class ProductVariantItemImage(models.Model):
     product_variant_item = models.ForeignKey(ProductVariantItem, on_delete=models.CASCADE, related_name="images")
-    uid = models.CharField(max_length=20, blank=False, unique=True)
     cover_image = models.ImageField(upload_to="images/product_media/", blank=True, null=True)
     order = models.IntegerField(blank=False)
     is_active = models.BooleanField(default=False)

@@ -1,5 +1,6 @@
 from django.db import models
 from users.models import User
+from utils.helpers import create_uid
 
 class Merchant(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="merchant")
@@ -10,8 +11,11 @@ class Merchant(models.Model):
     updated = models.DateTimeField(auto_now_add=True, null=True)
     deleted = models.DateTimeField(null=True)
 
+    def save(self, *args, **kwargs):
+        self.uid = create_uid('m-')
+        super(Merchant, self).save(*args, **kwargs)
+
 class MerchantPlan(models.Model):
-    uid = models.CharField(max_length=20, blank=False, unique=True)
     title = models.CharField(max_length=200, blank=False)
     description = models.CharField(max_length=2000, blank=False)
     merchant_plan_listings = models.IntegerField(blank=False)
@@ -22,7 +26,6 @@ class MerchantPlan(models.Model):
 
 class MerchantPlanPrice(models.Model):
     merchant_plan = models.ForeignKey(MerchantPlan, on_delete=models.CASCADE, related_name="plan_prices")
-    uid = models.CharField(max_length=20, blank=True, unique=True)
     title = models.CharField(max_length=200, blank=False)
     description = models.CharField(max_length=2000, blank=True, null=True)
     price = models.FloatField(blank=False)
@@ -59,6 +62,10 @@ class MerchantStore(models.Model):
     created = models.DateTimeField(auto_now_add=True, null=True)
     updated = models.DateTimeField(auto_now_add=True, null=True)
     deleted = models.DateTimeField(null=True)
+
+    def save(self, *args, **kwargs):
+        self.uid = create_uid('ms-')
+        super(MerchantStore, self).save(*args, **kwargs)
 
 class MerchantStoreView(models.Model):
     merchant_store = models.ForeignKey(MerchantStore, on_delete=models.CASCADE, related_name="views")
