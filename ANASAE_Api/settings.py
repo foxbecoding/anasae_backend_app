@@ -11,11 +11,17 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 from dotenv import load_dotenv
 from pathlib import Path
-import os
+import stripe, os
+
 
 load_dotenv()
 env = os.getenv
 
+
+#Set Stripe api key
+stripe.api_key = env('STRIPE_DEVELOPMENT_SECRET_KEY')
+if env('IS_DEVELOPMENT') == 'False':
+    stripe.api_key = env('STRIPE_PRODUCTION_SECRET_KEY')
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -27,9 +33,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
-if env('IS_DEVELOPMENT'):
-    DEBUG = True
+DEBUG = True
+if env('IS_DEVELOPMENT') == 'False':
+    DEBUG = False
 
 ALLOWED_HOSTS = [
     '192.168.1.235',
