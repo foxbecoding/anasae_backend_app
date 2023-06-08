@@ -14,7 +14,6 @@ class UserSignUpSerializer(serializers.ModelSerializer):
         fields = [
             'first_name',
             'last_name',
-            'username',
             'email',
             'password',
             'confirm_password',
@@ -26,14 +25,6 @@ class UserSignUpSerializer(serializers.ModelSerializer):
         }
 
     def validate(self, attrs):
-        # Set User details
-        user = User(
-            fullname = attrs.get('fullname'),
-            email = attrs.get('email').lower(),
-            password = make_password(attrs.get('password')),
-            agreed_to_toa = attrs.get('agreed_to_toa') 
-        )
-
         agreed_to_toa = attrs.get('agreed_to_toa')
         password = attrs.get('password')
         confirm_password = attrs.get('confirm_password')
@@ -44,12 +35,22 @@ class UserSignUpSerializer(serializers.ModelSerializer):
             msg = 'Passwords must match.'
             raise serializers.ValidationError({"error": msg}, code='authorization')
         
+        #Check if user agreed to terms of agreement
         if not agreed_to_toa:
             msg = 'Please agree to our Terms.'
             raise serializers.ValidationError({"error": msg}, code='authorization')
 
         # Save User in database
-        # user.save()
+        user = User(
+            first_name = attrs.get('first_name'),
+            last_name = attrs.get('last_name'),
+            email = attrs.get('email').lower(),
+            password = make_password(attrs.get('password')),
+            agreed_to_toa = attrs.get('agreed_to_toa'), 
+            date_of_birth = attrs.get('date_of_birth') 
+        )
+
+        user.save()
 
         attrs['user'] = user
         return attrs  

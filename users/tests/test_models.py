@@ -11,13 +11,12 @@ class TestModels(TestCase):
         self.user = User.objects.create(
             first_name = "Desmond",
             last_name = 'Fox',
-            username = 'foxbecoding',
             email = 'fox@foxbecoding.com',
             date_of_birth = date_time_obj.date(),
-            agreed_to_toa = True,
-            stripe_customer_id = 'ushd89u3hbeuid' 
+            agreed_to_toa = True
         )
         self.user.save()
 
     def test_user_assigned_uid_on_creation(self):
+        print(self.user.stripe_customer_id)
         self.assertGreater(len(self.user.uid), 0)
