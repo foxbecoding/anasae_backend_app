@@ -4,6 +4,21 @@ from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = [
+            'pk',
+            'uid',
+            'first_name',
+            'last_name',
+            'email',
+            'date_of_birth',
+            'agreed_to_toa'
+        ]
+
+
 class UserSignUpSerializer(serializers.ModelSerializer):
     
     # Create hidden password field for password confirmation
@@ -98,7 +113,6 @@ class UserLoginSerializer(serializers.ModelSerializer):
             msg = 'Both "email" and "password" are required.'
             raise serializers.ValidationError(msg, code='authorization')
 
-   
         # We have a valid user, put it in the serializer's validated_data.
         # It will be used in the view.
         attrs['user'] = user
@@ -109,8 +123,6 @@ class UserLoginSerializer(serializers.ModelSerializer):
         # and check if password matches with user input
         if User.objects.filter(email=email.lower()):
             user = User.objects.get(email=email.lower())
-            if user.is_producer: return None
-            if user.is_staff: return None
             
             if check_password(password, user.password):
                 return user

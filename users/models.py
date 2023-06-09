@@ -3,11 +3,11 @@ from django.contrib.auth.models import AbstractUser
 from utils.helpers import create_uid
 import stripe
 
-
 class User(AbstractUser):
     uid = models.CharField(max_length=20, blank=True, unique=True)
     agreed_to_toa = models.BooleanField(default=False)
     date_of_birth = models.DateField(null=True)
+    username = models.CharField(max_length=150, blank=True, null=True, unique=True)
     stripe_customer_id = models.CharField(max_length=200, blank=True)
     created = models.DateTimeField(auto_now_add=True, null=True)
     updated = models.DateTimeField(auto_now_add=True, null=True)

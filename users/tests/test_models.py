@@ -15,8 +15,7 @@ class TestModels(TestCase):
             date_of_birth = date_time_obj.date(),
             agreed_to_toa = True
         )
-        self.user.save()
+        # self.user.save()
 
     def test_user_assigned_uid_on_creation(self):
-        print(self.user.stripe_customer_id)
         self.assertGreater(len(self.user.uid), 0)
