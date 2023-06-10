@@ -131,4 +131,3 @@ class UserLoginSerializer(serializers.ModelSerializer):
                 return None
         else :
             return None
-        

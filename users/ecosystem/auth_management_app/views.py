@@ -1,4 +1,5 @@
 from django.utils.decorators import method_decorator
+from django.middleware.csrf import get_token
 from django.views.decorators.csrf import csrf_protect
 from django.contrib.auth import login, logout
 from rest_framework import viewsets
