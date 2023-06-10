@@ -10,7 +10,7 @@ from users.models import UserLogin
 from users.serializers import UserSerializer, UserSignUpSerializer, UserLoginSerializer
 
 
-class UserSignUpViewSet(viewsets.ViewSet):
+class AccountSignUpViewSet(viewsets.ViewSet):
     def get_permissions(self):
         permission_classes = [AllowAny]
         return [permission() for permission in permission_classes]
@@ -26,7 +26,7 @@ class UserSignUpViewSet(viewsets.ViewSet):
             return Response(user_serialized.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-class UserLogInViewSet(viewsets.ViewSet):
+class AccountLogInViewSet(viewsets.ViewSet):
     def get_permissions(self):
         permission_classes = [AllowAny]
         return [permission() for permission in permission_classes]
@@ -44,7 +44,7 @@ class UserLogInViewSet(viewsets.ViewSet):
             response = Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         return response 
     
-class UserLogOutViewSet(viewsets.ViewSet):
+class AccountLogOutViewSet(viewsets.ViewSet):
     def get_permissions(self):
         permission_classes = [IsAuthenticated]
         return [permission() for permission in permission_classes]
