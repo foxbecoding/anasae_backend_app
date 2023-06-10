@@ -11,5 +11,5 @@ class ForceCSRFViewSet(viewsets.ViewSet):
         return [permission() for permission in permission_classes]
     
     def list(self, request):
-        crsftoken = get_token(request)
+        get_token(request)
         return Response(None, status=status.HTTP_200_OK)

@@ -5,13 +5,12 @@ from django.middleware.csrf import get_token
 from users.models import User, UserLogin
 from datetime import datetime
 
-is_CSRF = False
-
 class TestUserSignUpViewSet(TestCase):
     
     def setUp(self):
-        self.client = Client(enforce_csrf_checks=is_CSRF)
+        self.client = Client()
         self.list_url = reverse('user-sign-up-list')
+        self.client.get(reverse('x-fct-list'))
 
     def test_user_sign_up_create(self):
         #set user data
@@ -27,7 +26,7 @@ class TestUserSignUpViewSet(TestCase):
             'date_of_birth': date_time_obj.date(),
             'agreed_to_toa': True
         }
-    
+
         #Get user data from response
         res = self.client.post(self.list_url, request_data)
 
@@ -49,7 +48,7 @@ class TestUserSignUpViewSet(TestCase):
 class TestUserLogInViewSet(TestCase):
     
     def setUp(self):
-        self.client = Client(enforce_csrf_checks=is_CSRF)
+        self.client = Client()
         self.list_url = reverse('user-log-in-list')
         date_time_str = '12/31/1990'
         self.date_time_obj = datetime.strptime(date_time_str, '%m/%d/%Y')
@@ -94,7 +93,7 @@ class TestUserLogInViewSet(TestCase):
 class TestUserLogOutViewSet(TestCase):
     
     def setUp(self):
-        self.client = Client(enforce_csrf_checks=is_CSRF)
+        self.client = Client()
         self.list_url = reverse('user-log-out-list')
         date_time_str = '12/31/1990'
         self.date_time_obj = datetime.strptime(date_time_str, '%m/%d/%Y')
@@ -117,9 +116,6 @@ class TestUserLogOutViewSet(TestCase):
         }
     
         self.client.post(reverse('user-log-in-list'), request_data)
-
-        # csrf_token = self.client.cookies['csrftoken'].value
-        # print(csrf_token)
         
         #Get user data from response
         res = self.client.post(self.list_url, {})
