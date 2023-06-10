@@ -5,12 +5,15 @@ from django.middleware.csrf import get_token
 from users.models import User, UserLogin
 from datetime import datetime
 
+is_CSRF = True
+
 class TestAccountSignUpViewSet(TestCase):
     
     def setUp(self):
-        self.client = Client()
+        self.client = Client(enforce_csrf_checks=is_CSRF)
         self.list_url = reverse('account-sign-up-list')
         self.client.get(reverse('x-fct-list'))
+        self.csrftoken = self.client.cookies['csrftoken'].value
 
     def test_account_sign_up_create(self):
         #set request data
@@ -28,7 +31,7 @@ class TestAccountSignUpViewSet(TestCase):
         }
 
         #Get response data
-        res = self.client.post(self.list_url, request_data)
+        res = self.client.post(self.list_url, request_data, **{'HTTP_X_CSRFTOKEN': self.csrftoken})
 
         #check if data is correct
         self.assertEquals(res.data['first_name'], 'Desmond')
@@ -39,7 +42,7 @@ class TestAccountSignUpViewSet(TestCase):
         request_data = {}
 
         #Get response data
-        res = self.client.post(self.list_url, request_data)
+        res = self.client.post(self.list_url, request_data, **{'HTTP_X_CSRFTOKEN': self.csrftoken})
 
         #check if data is correct
         self.assertEquals(res.status_code, 400)
@@ -48,10 +51,12 @@ class TestAccountSignUpViewSet(TestCase):
 class TestAccountLogInViewSet(TestCase):
     
     def setUp(self):
-        self.client = Client()
+        self.client = Client(enforce_csrf_checks=is_CSRF)
         self.list_url = reverse('account-log-in-list')
         date_time_str = '12/31/1990'
         self.date_time_obj = datetime.strptime(date_time_str, '%m/%d/%Y')
+        self.client.get(reverse('x-fct-list'))
+        self.csrftoken = self.client.cookies['csrftoken'].value
 
         self.user = User.objects.create(
             first_name = "Desmond",
@@ -71,7 +76,7 @@ class TestAccountLogInViewSet(TestCase):
         }
     
         #Get response data
-        res = self.client.post(self.list_url, request_data)
+        res = self.client.post(self.list_url, request_data, **{'HTTP_X_CSRFTOKEN': self.csrftoken})
 
         #check if data is correct
         self.assertGreater(len(res.data['logins']), 0)
@@ -85,7 +90,7 @@ class TestAccountLogInViewSet(TestCase):
         }
     
         #Get response data
-        res = self.client.post(self.list_url, request_data)
+        res = self.client.post(self.list_url, request_data, **{'HTTP_X_CSRFTOKEN': self.csrftoken})
 
         #check if data is correct
         self.assertEquals(res.status_code, 400)
@@ -93,10 +98,12 @@ class TestAccountLogInViewSet(TestCase):
 class TestUserLogOutViewSet(TestCase):
     
     def setUp(self):
-        self.client = Client()
+        self.client = Client(enforce_csrf_checks=is_CSRF)
         self.list_url = reverse('account-log-out-list')
         date_time_str = '12/31/1990'
         self.date_time_obj = datetime.strptime(date_time_str, '%m/%d/%Y')
+        self.client.get(reverse('x-fct-list'))
+        self.csrftoken = self.client.cookies['csrftoken'].value
 
         self.user = User.objects.create(
             first_name = "Desmond",
@@ -115,10 +122,14 @@ class TestUserLogOutViewSet(TestCase):
             'password': '123456'
         }
     
-        self.client.post(reverse('account-log-in-list'), request_data)
+        #Log in user
+        self.client.post(reverse('account-log-in-list'), request_data, **{'HTTP_X_CSRFTOKEN': self.csrftoken})
+        
+        #Get updated token
+        csrftoken = self.client.cookies['csrftoken'].value
         
         #Get response data
-        res = self.client.post(self.list_url, {})
+        res = self.client.post(self.list_url, {}, **{'HTTP_X_CSRFTOKEN': csrftoken})
 
         #check if data is correct
         self.assertEquals(res.status_code, 200)
