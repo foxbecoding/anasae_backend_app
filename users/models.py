@@ -86,7 +86,7 @@ class UserAddress(models.Model):
     deleted = models.DateTimeField(null=True)
 
 class UserLogin(models.Model):
-    user = models.ForeignKey( User, on_delete=models.CASCADE, related_name="logins")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="logins")
     ip_address = models.CharField(max_length=200, blank=True, null=True)
     latitude = models.FloatField(blank=True, null=True)
     longitude = models.FloatField(blank=True, null=True)

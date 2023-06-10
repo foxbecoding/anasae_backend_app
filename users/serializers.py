@@ -15,7 +15,9 @@ class UserSerializer(serializers.ModelSerializer):
             'last_name',
             'email',
             'date_of_birth',
-            'agreed_to_toa'
+            'agreed_to_toa',
+            #relationships
+            'logins'
         ]
 
 
@@ -91,7 +93,7 @@ class UserLoginSerializer(serializers.ModelSerializer):
         label="Password",
         # This will be used when the DRF browsable API is enabled
         style={'input_type': 'password'},
-        trim_whitespace=False,
+        trim_whitespace=True,
         write_only=True
     )
 
@@ -108,7 +110,7 @@ class UserLoginSerializer(serializers.ModelSerializer):
             if not user:
                 # If we don't have a regular user, raise a ValidationError
                 msg = 'Access denied: Invalid authentication credentials.'
-                raise serializers.ValidationError({'access_denied': msg}, code='authorization')
+                raise serializers.ValidationError(msg, code='authorization')
         else:
             msg = 'Both "email" and "password" are required.'
             raise serializers.ValidationError(msg, code='authorization')
@@ -122,8 +124,7 @@ class UserLoginSerializer(serializers.ModelSerializer):
         # Check if username or email exist in database
         # and check if password matches with user input
         if User.objects.filter(email=email.lower()):
-            user = User.objects.get(email=email.lower())
-            
+            user = User.objects.get(email=email.lower())     
             if check_password(password, user.password):
                 return user
             else :
