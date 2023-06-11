@@ -7,7 +7,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from users.models import UserLogin
-from users.serializers import UserSerializer, UserSignUpSerializer, UserLoginSerializer
+from users.serializers import *
 
 
 class AccountSignUpViewSet(viewsets.ViewSet):
@@ -17,14 +17,23 @@ class AccountSignUpViewSet(viewsets.ViewSet):
     
     @method_decorator(csrf_protect)
     def create(self, request):
-        serializer = UserSignUpSerializer(data=request.data, context={ 'request': request })
-        if serializer.is_valid():
-            user = serializer.validated_data['user']
+        User_Sign_Up_Serializer = UserSignUpSerializer(data=request.data, context={ 'request': request })
+        if User_Sign_Up_Serializer.is_valid():
+            user = User_Sign_Up_Serializer.validated_data['user']
             #login user
             # login(request, user)
-            user_serialized = UserSerializer(user)
-            return Response(user_serialized.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            
+            user_gender_data = {
+                'user_gender': request.data['gender'], 
+                'user': user.id
+            }
+            
+            User_Gender_Choice_Serializer = UserGenderChoiceSerializer(data=user_gender_data)
+            if User_Gender_Choice_Serializer.is_valid(): User_Gender_Choice_Serializer.save()
+
+            User_Serializer = UserSerializer(user)
+            return Response(User_Serializer.data, status=status.HTTP_201_CREATED)
+        return Response(User_Sign_Up_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 class AccountLogInViewSet(viewsets.ViewSet):
     def get_permissions(self):
@@ -33,15 +42,18 @@ class AccountLogInViewSet(viewsets.ViewSet):
 
     @method_decorator(csrf_protect)
     def create(self, request):
-        serializer = UserLoginSerializer(data=request.data, context={ 'request': request })
-        if serializer.is_valid():
-            user = serializer.validated_data['user']
+        User_Login_Serializer = UserLoginSerializer(data=request.data, context={ 'request': request })
+        if User_Login_Serializer.is_valid():
+            user = User_Login_Serializer.validated_data['user']
             login(request, user)
-            UserLogin.objects.create(user = user).save()
-            user_serialized = UserSerializer(user)
-            response = Response(user_serialized.data, status=status.HTTP_202_ACCEPTED)
+            
+            User_Account_Login_Serializer = UserAccountLoginSerializer(data={'user': user.id})
+            if User_Account_Login_Serializer.is_valid(): User_Account_Login_Serializer.save()
+            
+            User_Serializer = UserSerializer(user)
+            response = Response(User_Serializer.data, status=status.HTTP_202_ACCEPTED)
         else:
-            response = Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            response = Response(User_Login_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         return response 
     
 class AccountLogOutViewSet(viewsets.ViewSet):

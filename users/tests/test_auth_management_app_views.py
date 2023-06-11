@@ -2,7 +2,7 @@ from django.test import TestCase, Client
 from django.urls import reverse
 from django.contrib.auth.hashers import make_password, check_password
 from django.middleware.csrf import get_token
-from users.models import User, UserLogin
+from users.models import User, UserLogin, UserGender
 from datetime import datetime
 
 is_CSRF = True
@@ -15,11 +15,14 @@ class TestAccountSignUpViewSet(TestCase):
         self.client.get(reverse('x-fct-list'))
         self.csrftoken = self.client.cookies['csrftoken'].value
 
+        self.user_gender = UserGender.objects.create(gender = 'male')
+        self.user_gender.save()
+
     def test_account_sign_up_create(self):
         #set request data
         date_time_str = '12/31/1990'
         date_time_obj = datetime.strptime(date_time_str, '%m/%d/%Y')
-        
+
         request_data = {
             'first_name': "Desmond",
             'last_name': 'Fox',
@@ -27,13 +30,15 @@ class TestAccountSignUpViewSet(TestCase):
             'password': '123456',
             'confirm_password': '123456',
             'date_of_birth': date_time_obj.date(),
-            'agreed_to_toa': True
+            'agreed_to_toa': True,
+            'gender': self.user_gender.pk
         }
 
         #Get response data
         res = self.client.post(self.list_url, request_data, **{'HTTP_X_CSRFTOKEN': self.csrftoken})
-
+        
         #check if data is correct
+        self.assertEquals(res.data['gender_choice'], 1)
         self.assertEquals(res.data['first_name'], 'Desmond')
         self.assertEquals(res.status_code, 201)
     

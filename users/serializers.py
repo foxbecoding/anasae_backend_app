@@ -1,7 +1,7 @@
 from django.contrib.auth.hashers import make_password, check_password
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
-from users.models import User
+from users.models import *
 # User = get_user_model()
 
 
@@ -17,7 +17,8 @@ class UserSerializer(serializers.ModelSerializer):
             'date_of_birth',
             'agreed_to_toa',
             #relationships
-            'logins'
+            'logins',
+            'gender_choice'
         ]
 
 
@@ -131,3 +132,26 @@ class UserLoginSerializer(serializers.ModelSerializer):
                 return None
         else :
             return None
+        
+class UserAccountLoginSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserLogin
+        fields = [
+            'user'
+        ]
+
+class UserGenderSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserGender
+        fields = [
+            'gender',
+            'is_active'
+        ]
+
+class UserGenderChoiceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserGenderChoice
+        fields = [
+            'user_gender',
+            'user'
+        ]
