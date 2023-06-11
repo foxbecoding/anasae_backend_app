@@ -39,6 +39,7 @@ class TestAccountSignUpViewSet(TestCase):
   
         #check if data is correct
         self.assertEquals(res.data['gender_choice'], 1)
+        self.assertGreater(len(res.data['profiles']), 0)
         self.assertEquals(res.data['first_name'], 'Desmond')
         self.assertEquals(res.status_code, 201)
     

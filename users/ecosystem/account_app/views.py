@@ -23,6 +23,7 @@ class AccountSignUpViewSet(viewsets.ViewSet):
             #login user
             # login(request, user)
             
+            #Set user Gender
             user_gender_data = {
                 'user_gender': request.data['gender'], 
                 'user': user.id
@@ -31,6 +32,7 @@ class AccountSignUpViewSet(viewsets.ViewSet):
             User_Gender_Choice_Serializer = UserGenderChoiceSerializer(data=user_gender_data)
             if User_Gender_Choice_Serializer.is_valid(): User_Gender_Choice_Serializer.save()
             
+            #Create user profile
             user_profile_data = {
                 'user': user.id,
                 'name': user.first_name+' '+user.last_name[0],
