@@ -36,7 +36,7 @@ class TestAccountSignUpViewSet(TestCase):
 
         #Get response data
         res = self.client.post(self.list_url, request_data, **{'HTTP_X_CSRFTOKEN': self.csrftoken})
-        
+  
         #check if data is correct
         self.assertEquals(res.data['gender_choice'], 1)
         self.assertEquals(res.data['first_name'], 'Desmond')
