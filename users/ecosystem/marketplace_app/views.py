@@ -17,5 +17,42 @@ class MAUserViewSet(viewsets.ViewSet):
         if User.objects.filter(pk=pk).exists():
             User_Instance = User.objects.get(pk=pk)
             User_Serializer = UserSerializer(User_Instance)
+            User_Data = User_Serializer.data
             
+            User_Data = self.prepare_user_data(User_Data)
+            print(User_Data)
             return Response(None, status=status.HTTP_200_OK)
+        
+    def prepare_user_data(self, User_Data):
+        User_Login_Instance = UserLogin.objects.filter(pk__in=User_Data['logins'])
+        User_Account_Login_Serializer = UserAccountLoginSerializer(User_Login_Instance, many=True)
+        user_logins = []
+
+        for login in User_Account_Login_Serializer.data:
+            user_logins.append({
+                'pk': login['pk'],
+                'logged_in_date': login['created']
+            })
+
+        User_Profile_Instance = UserProfile.objects.filter(pk__in=User_Data['profiles'])
+        User_Profile_Serializer = UserProfileSerializer(User_Profile_Instance, many=True)
+        user_profiles = []
+
+        for profile in User_Profile_Serializer.data:
+            user_profiles.append({
+                'pk': profile['pk'],
+                'name': profile['name'],
+                'is_account_holder': profile['is_account_holder'],
+            })
+
+        data = {
+            'pk': User_Data['pk'],
+            'uid': User_Data['uid'],
+            'first_name': User_Data['first_name'],
+            'last_name': User_Data['last_name'],
+            'email': User_Data['email'],
+            'logins': user_logins,
+            'profiles': user_profiles
+        }
+
+        return data

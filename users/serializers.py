@@ -139,13 +139,16 @@ class UserAccountLoginSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserLogin
         fields = [
-            'user'
+            'pk',
+            'user',
+            'created'
         ]
 
 class UserGenderSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserGender
         fields = [
+            'pk',
             'gender',
             'is_active'
         ]
@@ -154,6 +157,7 @@ class UserGenderChoiceSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserGenderChoice
         fields = [
+            'pk',
             'user_gender',
             'user'
         ]
@@ -162,16 +166,19 @@ class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
         fields = [
+            'pk',
             'user',
             'name',
             'is_account_holder',
-            'is_active'
+            'is_active',
+      
         ]
 
 class UserProfileImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfileImage
         fields = [
+            'pk',
             'user_profile',
             'image'
         ]
