@@ -155,3 +155,21 @@ class UserGenderChoiceSerializer(serializers.ModelSerializer):
             'user_gender',
             'user'
         ]
+
+class UserProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserProfile
+        fields = [
+            'user',
+            'name',
+            'is_account_holder',
+            'is_active'
+        ]
+
+class UserProfileImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserProfileImage
+        fields = [
+            'user_profile',
+            'image'
+        ]
