@@ -8,9 +8,6 @@ class TestForceCSRFViewSet(TestCase):
         self.list_url = reverse('x-fct-list')
 
     def test_force_csrf_list(self):
-        #Get data from response
         self.client.get(self.list_url)
-
-        #check if data is correct
         self.assertIn('csrftoken', self.client.cookies)
     
