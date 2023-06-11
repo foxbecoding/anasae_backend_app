@@ -30,6 +30,15 @@ class AccountSignUpViewSet(viewsets.ViewSet):
             
             User_Gender_Choice_Serializer = UserGenderChoiceSerializer(data=user_gender_data)
             if User_Gender_Choice_Serializer.is_valid(): User_Gender_Choice_Serializer.save()
+            
+            user_profile_data = {
+                'user': user.id,
+                'name': user.first_name+' '+user.last_name[0],
+                'is_account_holder': True
+            }
+
+            User_Profile_Serializer = UserProfileSerializer(data=user_profile_data)
+            if User_Profile_Serializer.is_valid(): User_Profile_Serializer.save()
 
             User_Serializer = UserSerializer(user)
             return Response(User_Serializer.data, status=status.HTTP_201_CREATED)

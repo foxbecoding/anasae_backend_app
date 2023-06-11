@@ -16,8 +16,10 @@ class UserSerializer(serializers.ModelSerializer):
             'email',
             'date_of_birth',
             'agreed_to_toa',
+            'is_active',
             #relationships
             'logins',
+            'profiles',
             'gender_choice'
         ]
 
