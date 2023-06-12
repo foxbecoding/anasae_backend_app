@@ -59,9 +59,19 @@ class TestMAUserViewSet(TestCase):
         }
 
         res = self.client.patch(reverse('ma-user-detail', kwargs={'pk': self.user['pk']}), content_type='application/json', data=request_data, **{'HTTP_X_CSRFTOKEN': self.csrftoken})
-        print(res.data)
+        
         self.assertEqual(res.data['first_name'], 'Slugga')
         self.assertEqual(res.status_code, 202)
+    
+    def test_ma_user_update_error(self):
+        request_data = {
+            'first_name': 'Slugga',
+            'last_name': '',
+        }
+
+        res = self.client.patch(reverse('ma-user-detail', kwargs={'pk': self.user['pk']}), content_type='application/json', data=request_data, **{'HTTP_X_CSRFTOKEN': self.csrftoken})       
+        
+        self.assertEqual(res.status_code, 400)
 
     def test_ma_user_update_pk_mismatch(self):
         request_data = {
