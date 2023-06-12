@@ -17,11 +17,19 @@ class UserSerializer(serializers.ModelSerializer):
             'date_of_birth',
             'agreed_to_toa',
             'is_active',
+            'stripe_customer_id',
             #relationships
             'logins',
             'profiles',
             'gender_choice'
         ]
+
+        extra_kwargs = {
+            'logins': {'required': False},
+            'profiles': {'required': False},
+            'gender_choice': {'required': False}
+        }
+
 
 
 class UserSignUpSerializer(serializers.ModelSerializer):
@@ -53,12 +61,12 @@ class UserSignUpSerializer(serializers.ModelSerializer):
         # Check if passwords matches
         if password != confirm_password:
             msg = 'Passwords must match.'
-            raise serializers.ValidationError({"error": msg}, code='authorization')
+            raise serializers.ValidationError({"password": msg}, code='authorization')
         
         #Check if user agreed to terms of agreement
         if not agreed_to_toa:
             msg = 'Please agree to our Terms.'
-            raise serializers.ValidationError({"error": msg}, code='authorization')
+            raise serializers.ValidationError({"agreed_to_toa": msg}, code='authorization')
 
         # Save User in database
         user = User(

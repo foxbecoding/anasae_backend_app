@@ -8,6 +8,8 @@ class User(AbstractUser):
     agreed_to_toa = models.BooleanField(default=False)
     date_of_birth = models.DateField(null=True)
     username = models.CharField(max_length=150, blank=True, null=True, unique=True)
+    first_name = models.CharField(max_length=300, blank=False)
+    last_name = models.CharField(max_length=300, blank=False)
     stripe_customer_id = models.CharField(max_length=200, blank=True)
     created = models.DateTimeField(auto_now_add=True, null=True)
     updated = models.DateTimeField(auto_now_add=True, null=True)
