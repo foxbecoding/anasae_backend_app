@@ -123,5 +123,5 @@ class TestMAUserProfileViewSet(TestCase):
 
         res = self.client.post(reverse('ma-user-profile-list'), data=request_data, **{'HTTP_X_CSRFTOKEN': self.csrftoken})
         
-        # self.assertEqual(res.data['first_name'], 'Slugga')
+        self.assertGreater(len(res.data['profiles']), 1)
         self.assertEqual(res.status_code, 201)
