@@ -44,9 +44,11 @@ class MAUserProfileViewSet(viewsets.ViewSet):
     def create(self, request):
         pass
     
+    @method_decorator(csrf_protect)
     def update(self, request, pk=None):
         pass
     
+    @method_decorator(csrf_protect)
     def destroy(self, request, pk=None):
         pass
 
