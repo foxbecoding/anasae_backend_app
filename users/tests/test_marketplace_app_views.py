@@ -56,7 +56,7 @@ class TestMAUserViewSet(TestCase):
             'last_name': 'Fox',
         }
 
-        res = self.client.patch(reverse('ma-user-detail', kwargs={'pk': self.user['pk']}), content_type='application/json', data=request_data, **{'HTTP_X_CSRFTOKEN': self.csrftoken})
+        res = self.client.put(reverse('ma-user-detail', kwargs={'pk': self.user['pk']}), content_type='application/json', data=request_data, **{'HTTP_X_CSRFTOKEN': self.csrftoken})
         
         self.assertEqual(res.data['first_name'], 'Slugga')
         self.assertEqual(res.status_code, 202)
@@ -67,7 +67,7 @@ class TestMAUserViewSet(TestCase):
             'last_name': '',
         }
 
-        res = self.client.patch(reverse('ma-user-detail', kwargs={'pk': self.user['pk']}), content_type='application/json', data=request_data, **{'HTTP_X_CSRFTOKEN': self.csrftoken})       
+        res = self.client.put(reverse('ma-user-detail', kwargs={'pk': self.user['pk']}), content_type='application/json', data=request_data, **{'HTTP_X_CSRFTOKEN': self.csrftoken})       
         
         self.assertEqual(res.status_code, 400)
 
@@ -77,6 +77,6 @@ class TestMAUserViewSet(TestCase):
             'last_name': 'Fox'
         }
 
-        res = self.client.patch(reverse('ma-user-detail', kwargs={'pk': 0}), content_type='application/json', data=request_data, **{'HTTP_X_CSRFTOKEN': self.csrftoken})
+        res = self.client.put(reverse('ma-user-detail', kwargs={'pk': 0}), content_type='application/json', data=request_data, **{'HTTP_X_CSRFTOKEN': self.csrftoken})
     
         self.assertEqual(res.status_code, 400)

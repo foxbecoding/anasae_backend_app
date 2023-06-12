@@ -3,8 +3,7 @@ from django.views.decorators.csrf import csrf_protect
 from rest_framework import viewsets
 from rest_framework import status
 from rest_framework.response import Response
-from rest_framework.permissions import AllowAny, IsAuthenticated
-from users.models import User
+from rest_framework.permissions import IsAuthenticated
 from users.serializers import *
 
 
@@ -23,17 +22,17 @@ class MAUserViewSet(viewsets.ViewSet):
         return Response(None, status=status.HTTP_400_BAD_REQUEST)
         
     @method_decorator(csrf_protect)
-    def partial_update(self, request, pk=None):
+    def update(self, request, pk=None):
         if str(pk) == str(request.user.id):
             User_Instance = request.user
-            User_Serializer = UserSerializer(User_Instance, data=request.data)
-            if User_Serializer.is_valid():
-                User_Serializer.save()
-                User_Data = User_Serializer.data
-                data = prepare_user_data(User_Data)
+            Edit_User_Serializer = EditUserSerializer(User_Instance, data=request.data)
+            if Edit_User_Serializer.is_valid():
+                Edit_User_Serializer.save()
+                User_Serializer = UserSerializer(User_Instance)
+                data = prepare_user_data(User_Serializer.data)
                 return Response(data, status=status.HTTP_202_ACCEPTED)
             else: 
-                return Response(User_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+                return Response(Edit_User_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         return Response(None, status=status.HTTP_400_BAD_REQUEST)
         
 def prepare_user_data(User_Data):
