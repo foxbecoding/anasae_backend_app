@@ -52,7 +52,7 @@ class MAUserProfileViewSet(viewsets.ViewSet):
 
 def prepare_user_data(User_Data):
     User_Login_Instance = UserLogin.objects.filter(pk__in=User_Data['logins'])
-    User_Account_Login_Serializer = UserAccountLoginSerializer(User_Login_Instance, many=True)
+    User_Account_Login_Serializer = UserLoginSerializer(User_Login_Instance, many=True)
     user_logins = []
 
     for login in User_Account_Login_Serializer.data:

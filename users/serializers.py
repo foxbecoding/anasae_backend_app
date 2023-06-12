@@ -86,7 +86,7 @@ class UserSignUpSerializer(serializers.ModelSerializer):
         attrs['user'] = user
         return attrs  
 
-class UserLoginSerializer(serializers.ModelSerializer):
+class AccountLoginSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = [
@@ -146,7 +146,7 @@ class UserLoginSerializer(serializers.ModelSerializer):
         else :
             return None
         
-class UserAccountLoginSerializer(serializers.ModelSerializer):
+class UserLoginSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserLogin
         fields = [

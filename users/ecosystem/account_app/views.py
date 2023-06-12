@@ -1,12 +1,10 @@
 from django.utils.decorators import method_decorator
-from django.middleware.csrf import get_token
 from django.views.decorators.csrf import csrf_protect
 from django.contrib.auth import login, logout
 from rest_framework import viewsets
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
-from users.models import UserLogin
 from users.serializers import *
 
 
@@ -53,12 +51,12 @@ class AccountLogInViewSet(viewsets.ViewSet):
 
     @method_decorator(csrf_protect)
     def create(self, request):
-        User_Login_Serializer = UserLoginSerializer(data=request.data, context={ 'request': request })
+        User_Login_Serializer = AccountLoginSerializer(data=request.data, context={ 'request': request })
         if User_Login_Serializer.is_valid():
             user = User_Login_Serializer.validated_data['user']
             login(request, user)
             
-            User_Account_Login_Serializer = UserAccountLoginSerializer(data={'user': user.id})
+            User_Account_Login_Serializer = UserLoginSerializer(data={'user': user.id})
             if User_Account_Login_Serializer.is_valid(): User_Account_Login_Serializer.save()
             
             User_Serializer = UserSerializer(user)
