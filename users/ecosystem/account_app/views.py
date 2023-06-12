@@ -15,9 +15,9 @@ class AccountSignUpViewSet(viewsets.ViewSet):
     
     @method_decorator(csrf_protect)
     def create(self, request):
-        User_Sign_Up_Serializer = UserSignUpSerializer(data=request.data, context={ 'request': request })
-        if User_Sign_Up_Serializer.is_valid():
-            user = User_Sign_Up_Serializer.validated_data['user']
+        Create_Account_Serializer = CreateAccountSerializer(data=request.data, context={ 'request': request })
+        if Create_Account_Serializer.is_valid():
+            user = Create_Account_Serializer.validated_data['user']
             #login user
             # login(request, user)
             
@@ -42,7 +42,7 @@ class AccountSignUpViewSet(viewsets.ViewSet):
 
             User_Serializer = UserSerializer(user)
             return Response(User_Serializer.data, status=status.HTTP_201_CREATED)
-        return Response(User_Sign_Up_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(Create_Account_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 class AccountLogInViewSet(viewsets.ViewSet):
     def get_permissions(self):
@@ -51,18 +51,18 @@ class AccountLogInViewSet(viewsets.ViewSet):
 
     @method_decorator(csrf_protect)
     def create(self, request):
-        User_Login_Serializer = AccountLoginSerializer(data=request.data, context={ 'request': request })
-        if User_Login_Serializer.is_valid():
-            user = User_Login_Serializer.validated_data['user']
+        Account_Login_Serializer = AccountLoginSerializer(data=request.data, context={ 'request': request })
+        if Account_Login_Serializer.is_valid():
+            user = Account_Login_Serializer.validated_data['user']
             login(request, user)
             
-            User_Account_Login_Serializer = UserLoginSerializer(data={'user': user.id})
-            if User_Account_Login_Serializer.is_valid(): User_Account_Login_Serializer.save()
+            User_Login_Serializer = UserLoginSerializer(data={'user': user.id})
+            if User_Login_Serializer.is_valid(): User_Login_Serializer.save()
             
             User_Serializer = UserSerializer(user)
             response = Response(User_Serializer.data, status=status.HTTP_202_ACCEPTED)
         else:
-            response = Response(User_Login_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            response = Response(Account_Login_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         return response 
     
 class AccountLogOutViewSet(viewsets.ViewSet):

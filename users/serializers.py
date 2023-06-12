@@ -35,7 +35,7 @@ class EditUserSerializer(serializers.ModelSerializer):
             'last_name',
         ]
 
-class UserSignUpSerializer(serializers.ModelSerializer):
+class CreateAccountSerializer(serializers.ModelSerializer):
     
     # Create hidden password field for password confirmation
     confirm_password = serializers.CharField(style={'input_type': 'password'}, write_only=True)
