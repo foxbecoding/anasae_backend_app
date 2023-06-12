@@ -45,8 +45,8 @@ class TestMAUserViewSet(TestCase):
 
     def test_ma_user_retrieve(self):
         res = self.client.get(reverse('ma-user-detail', kwargs={'pk': self.user['pk']}))
-        
         self.assertEquals(res.status_code, 200)
 
-
-
+    def test_ma_user_retrieve_pk_mismatch(self):
+        res = self.client.get(reverse('ma-user-detail', kwargs={'pk': 0}))
+        self.assertEquals(res.status_code, 400)
