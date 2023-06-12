@@ -34,7 +34,22 @@ class MAUserViewSet(viewsets.ViewSet):
             else: 
                 return Response(Edit_User_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         return Response(None, status=status.HTTP_400_BAD_REQUEST)
-        
+
+class MAUserProfileViewSet(viewsets.ViewSet):
+    def get_permissions(self):
+        permission_classes = [IsAuthenticated]
+        return [permission() for permission in permission_classes]
+    
+    @method_decorator(csrf_protect)
+    def create(self, request):
+        pass
+    
+    def update(self, request, pk=None):
+        pass
+    
+    def destroy(self, request, pk=None):
+        pass
+
 def prepare_user_data(User_Data):
     User_Login_Instance = UserLogin.objects.filter(pk__in=User_Data['logins'])
     User_Account_Login_Serializer = UserAccountLoginSerializer(User_Login_Instance, many=True)
