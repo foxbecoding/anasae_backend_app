@@ -1,8 +1,6 @@
 from django.test import TestCase, Client
 from django.urls import reverse
-from django.contrib.auth.hashers import make_password, check_password
-from django.middleware.csrf import get_token
-from users.models import User, UserLogin, UserGender
+from users.models import UserGender
 from datetime import datetime
 
 is_CSRF = True
