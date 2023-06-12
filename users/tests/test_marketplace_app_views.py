@@ -76,8 +76,7 @@ class TestMAUserViewSet(TestCase):
     def test_ma_user_update_pk_mismatch(self):
         request_data = {
             'first_name': 'Slugga',
-            'last_name': 'Fox',
-            'email': 'fox@foxbecoding.com'
+            'last_name': 'Fox'
         }
 
         res = self.client.patch(reverse('ma-user-detail', kwargs={'pk': 0}), content_type='application/json', data=request_data, **{'HTTP_X_CSRFTOKEN': self.csrftoken})
