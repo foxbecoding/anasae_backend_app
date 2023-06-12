@@ -38,10 +38,10 @@ class TestAccountSignUpViewSet(TestCase):
         res = self.client.post(self.list_url, request_data, **{'HTTP_X_CSRFTOKEN': self.csrftoken})
   
         #check if data is correct
-        self.assertEquals(res.data['gender_choice'], 1)
+        self.assertEqual(res.data['gender_choice'], 1)
         self.assertGreater(len(res.data['profiles']), 0)
-        self.assertEquals(res.data['first_name'], 'Desmond')
-        self.assertEquals(res.status_code, 201)
+        self.assertEqual(res.data['first_name'], 'Desmond')
+        self.assertEqual(res.status_code, 201)
     
     def test_account_sign_up_create_no_data(self):
         #set request data
@@ -51,7 +51,7 @@ class TestAccountSignUpViewSet(TestCase):
         res = self.client.post(self.list_url, request_data, **{'HTTP_X_CSRFTOKEN': self.csrftoken})
 
         #check if data is correct
-        self.assertEquals(res.status_code, 400)
+        self.assertEqual(res.status_code, 400)
 
 
 class TestAccountLogInViewSet(TestCase):
@@ -86,8 +86,8 @@ class TestAccountLogInViewSet(TestCase):
 
         #check if data is correct
         self.assertGreater(len(res.data['logins']), 0)
-        self.assertEquals(res.data['first_name'], 'Desmond')
-        self.assertEquals(res.status_code, 202)
+        self.assertEqual(res.data['first_name'], 'Desmond')
+        self.assertEqual(res.status_code, 202)
 
     def test_account_log_in_create_failed(self):
         #set request data
@@ -99,7 +99,7 @@ class TestAccountLogInViewSet(TestCase):
         res = self.client.post(self.list_url, request_data, **{'HTTP_X_CSRFTOKEN': self.csrftoken})
 
         #check if data is correct
-        self.assertEquals(res.status_code, 400)
+        self.assertEqual(res.status_code, 400)
 
 class TestUserLogOutViewSet(TestCase):
     
@@ -138,4 +138,4 @@ class TestUserLogOutViewSet(TestCase):
         res = self.client.post(self.list_url, {}, **{'HTTP_X_CSRFTOKEN': csrftoken})
 
         #check if data is correct
-        self.assertEquals(res.status_code, 200)
+        self.assertEqual(res.status_code, 200)
