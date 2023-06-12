@@ -181,8 +181,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
             'user',
             'name',
             'is_account_holder',
-            'is_active',
-      
+            'is_active'
         ]
 
 class UserProfileImageSerializer(serializers.ModelSerializer):

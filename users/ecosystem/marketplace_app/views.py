@@ -31,8 +31,7 @@ class MAUserViewSet(viewsets.ViewSet):
                 User_Serializer = UserSerializer(User_Instance)
                 data = prepare_user_data(User_Serializer.data)
                 return Response(data, status=status.HTTP_202_ACCEPTED)
-            else: 
-                return Response(Edit_User_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response(Edit_User_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         return Response(None, status=status.HTTP_400_BAD_REQUEST)
 
 class MAUserProfileViewSet(viewsets.ViewSet):
@@ -42,7 +41,18 @@ class MAUserProfileViewSet(viewsets.ViewSet):
     
     @method_decorator(csrf_protect)
     def create(self, request):
-        pass
+        request_data = {
+            'user': str(request.user.id),
+            'name': request.data['name']
+        }
+        User_Profile_Serializer = UserProfileSerializer(data=request_data)
+        if User_Profile_Serializer.is_valid(): 
+            User_Profile_Serializer.save()
+            User_Instance = request.user
+            User_Serializer = UserSerializer(User_Instance)
+            data = prepare_user_data(User_Serializer.data)
+            return Response(data, status=status.HTTP_201_CREATED)
+        return Response(User_Profile_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
     @method_decorator(csrf_protect)
     def update(self, request, pk=None):
