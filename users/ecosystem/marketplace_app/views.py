@@ -5,21 +5,18 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from users.serializers import *
+from users.models import UserProfile
 
-
-class MAUserViewSet(viewsets.ViewSet):
+class MPAUserViewSet(viewsets.ViewSet):
     def get_permissions(self):
         permission_classes = [IsAuthenticated]
         return [permission() for permission in permission_classes]
 
     def retrieve(self, request, pk=None):
         if str(pk) == str(request.user.id):
-            User_Instance = request.user
-            User_Serializer = UserSerializer(User_Instance)
-            User_Data = User_Serializer.data
-            data = prepare_user_data(User_Data)
+            data = prepare_user_data(request.user)
             return Response(data, status=status.HTTP_200_OK)
-        return Response(None, status=status.HTTP_400_BAD_REQUEST)
+        return Response(None, status=status.HTTP_401_UNAUTHORIZED)
         
     @method_decorator(csrf_protect)
     def update(self, request, pk=None):
@@ -28,13 +25,12 @@ class MAUserViewSet(viewsets.ViewSet):
             Edit_User_Serializer = EditUserSerializer(User_Instance, data=request.data)
             if Edit_User_Serializer.is_valid():
                 Edit_User_Serializer.save()
-                User_Serializer = UserSerializer(User_Instance)
-                data = prepare_user_data(User_Serializer.data)
+                data = prepare_user_data(User_Instance)
                 return Response(data, status=status.HTTP_202_ACCEPTED)
             return Response(Edit_User_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        return Response(None, status=status.HTTP_400_BAD_REQUEST)
+        return Response(None, status=status.HTTP_401_UNAUTHORIZED)
 
-class MAUserProfileViewSet(viewsets.ViewSet):
+class MPAUserProfileViewSet(viewsets.ViewSet):
     def get_permissions(self):
         permission_classes = [IsAuthenticated]
         return [permission() for permission in permission_classes]
@@ -49,22 +45,31 @@ class MAUserProfileViewSet(viewsets.ViewSet):
         User_Profile_Serializer = UserProfileSerializer(data=request_data)
         if User_Profile_Serializer.is_valid(): 
             User_Profile_Serializer.save()
-            User_Instance = request.user
-            User_Serializer = UserSerializer(User_Instance)
-            data = prepare_user_data(User_Serializer.data)
+            data = prepare_user_data(request.user)
             return Response(data, status=status.HTTP_201_CREATED)
         return Response(User_Profile_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
     @method_decorator(csrf_protect)
     def update(self, request, pk=None):
-        request_data = request.data
-        pass
+        User_Profile_Instances = UserProfile.objects.filter(user__in=str(request.user.id))
+        user_profile_pks = [str(upi.id) for upi in User_Profile_Instances]  
+        if str(pk) in user_profile_pks:
+            User_Profile_Instance = UserProfile.objects.get(pk=pk)
+            Edit_User_Profile_Serializer = EditUserProfileSerializer(User_Profile_Instance, data=request.data)
+            if Edit_User_Profile_Serializer.is_valid():
+                Edit_User_Profile_Serializer.save()
+                data = prepare_user_data(request.user)
+                return Response(data, status=status.HTTP_202_ACCEPTED)
+            return Response(Edit_User_Profile_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(None, status=status.HTTP_401_UNAUTHORIZED)
     
     @method_decorator(csrf_protect)
     def destroy(self, request, pk=None):
         pass
 
-def prepare_user_data(User_Data):
+def prepare_user_data(User_Instance):
+    User_Serializer = UserSerializer(User_Instance)
+    User_Data = User_Serializer.data
     User_Login_Instance = UserLogin.objects.filter(pk__in=User_Data['logins'])
     User_Account_Login_Serializer = UserLoginSerializer(User_Login_Instance, many=True)
     user_logins = []

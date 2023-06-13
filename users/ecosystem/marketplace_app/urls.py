@@ -1,7 +1,7 @@
 from rest_framework.routers import DefaultRouter
-from users.ecosystem.marketplace_app.views import MAUserViewSet, MAUserProfileViewSet
+from users.ecosystem.marketplace_app.views import MPAUserViewSet, MPAUserProfileViewSet
 
 router = DefaultRouter()
-router.register(r"ma-user", MAUserViewSet, basename="ma-user")
-router.register(r"ma-user-profile", MAUserProfileViewSet, basename="ma-user-profile")
+router.register(r"mpa-user", MPAUserViewSet, basename="mpa-user")
+router.register(r"mpa-user-profile", MPAUserProfileViewSet, basename="mpa-user-profile")
 urlpatterns = router.urls

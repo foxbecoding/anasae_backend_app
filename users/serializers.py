@@ -184,6 +184,13 @@ class UserProfileSerializer(serializers.ModelSerializer):
             'is_active'
         ]
 
+class EditUserProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserProfile
+        fields = [
+            'name'
+        ]
+
 class UserProfileImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfileImage
