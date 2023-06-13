@@ -86,13 +86,6 @@ def prepare_user_data(User_Instance):
         }
         for login in User_Account_Login_Serializer.data
     ]
-
-    # for login in User_Account_Login_Serializer.data:
-    #     user_logins.append({
-    #         'pk': login['pk'],
-    #         'logged_in_date': login['created']
-    #     })
-
     User_Profile_Instance = UserProfile.objects.filter(pk__in=User_Data['profiles'])
     User_Profile_Serializer = UserProfileSerializer(User_Profile_Instance, many=True)
     user_profiles = [
@@ -103,14 +96,6 @@ def prepare_user_data(User_Instance):
         }
         for profile in User_Profile_Serializer.data
     ]
-
-    # for profile in User_Profile_Serializer.data:
-    #     user_profiles.append({
-    #         'pk': profile['pk'],
-    #         'name': profile['name'],
-    #         'is_account_holder': profile['is_account_holder'],
-    #     })
-
     data = {
         'pk': User_Data['pk'],
         'uid': User_Data['uid'],
