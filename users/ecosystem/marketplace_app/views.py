@@ -45,6 +45,7 @@ class MAUserProfileViewSet(viewsets.ViewSet):
             'user': str(request.user.id),
             'name': request.data['name']
         }
+        
         User_Profile_Serializer = UserProfileSerializer(data=request_data)
         if User_Profile_Serializer.is_valid(): 
             User_Profile_Serializer.save()
@@ -56,6 +57,7 @@ class MAUserProfileViewSet(viewsets.ViewSet):
     
     @method_decorator(csrf_protect)
     def update(self, request, pk=None):
+        request_data = request.data
         pass
     
     @method_decorator(csrf_protect)
