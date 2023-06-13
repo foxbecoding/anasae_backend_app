@@ -65,31 +65,51 @@ class MPAUserProfileViewSet(viewsets.ViewSet):
     
     @method_decorator(csrf_protect)
     def destroy(self, request, pk=None):
-        pass
+        User_Profile_Instances = UserProfile.objects.filter(user__in=str(request.user.id)).filter(is_account_holder=False)
+        user_profile_pks = [str(upi.id) for upi in User_Profile_Instances]  
+        if str(pk) in user_profile_pks:
+            User_Profile_Instance = UserProfile.objects.get(pk=pk)
+            User_Profile_Instance.delete()
+            data = prepare_user_data(request.user)
+            return Response(data, status=status.HTTP_202_ACCEPTED)
+        return Response(None, status=status.HTTP_401_UNAUTHORIZED)
 
 def prepare_user_data(User_Instance):
     User_Serializer = UserSerializer(User_Instance)
     User_Data = User_Serializer.data
     User_Login_Instance = UserLogin.objects.filter(pk__in=User_Data['logins'])
     User_Account_Login_Serializer = UserLoginSerializer(User_Login_Instance, many=True)
-    user_logins = []
-
-    for login in User_Account_Login_Serializer.data:
-        user_logins.append({
+    user_logins = [
+        {
             'pk': login['pk'],
             'logged_in_date': login['created']
-        })
+        }
+        for login in User_Account_Login_Serializer.data
+    ]
+
+    # for login in User_Account_Login_Serializer.data:
+    #     user_logins.append({
+    #         'pk': login['pk'],
+    #         'logged_in_date': login['created']
+    #     })
 
     User_Profile_Instance = UserProfile.objects.filter(pk__in=User_Data['profiles'])
     User_Profile_Serializer = UserProfileSerializer(User_Profile_Instance, many=True)
-    user_profiles = []
+    user_profiles = [
+        { 
+            'pk': profile['pk'], 
+            'name': profile['name'], 
+            'is_account_holder': profile['is_account_holder'] 
+        }
+        for profile in User_Profile_Serializer.data
+    ]
 
-    for profile in User_Profile_Serializer.data:
-        user_profiles.append({
-            'pk': profile['pk'],
-            'name': profile['name'],
-            'is_account_holder': profile['is_account_holder'],
-        })
+    # for profile in User_Profile_Serializer.data:
+    #     user_profiles.append({
+    #         'pk': profile['pk'],
+    #         'name': profile['name'],
+    #         'is_account_holder': profile['is_account_holder'],
+    #     })
 
     data = {
         'pk': User_Data['pk'],

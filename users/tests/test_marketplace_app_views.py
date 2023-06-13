@@ -4,7 +4,7 @@ from users.models import UserGender
 from datetime import datetime
 
 is_CSRF = True
-ACCOUNT_LIST = ''
+
 class TestMPAUserViewSet(TestCase):
     
     def setUp(self):
@@ -28,18 +28,25 @@ class TestMPAUserViewSet(TestCase):
             'gender': self.user_gender.pk
         }
 
-        self.client.post(reverse('account-sign-up-list'), user_sign_up_data, **{'HTTP_X_CSRFTOKEN': self.csrftoken})
+        self.client.post(
+            reverse('account-sign-up-list'), 
+            user_sign_up_data, 
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
 
         #User Login
-        request_data = {
+        login_credentials = {
             'email': 'fox@foxbecoding.com',
             'password': '123456'
         }
     
         #Get response data
-        res = self.client.post(reverse('account-log-in-list'), request_data, **{'HTTP_X_CSRFTOKEN': self.csrftoken})
+        res = self.client.post(
+            reverse('account-log-in-list'), 
+            login_credentials, 
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
         self.user = res.data
-
         self.csrftoken = self.client.cookies['csrftoken'].value
 
     def test_mpa_user_retrieve(self):
@@ -55,9 +62,12 @@ class TestMPAUserViewSet(TestCase):
             'first_name': 'Slugga',
             'last_name': 'Fox',
         }
-
-        res = self.client.put(reverse('mpa-user-detail', kwargs={'pk': self.user['pk']}), content_type='application/json', data=request_data, **{'HTTP_X_CSRFTOKEN': self.csrftoken})
-        
+        res = self.client.put(
+            reverse('mpa-user-detail', kwargs={'pk': self.user['pk']}), 
+            content_type='application/json', 
+            data=request_data, 
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
         self.assertEqual(res.data['first_name'], 'Slugga')
         self.assertEqual(res.status_code, 202)
     
@@ -66,8 +76,12 @@ class TestMPAUserViewSet(TestCase):
             'first_name': 'Slugga',
             'last_name': '',
         }
-
-        res = self.client.put(reverse('mpa-user-detail', kwargs={'pk': self.user['pk']}), content_type='application/json', data=request_data, **{'HTTP_X_CSRFTOKEN': self.csrftoken})               
+        res = self.client.put(
+            reverse('mpa-user-detail', kwargs={'pk': self.user['pk']}), 
+            content_type='application/json', 
+            data=request_data, 
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )               
         self.assertEqual(res.status_code, 400)
 
     def test_mpa_user_update_pk_mismatch(self):
@@ -75,8 +89,12 @@ class TestMPAUserViewSet(TestCase):
             'first_name': 'Slugga',
             'last_name': 'Fox'
         }
-
-        res = self.client.put(reverse('mpa-user-detail', kwargs={'pk': 0}), content_type='application/json', data=request_data, **{'HTTP_X_CSRFTOKEN': self.csrftoken})
+        res = self.client.put(
+            reverse('mpa-user-detail', kwargs={'pk': 0}), 
+            content_type='application/json', 
+            data=request_data, 
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
         self.assertEqual(res.status_code, 401)
 
 class TestMPAUserProfileViewSet(TestCase):
@@ -102,36 +120,102 @@ class TestMPAUserProfileViewSet(TestCase):
             'gender': self.user_gender.pk
         }
 
-        self.client.post(reverse('account-sign-up-list'), user_sign_up_data, **{'HTTP_X_CSRFTOKEN': self.csrftoken})
+        self.client.post(
+            reverse('account-sign-up-list'), 
+            user_sign_up_data, 
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
 
         #User Login
-        request_data = {
+        login_credentials = {
             'email': 'fox@foxbecoding.com',
             'password': '123456'
         }
     
         #Get response data
-        res = self.client.post(reverse('account-log-in-list'), request_data, **{'HTTP_X_CSRFTOKEN': self.csrftoken})
+        res = self.client.post(
+            reverse('account-log-in-list'), 
+            login_credentials, 
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
         self.user = res.data
-
         self.csrftoken = self.client.cookies['csrftoken'].value
+        
 
     def test_mpa_user_profile_create(self):
-        request_data = {
-            'name': 'foxbecoding'
-        }
-
-        res = self.client.post(reverse('mpa-user-profile-list'), data=request_data, **{'HTTP_X_CSRFTOKEN': self.csrftoken})
-
+        request_data = { 'name': 'foxbecoding' }
+        res = self.client.post(
+            reverse('mpa-user-profile-list'), 
+            data=request_data, 
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
         self.assertGreater(len(res.data['profiles']), 1)
         self.assertEqual(res.status_code, 201)
 
     
     def test_mpa_user_profile_update(self):
         profile_pk = self.user['profiles'][0]
-
         request_data = {'name': 'foxbecoding'}
-        res = self.client.put(reverse('mpa-user-profile-detail', kwargs={'pk': profile_pk}), content_type='application/json', data=request_data, **{'HTTP_X_CSRFTOKEN': self.csrftoken})
-        
-        self.assertEqual(res.data['profiles'][0]['name'], 'foxbecodin')
+        res = self.client.put(
+            reverse('mpa-user-profile-detail', kwargs={'pk': profile_pk}), 
+            content_type='application/json', 
+            data=request_data, 
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
+        self.assertEqual(res.data['profiles'][0]['name'], 'foxbecoding')
         self.assertEqual(res.status_code, 202)
+
+    def test_mpa_user_profile_update_error(self):
+        profile_pk = self.user['profiles'][0]
+        request_data = {'name': ''}
+        res = self.client.put(
+            reverse('mpa-user-profile-detail', kwargs={'pk': profile_pk}), 
+            content_type='application/json', 
+            data=request_data, 
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
+        self.assertEqual(res.status_code, 400)
+
+    def test_mpa_user_profile_update_no_ownership(self):
+        profile_pk = 25
+        request_data = {'name': 'foxbecoding'}
+        res = self.client.put(
+            reverse('mpa-user-profile-detail', kwargs={'pk': profile_pk}), 
+            content_type='application/json', 
+            data=request_data, 
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
+        self.assertEqual(res.status_code, 401)
+
+    def test_mpa_user_profile_destroy(self):
+        #Make additional profile
+        res = self.client.post(
+            reverse('mpa-user-profile-list'), 
+            data={ 'name': 'SoyReyFox' }, 
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
+        profile_pk = res.data['profiles'][1]['pk']
+        request_data = {}
+        res = self.client.delete(
+            reverse('mpa-user-profile-detail', kwargs={'pk': profile_pk}), 
+            data=request_data, 
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
+        self.assertEqual(len(res.data['profiles']), 1)
+        self.assertEqual(res.status_code, 202)
+    
+    def test_mpa_user_profile_destroy_error(self):
+        #Make additional profile
+        self.client.post(
+            reverse('mpa-user-profile-list'), 
+            data={ 'name': 'SoyReyFox' }, 
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
+        profile_pk = self.user['profiles'][0]
+        request_data = {}
+        res = self.client.delete(
+            reverse('mpa-user-profile-detail', kwargs={'pk': profile_pk}), 
+            data=request_data, 
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
+        self.assertEqual(res.status_code, 401)
