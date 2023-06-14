@@ -157,6 +157,7 @@ class TestMPAUserProfileViewSet(TestCase):
     
     def test_mpa_user_profile_update(self):
         profile_pk = self.user['profiles'][0]
+        print('update...')
         request_data = {'name': 'foxbecoding'}
         res = self.client.put(
             reverse('mpa-user-profile-detail', kwargs={'pk': profile_pk}), 
@@ -169,6 +170,7 @@ class TestMPAUserProfileViewSet(TestCase):
 
     def test_mpa_user_profile_update_error(self):
         profile_pk = self.user['profiles'][0]
+        print('update error...')
         request_data = {'name': ''}
         res = self.client.put(
             reverse('mpa-user-profile-detail', kwargs={'pk': profile_pk}), 
@@ -180,6 +182,7 @@ class TestMPAUserProfileViewSet(TestCase):
 
     def test_mpa_user_profile_update_no_ownership(self):
         profile_pk = 25
+        print('update no ownership...')
         request_data = {'name': 'foxbecoding'}
         res = self.client.put(
             reverse('mpa-user-profile-detail', kwargs={'pk': profile_pk}), 
@@ -276,9 +279,8 @@ class TestMPAUserProfileImageViewSet(TestCase):
             'user_profile': self.user['profiles'][0],
             'image': tmp_file
         }
-        print(request_data)
         # res = self.client.post(
-        #     reverse('mpa-user-profile-list'), 
+        #     reverse('mpa-user-profile-image-list'), 
         #     data=request_data, 
         #     **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         # )
@@ -286,9 +288,4 @@ class TestMPAUserProfileImageViewSet(TestCase):
         # self.assertEqual(res.status_code, 201)
 
         # clean event images directory
-        # os.remove(os.getenv('MEDIA_ROOT')+res.data['image'])
-
-        
-
-
-        
+        # os.remove(os.getenv('MEDIA_ROOT')+res.data['image'])    

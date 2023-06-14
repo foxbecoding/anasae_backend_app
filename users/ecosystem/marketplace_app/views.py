@@ -52,8 +52,8 @@ class MPAUserProfileViewSet(viewsets.ViewSet):
     
     @method_decorator(csrf_protect)
     def update(self, request, pk=None):
-        User_Profile_Instances = UserProfile.objects.filter(user__in=str(request.user.id))
-        user_profile_pks = [str(upi.id) for upi in User_Profile_Instances]  
+        User_Serializer = UserSerializer(request.user) 
+        user_profile_pks = [ str(profile) for profile in User_Serializer.data['profiles'] ] 
         if str(pk) in user_profile_pks:
             User_Profile_Instance = UserProfile.objects.get(pk=pk)
             Edit_User_Profile_Serializer = EditUserProfileSerializer(User_Profile_Instance, data=request.data)
