@@ -19,10 +19,16 @@ def Prepare_User_Data(User_Instance):
         { 
             'pk': profile['pk'], 
             'name': profile['name'], 
-            'is_account_holder': profile['is_account_holder'] 
+            'is_account_holder': profile['is_account_holder']
         }
         for profile in User_Profile_Serializer.data
     ]
+
+    for profile in user_profiles:
+        User_Profile_Image_Instance = UserProfileImage.objects.filter(user_profile=profile['pk'])
+        User_Profile_Image_Serializer = UserProfileImageSerializer(User_Profile_Image_Instance)
+        profile['image'] = User_Profile_Image_Serializer.data['image']
+
     data = {
         'pk': User_Data['pk'],
         'uid': User_Data['uid'],
