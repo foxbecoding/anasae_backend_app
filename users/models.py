@@ -38,7 +38,7 @@ class UserProfile(models.Model):
 
 class UserProfileImage(models.Model):
     user_profile = models.OneToOneField(UserProfile, on_delete=models.CASCADE, related_name="image")
-    image = models.ImageField(upload_to='images/user_images', blank=True, null=True)
+    image = models.ImageField(upload_to='images/user/profile', blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True, null=True)
     updated = models.DateTimeField(auto_now_add=True, null=True)
     deleted = models.DateTimeField(null=True)
