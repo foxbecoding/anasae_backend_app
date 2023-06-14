@@ -66,12 +66,25 @@ class MPAUserProfileViewSet(viewsets.ViewSet):
     @method_decorator(csrf_protect)
     def destroy(self, request, pk=None):
         User_Profile_Instances = UserProfile.objects.filter(user__in=str(request.user.id)).filter(is_account_holder=False)
-        user_profile_pks = [str(upi.id) for upi in User_Profile_Instances]  
+        user_profile_pks = [ str(upi.id) for upi in User_Profile_Instances ]  
         if str(pk) in user_profile_pks:
             User_Profile_Instance = UserProfile.objects.get(pk=pk)
             User_Profile_Instance.delete()
             data = prepare_user_data(request.user)
             return Response(data, status=status.HTTP_202_ACCEPTED)
+        return Response(None, status=status.HTTP_401_UNAUTHORIZED)
+    
+class MPAUserProfileImageViewSet(viewsets.ViewSet):
+    def get_permissions(self):
+        permission_classes = [IsAuthenticated]
+        return [permission() for permission in permission_classes]
+    
+    @method_decorator(csrf_protect)
+    def create(self, request):
+        User_Profile_Instances = UserProfile.objects.filter(user__in=str(request.user.id)).filter(is_account_holder=False)
+        user_profile_pks = [ str(upi.id) for upi in User_Profile_Instances ] 
+        if str(request.data['profile']) in user_profile_pks:
+            return Response(None, status=status.HTTP_201_CREATED)
         return Response(None, status=status.HTTP_401_UNAUTHORIZED)
 
 def prepare_user_data(User_Instance):
@@ -105,5 +118,4 @@ def prepare_user_data(User_Instance):
         'logins': user_logins,
         'profiles': user_profiles
     }
-
     return data
