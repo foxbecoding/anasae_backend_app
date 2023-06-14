@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from users.serializers import *
 from users.models import UserProfile
-from users.ecosystem.prepare_user_data import Prepare_User_Data
+from users.ecosystem.methods import Prepare_User_Data
 
 class MPAUserViewSet(viewsets.ViewSet):
     def get_permissions(self):
