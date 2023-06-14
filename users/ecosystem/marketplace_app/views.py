@@ -83,8 +83,8 @@ class MPAUserProfileImageViewSet(viewsets.ViewSet):
     
     @method_decorator(csrf_protect)
     def create(self, request):
-        User_Profile_Instances = UserProfile.objects.filter(user__in=str(request.user.id)).filter(is_account_holder=False)
-        user_profile_pks = [ str(upi.id) for upi in User_Profile_Instances ] 
+        User_Serializer = UserSerializer(request.user) 
+        user_profile_pks = [ str(profile) for profile in User_Serializer.data['profiles'] ]  
         if str(request.data['user_profile']) in user_profile_pks:
             User_Profile_Image_Serializer = UserProfileImageSerializer(data=request.data)
             if User_Profile_Image_Serializer.is_valid():
