@@ -1,6 +1,6 @@
 from django.test import TestCase, Client
 from django.urls import reverse
-from users.models import UserGender
+from users.models import User, UserGender, UserProfile
 from datetime import datetime
 from PIL import Image
 import os, tempfile
@@ -122,11 +122,19 @@ class TestMPAUserProfileViewSet(TestCase):
             'gender': self.user_gender.pk
         }
 
-        self.client.post(
+        account_res = self.client.post(
             reverse('account-sign-up-list'), 
             user_sign_up_data, 
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
+
+        user = User.objects.get(pk=account_res.data['pk'])
+
+        user_profile = UserProfile.objects.create(
+            user = user,
+            name = 'KingFox'
+        )
+        user_profile.save()
 
         #User Login
         login_credentials = {
@@ -164,7 +172,7 @@ class TestMPAUserProfileViewSet(TestCase):
             data=request_data, 
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
-        self.assertEqual(res.data['profiles'][0]['name'], 'foxbecoding')
+        self.assertEqual(res.data['profiles'][1]['name'], 'foxbecoding')
         self.assertEqual(res.status_code, 202)
 
     def test_mpa_user_profile_update_error(self):
@@ -191,12 +199,13 @@ class TestMPAUserProfileViewSet(TestCase):
 
     def test_mpa_user_profile_destroy(self):
         #Make additional profile
-        res = self.client.post(
-            reverse('mpa-user-profile-list'), 
-            data={ 'name': 'SoyReyFox' }, 
-            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
-        )
-        profile_pk = res.data['profiles'][1]['pk']
+        # res = self.client.post(
+        #     reverse('mpa-user-profile-list'), 
+        #     data={ 'name': 'SoyReyFox' }, 
+        #     **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        # )
+        # profile_pk = res.data['profiles'][1]['pk']
+        profile_pk = self.user['profiles'][1]
         request_data = {}
         res = self.client.delete(
             reverse('mpa-user-profile-detail', kwargs={'pk': profile_pk}), 
@@ -207,12 +216,11 @@ class TestMPAUserProfileViewSet(TestCase):
         self.assertEqual(res.status_code, 202)
     
     def test_mpa_user_profile_destroy_error(self):
-        #Make additional profile
-        self.client.post(
-            reverse('mpa-user-profile-list'), 
-            data={ 'name': 'SoyReyFox' }, 
-            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
-        )
+        # self.client.post(
+        #     reverse('mpa-user-profile-list'), 
+        #     data={ 'name': 'SoyReyFox' }, 
+        #     **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        # )
         profile_pk = self.user['profiles'][0]
         request_data = {}
         res = self.client.delete(

@@ -66,7 +66,8 @@ class MPAUserProfileViewSet(viewsets.ViewSet):
     
     @method_decorator(csrf_protect)
     def destroy(self, request, pk=None):
-        User_Profile_Instances = UserProfile.objects.filter(user__in=str(request.user.id)).filter(is_account_holder=False)
+        User_Serializer = UserSerializer(request.user) 
+        User_Profile_Instances = UserProfile.objects.filter(pk__in=User_Serializer.data['profiles']).filter(is_account_holder=False)
         user_profile_pks = [ str(upi.id) for upi in User_Profile_Instances ]  
         if str(pk) in user_profile_pks:
             User_Profile_Instance = UserProfile.objects.get(pk=pk)
