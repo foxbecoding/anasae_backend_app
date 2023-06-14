@@ -84,6 +84,10 @@ class MPAUserProfileImageViewSet(viewsets.ViewSet):
     def create(self, request):
         User_Profile_Instances = UserProfile.objects.filter(user__in=str(request.user.id)).filter(is_account_holder=False)
         user_profile_pks = [ str(upi.id) for upi in User_Profile_Instances ] 
-        if str(request.data['profile']) in user_profile_pks:
-            return Response(None, status=status.HTTP_201_CREATED)
+        if str(request.data['user_profile']) in user_profile_pks:
+            User_Profile_Image_Serializer = UserProfileImageSerializer(data=request.data)
+            if User_Profile_Image_Serializer.is_valid():
+                User_Profile_Image_Serializer.save()
+                data = Prepare_User_Data(request.user)
+            return Response(data, status=status.HTTP_201_CREATED)
         return Response(None, status=status.HTTP_401_UNAUTHORIZED)

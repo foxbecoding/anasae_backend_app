@@ -2,6 +2,8 @@ from django.test import TestCase, Client
 from django.urls import reverse
 from users.models import UserGender
 from datetime import datetime
+from PIL import Image
+import os, tempfile
 
 is_CSRF = True
 
@@ -219,3 +221,74 @@ class TestMPAUserProfileViewSet(TestCase):
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
         self.assertEqual(res.status_code, 401)
+
+class TestMPAUserProfileImageViewSet(TestCase):
+    
+    def setUp(self):
+        self.client = Client(enforce_csrf_checks=is_CSRF)
+        date_time_str = '12/31/1990'
+        self.date_time_obj = datetime.strptime(date_time_str, '%m/%d/%Y')
+        self.client.get(reverse('x-fct-list'))
+        self.csrftoken = self.client.cookies['csrftoken'].value
+        self.user_gender = UserGender.objects.create(gender = 'male')
+        self.user_gender.save()
+
+        #User Sign up
+        user_sign_up_data = {
+            'first_name': "Desmond",
+            'last_name': 'Fox',
+            'email': 'fox@foxbecoding.com',
+            'password': '123456',
+            'confirm_password': '123456',
+            'date_of_birth': self.date_time_obj.date(),
+            'agreed_to_toa': True,
+            'gender': self.user_gender.pk
+        }
+
+        self.client.post(
+            reverse('account-sign-up-list'), 
+            user_sign_up_data, 
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
+
+        #User Login
+        login_credentials = {
+            'email': 'fox@foxbecoding.com',
+            'password': '123456'
+        }
+    
+        #Get response data
+        res = self.client.post(
+            reverse('account-log-in-list'), 
+            login_credentials, 
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
+        self.user = res.data
+        self.csrftoken = self.client.cookies['csrftoken'].value
+        
+
+    def test_mpa_user_profile_image_create(self):
+        image = Image.new('RGB', (100, 100))
+        tmp_file = tempfile.NamedTemporaryFile(suffix='.jpg', prefix="test_img_")
+        image.save(tmp_file, 'jpeg')
+        tmp_file.seek(0)
+        request_data = {
+            'user_profile': self.user['profiles'][0],
+            'image': tmp_file
+        }
+        print(request_data)
+        # res = self.client.post(
+        #     reverse('mpa-user-profile-list'), 
+        #     data=request_data, 
+        #     **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        # )
+        # self.assertGreater(len(res.data['profiles']), 1)
+        # self.assertEqual(res.status_code, 201)
+
+        # clean event images directory
+        # os.remove(os.getenv('MEDIA_ROOT')+res.data['image'])
+
+        
+
+
+        
