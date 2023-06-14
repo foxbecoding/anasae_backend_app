@@ -41,13 +41,15 @@ ALLOWED_HOSTS = [
     '192.168.1.235',
     '192.168.1.235:3000',
     '192.168.1.235:3001',
-    '192.168.1.235:3002'
+    '192.168.1.235:3002',
+    '192.168.1.235:3003'
 ]
 
 CSRF_TRUSTED_ORIGINS = [
     'http://192.168.1.235:3000',   
     'http://192.168.1.235:3001',   
-    'http://192.168.1.235:3002'   
+    'http://192.168.1.235:3002',   
+    'http://192.168.1.235:3003'   
 ]
 
 CORS_ALLOW_CREDENTIALS = True
@@ -55,7 +57,8 @@ CORS_ORIGIN_ALLOW_ALL = False
 CORS_ORIGIN_WHITELIST = (
     'http://192.168.1.235:3000',   
     'http://192.168.1.235:3001',   
-    'http://192.168.1.235:3002'   
+    'http://192.168.1.235:3002',   
+    'http://192.168.1.235:3003'   
 )
 
 
@@ -182,3 +185,5 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+MEDIA_ROOT = env('MEDIA_ROOT')
