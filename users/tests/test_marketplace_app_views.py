@@ -198,13 +198,6 @@ class TestMPAUserProfileViewSet(TestCase):
         self.assertEqual(res.status_code, 401)
 
     def test_mpa_user_profile_destroy(self):
-        #Make additional profile
-        # res = self.client.post(
-        #     reverse('mpa-user-profile-list'), 
-        #     data={ 'name': 'SoyReyFox' }, 
-        #     **{'HTTP_X_CSRFTOKEN': self.csrftoken}
-        # )
-        # profile_pk = res.data['profiles'][1]['pk']
         profile_pk = self.user['profiles'][1]
         request_data = {}
         res = self.client.delete(
@@ -216,11 +209,6 @@ class TestMPAUserProfileViewSet(TestCase):
         self.assertEqual(res.status_code, 202)
     
     def test_mpa_user_profile_destroy_error(self):
-        # self.client.post(
-        #     reverse('mpa-user-profile-list'), 
-        #     data={ 'name': 'SoyReyFox' }, 
-        #     **{'HTTP_X_CSRFTOKEN': self.csrftoken}
-        # )
         profile_pk = self.user['profiles'][0]
         request_data = {}
         res = self.client.delete(
@@ -284,13 +272,14 @@ class TestMPAUserProfileImageViewSet(TestCase):
             'user_profile': self.user['profiles'][0],
             'image': tmp_file
         }
-        # res = self.client.post(
-        #     reverse('mpa-user-profile-image-list'), 
-        #     data=request_data, 
-        #     **{'HTTP_X_CSRFTOKEN': self.csrftoken}
-        # )
+        res = self.client.post(
+            reverse('mpa-user-profile-image-list'), 
+            data=request_data, 
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
         # self.assertGreater(len(res.data['profiles']), 1)
-        # self.assertEqual(res.status_code, 201)
+        self.assertEqual(res.status_code, 201)
 
         # clean event images directory
         # os.remove(os.getenv('MEDIA_ROOT')+res.data['image'])    
+    
