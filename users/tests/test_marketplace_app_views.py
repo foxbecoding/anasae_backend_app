@@ -315,7 +315,7 @@ class TestMPAUserProfileImageViewSet(TestCase):
         )
         self.assertEqual(res.status_code, 401)
 
-    def test_mpa_user_profile_image_create(self):
+    def test_mpa_user_profile_image_update(self):
         image = Image.new('RGB', (100, 100))
         tmp_file = tempfile.NamedTemporaryFile(suffix='.png', prefix="test_img_")
         image.save(tmp_file, 'png')
