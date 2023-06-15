@@ -1,7 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from utils.helpers import create_uid
-import stripe
 
 class User(AbstractUser):
     uid = models.CharField(max_length=20, blank=True, unique=True)
@@ -14,18 +12,6 @@ class User(AbstractUser):
     created = models.DateTimeField(auto_now_add=True, null=True)
     updated = models.DateTimeField(auto_now_add=True, null=True)
     deleted = models.DateTimeField(null=True)
-
-    def save(self, *args, **kwargs):
-        self.uid = create_uid('u-')
-        stripe_customer = stripe.Customer.create(
-            email=self.email,
-            name=self.first_name+' '+self.last_name,
-            metadata={
-                "uid": self.uid
-            }                
-        )
-        self.stripe_customer_id = stripe_customer.id
-        super(User, self).save(*args, **kwargs)
 
 class UserProfile(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="profiles")

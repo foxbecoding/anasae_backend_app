@@ -25,9 +25,10 @@ def Prepare_User_Data(User_Instance):
     ]
 
     for profile in user_profiles:
-        User_Profile_Image_Instance = UserProfileImage.objects.filter(user_profile=profile['pk'])
-        User_Profile_Image_Serializer = UserProfileImageSerializer(User_Profile_Image_Instance)
-        profile['image'] = User_Profile_Image_Serializer.data['image']
+        if UserProfileImage.objects.filter(user_profile=profile['pk']).exists():
+            User_Profile_Image_Instance = UserProfileImage.objects.get(user_profile=profile['pk'])
+            User_Profile_Image_Serializer = UserProfileImageSerializer(User_Profile_Image_Instance)
+            profile['image'] = User_Profile_Image_Serializer.data['image']
 
     data = {
         'pk': User_Data['pk'],

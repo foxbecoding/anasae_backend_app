@@ -1,6 +1,8 @@
 from django.contrib.auth.hashers import make_password, check_password
 from rest_framework import serializers
 from users.models import *
+from utils.helpers import create_uid
+import stripe
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -71,6 +73,16 @@ class CreateAccountSerializer(serializers.ModelSerializer):
             msg = 'Please agree to our Terms.'
             raise serializers.ValidationError({"agreed_to_toa": msg}, code='authorization')
 
+        uid = create_uid('u-')
+        stripe_customer = stripe.Customer.create(
+            email = attrs.get('email').lower(),
+            name = attrs.get('first_name')+' '+attrs.get('last_name'),
+            metadata = {
+                "uid": uid
+            }                
+        )
+        stripe_customer_id = stripe_customer.id
+
         # Save User in database
         user = User(
             first_name = attrs.get('first_name'),
@@ -78,11 +90,10 @@ class CreateAccountSerializer(serializers.ModelSerializer):
             email = attrs.get('email').lower(),
             password = make_password(attrs.get('password')),
             agreed_to_toa = attrs.get('agreed_to_toa'), 
-            date_of_birth = attrs.get('date_of_birth') 
+            date_of_birth = attrs.get('date_of_birth'), 
+            stripe_customer_id = stripe_customer_id
         )
-
         user.save()
-
         attrs['user'] = user
         return attrs  
 
