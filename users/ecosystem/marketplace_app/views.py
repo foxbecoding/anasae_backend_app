@@ -7,6 +7,7 @@ from rest_framework.permissions import IsAuthenticated
 from users.serializers import *
 from users.models import UserProfile
 from users.ecosystem.methods import Prepare_User_Data
+from utils.helpers import is_valid_square_img
 
 class MPAUserViewSet(viewsets.ViewSet):
     def get_permissions(self):
@@ -86,9 +87,9 @@ class MPAUserProfileImageViewSet(viewsets.ViewSet):
         User_Serializer = UserSerializer(request.user) 
         user_profile_pks = [ str(profile) for profile in User_Serializer.data['profiles'] ]  
         if str(request.data['user_profile']) in user_profile_pks:
-            User_Profile_Image_Serializer = UserProfileImageSerializer(data=request.data)
-            if User_Profile_Image_Serializer.is_valid():
-                User_Profile_Image_Serializer.save()
+            Create_User_Profile_Image_Serializer = CreateUserProfileImageSerializer(data=request.data, context={ 'request': request })
+            if Create_User_Profile_Image_Serializer.is_valid():
                 data = Prepare_User_Data(request.user)
-            return Response(data, status=status.HTTP_201_CREATED)
+                return Response(data, status=status.HTTP_201_CREATED)
+            return Response(Create_User_Profile_Image_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         return Response(None, status=status.HTTP_401_UNAUTHORIZED)

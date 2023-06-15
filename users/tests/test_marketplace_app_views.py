@@ -277,9 +277,40 @@ class TestMPAUserProfileImageViewSet(TestCase):
             data=request_data, 
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
-        # self.assertGreater(len(res.data['profiles']), 1)
+        self.assertNotEqual(res.data['profiles'][0]['image'], '')
         self.assertEqual(res.status_code, 201)
 
         # clean event images directory
         # os.remove(os.getenv('MEDIA_ROOT')+res.data['image'])    
+
+    def test_mpa_user_profile_image_create_error(self):
+        image = Image.new('RGB', (100, 100))
+        tmp_file = tempfile.NamedTemporaryFile(suffix='.gif', prefix="test_img_")
+        image.save(tmp_file, 'gif')
+        tmp_file.seek(0)
+        request_data = {
+            'user_profile': self.user['profiles'][0],
+            'image': tmp_file
+        }
+        res = self.client.post(
+            reverse('mpa-user-profile-image-list'), 
+            data=request_data, 
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
+        self.assertEqual(res.status_code, 400)
     
+    def test_mpa_user_profile_image_create_no_ownership(self):
+        image = Image.new('RGB', (100, 100))
+        tmp_file = tempfile.NamedTemporaryFile(suffix='.png', prefix="test_img_")
+        image.save(tmp_file, 'png')
+        tmp_file.seek(0)
+        request_data = {
+            'user_profile': 1111,
+            'image': tmp_file
+        }
+        res = self.client.post(
+            reverse('mpa-user-profile-image-list'), 
+            data=request_data, 
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
+        self.assertEqual(res.status_code, 401)

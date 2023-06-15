@@ -2,6 +2,7 @@ from django.contrib.auth.hashers import make_password, check_password
 from rest_framework import serializers
 from users.models import *
 from utils.helpers import create_uid
+from PIL import Image
 import stripe
 
 class UserSerializer(serializers.ModelSerializer):
@@ -61,7 +62,6 @@ class CreateAccountSerializer(serializers.ModelSerializer):
         agreed_to_toa = attrs.get('agreed_to_toa')
         password = attrs.get('password')
         confirm_password = attrs.get('confirm_password')
-
 
         # Check if passwords matches
         if password != confirm_password:
@@ -210,3 +210,29 @@ class UserProfileImageSerializer(serializers.ModelSerializer):
             'user_profile',
             'image'
         ]
+
+class CreateUserProfileImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserProfileImage
+        fields = [
+            'user_profile',
+            'image'
+        ]
+    
+    def validate(self, attrs):
+        image = attrs.get('image')
+        user_profile_pk = attrs.get('user_profile')
+
+        img = Image.open(image)
+        valid_formats = ['PNG', 'JPEG']
+        if img.format not in valid_formats:
+            msg = 'Image must be in PNG or JPEG format'
+            raise serializers.ValidationError({"image": msg}, code='authorization')
+
+        user_profile_image = UserProfileImage(
+            user_profile = user_profile_pk,
+            image = image
+        )
+        user_profile_image.save()
+        attrs['user_profile_image'] = user_profile_image
+        return attrs
