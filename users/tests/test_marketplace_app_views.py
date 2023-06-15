@@ -7,6 +7,16 @@ import os, tempfile
 
 is_CSRF = True
 
+def tmp_image(img_format = 'jpg'):
+    image = Image.new('RGB', (100, 100))
+    tmp_file = tempfile.NamedTemporaryFile(suffix='.{}'.format(img_format), prefix="test_img_")
+    if img_format == 'jpg':
+        img_format = 'jpeg'
+    image.save(tmp_file, img_format)
+    tmp_file.seek(0)
+    return tmp_file
+
+
 class TestMPAUserViewSet(TestCase):
     
     def setUp(self):
@@ -264,19 +274,16 @@ class TestMPAUserProfileImageViewSet(TestCase):
         
 
     def test_mpa_user_profile_image_create(self):
-        image = Image.new('RGB', (100, 100))
-        tmp_file = tempfile.NamedTemporaryFile(suffix='.jpg', prefix="test_img_")
-        image.save(tmp_file, 'jpeg')
-        tmp_file.seek(0)
         request_data = {
             'user_profile': self.user['profiles'][0],
-            'image': tmp_file
+            'image': tmp_image()
         }
         res = self.client.post(
             reverse('mpa-user-profile-image-list'), 
             data=request_data, 
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
+  
         self.assertNotEqual(res.data['profiles'][0]['image'], None)
         self.assertEqual(res.status_code, 201)
 
@@ -284,13 +291,9 @@ class TestMPAUserProfileImageViewSet(TestCase):
         # os.remove(os.getenv('MEDIA_ROOT')+res.data['image'])    
 
     def test_mpa_user_profile_image_create_error(self):
-        image = Image.new('RGB', (100, 100))
-        tmp_file = tempfile.NamedTemporaryFile(suffix='.gif', prefix="test_img_")
-        image.save(tmp_file, 'gif')
-        tmp_file.seek(0)
         request_data = {
             'user_profile': self.user['profiles'][0],
-            'image': tmp_file
+            'image': tmp_image('gif')
         }
         res = self.client.post(
             reverse('mpa-user-profile-image-list'), 
@@ -300,13 +303,9 @@ class TestMPAUserProfileImageViewSet(TestCase):
         self.assertEqual(res.status_code, 400)
     
     def test_mpa_user_profile_image_create_no_ownership(self):
-        image = Image.new('RGB', (100, 100))
-        tmp_file = tempfile.NamedTemporaryFile(suffix='.png', prefix="test_img_")
-        image.save(tmp_file, 'png')
-        tmp_file.seek(0)
         request_data = {
             'user_profile': 1111,
-            'image': tmp_file
+            'image': tmp_image('png')
         }
         res = self.client.post(
             reverse('mpa-user-profile-image-list'), 
@@ -316,18 +315,23 @@ class TestMPAUserProfileImageViewSet(TestCase):
         self.assertEqual(res.status_code, 401)
 
     def test_mpa_user_profile_image_update(self):
-        image = Image.new('RGB', (100, 100))
-        tmp_file = tempfile.NamedTemporaryFile(suffix='.png', prefix="test_img_")
-        image.save(tmp_file, 'png')
-        tmp_file.seek(0)
-        request_data = {
+        create_image_request_data = {
             'user_profile': self.user['profiles'][0],
-            'image': tmp_file
+            'image': tmp_image('png')
         }
         create_image_res = self.client.post(
             reverse('mpa-user-profile-image-list'), 
-            data=request_data, 
+            data=create_image_request_data, 
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
-        print(create_image_res.data['profiles'][0]['image']['pk'])
+        image_pk = create_image_res.data['profiles'][0]['image']['pk']
+        update_image_request_data = {
+            'image': tmp_image('png')
+        }
+        print(update_image_request_data)
+        update_image_res = self.client.put(
+            reverse('mpa-user-profile-image-detail', kwargs={'pk': image_pk}), 
+            data=update_image_request_data, 
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
         # self.assertEqual(res.status_code, 201)

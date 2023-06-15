@@ -92,11 +92,15 @@ class MPAUserProfileImageViewSet(viewsets.ViewSet):
             return Response(Create_User_Profile_Image_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         return Response(None, status=status.HTTP_401_UNAUTHORIZED)
     
+    @method_decorator(csrf_protect)
     def update(self, request, pk=None):
         User_Serializer = UserSerializer(request.user) 
         user_profile_pks = [ profile for profile in User_Serializer.data['profiles'] ] 
-        test = UserProfileImage.objects.filter(user_profile_id=user_profile_pks)
+        test = UserProfileImage.objects.filter(user_profile_id=user_profile_pks[0])
         print(len(test))
+        print('pk = {}'.format(pk))
+        print(request.data['image'])
+        print(request.FILES)
         return Response(None, status=status.HTTP_200_OK)
         # if str(request.data['user_profile']) in user_profile_pks:
         #     Create_User_Profile_Image_Serializer = CreateUserProfileImageSerializer(data=request.data, context={ 'request': request })

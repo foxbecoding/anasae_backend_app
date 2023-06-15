@@ -211,15 +211,6 @@ class UserProfileImageSerializer(serializers.ModelSerializer):
             'image'
         ]
 
-class UserProfileImageSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = UserProfileImage
-        fields = [
-            'pk',
-            'user_profile',
-            'image'
-        ]
-
 class CreateUserProfileImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfileImage
