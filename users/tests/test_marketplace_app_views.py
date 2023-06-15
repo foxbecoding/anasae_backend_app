@@ -277,7 +277,7 @@ class TestMPAUserProfileImageViewSet(TestCase):
             data=request_data, 
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
-        self.assertNotEqual(res.data['profiles'][0]['image'], '')
+        self.assertNotEqual(res.data['profiles'][0]['image'], None)
         self.assertEqual(res.status_code, 201)
 
         # clean event images directory
@@ -314,3 +314,20 @@ class TestMPAUserProfileImageViewSet(TestCase):
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
         self.assertEqual(res.status_code, 401)
+
+    def test_mpa_user_profile_image_create(self):
+        image = Image.new('RGB', (100, 100))
+        tmp_file = tempfile.NamedTemporaryFile(suffix='.png', prefix="test_img_")
+        image.save(tmp_file, 'png')
+        tmp_file.seek(0)
+        request_data = {
+            'user_profile': self.user['profiles'][0],
+            'image': tmp_file
+        }
+        create_image_res = self.client.post(
+            reverse('mpa-user-profile-image-list'), 
+            data=request_data, 
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
+        print(create_image_res.data['profiles'][0]['image']['pk'])
+        # self.assertEqual(res.status_code, 201)

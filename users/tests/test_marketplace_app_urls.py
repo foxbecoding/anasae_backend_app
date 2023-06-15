@@ -23,6 +23,6 @@ class TestMAUserProfileImageUrls(SimpleTestCase):
         url = reverse('mpa-user-profile-image-list')
         self.assertEqual(resolve(url).view_name, 'mpa-user-profile-image-list')
     
-    # def test_mpa_user_profile_detail_url_resolves(self):
-    #     url = reverse('mpa-user-profile-detail', kwargs={'pk': 1})
-    #     self.assertEqual(resolve(url).view_name, 'mpa-user-profile-detail')
+    def test_mpa_user_profile_image_detail_url_resolves(self):
+        url = reverse('mpa-user-profile-image-detail', kwargs={'pk': 1})
+        self.assertEqual(resolve(url).view_name, 'mpa-user-profile-image-detail')
