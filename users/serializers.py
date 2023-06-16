@@ -85,6 +85,7 @@ class CreateAccountSerializer(serializers.ModelSerializer):
 
         # Save User in database
         user = User(
+            uid = uid,
             first_name = attrs.get('first_name'),
             last_name = attrs.get('last_name'),
             email = attrs.get('email').lower(),
@@ -218,10 +219,10 @@ class CreateUserProfileImageSerializer(serializers.ModelSerializer):
             'user_profile',
             'image'
         ]
-    
+
     def validate(self, attrs):
         image = attrs.get('image')
-        user_profile_pk = attrs.get('user_profile')
+        user_profile = attrs.get('user_profile')
 
         img = Image.open(image)
         valid_formats = ['PNG', 'JPEG']
@@ -230,7 +231,7 @@ class CreateUserProfileImageSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError({"image": msg}, code='authorization')
 
         user_profile_image = UserProfileImage(
-            user_profile = user_profile_pk,
+            user_profile = user_profile,
             image = image
         )
         user_profile_image.save()

@@ -1,3 +1,4 @@
+from django.test.client import encode_multipart, RequestFactory
 from django.test import TestCase, Client
 from django.urls import reverse
 from users.models import User, UserGender, UserProfile
@@ -315,6 +316,7 @@ class TestMPAUserProfileImageViewSet(TestCase):
         self.assertEqual(res.status_code, 401)
 
     def test_mpa_user_profile_image_update(self):
+        # Create Image File
         create_image_request_data = {
             'user_profile': self.user['profiles'][0],
             'image': tmp_image('png')
@@ -324,14 +326,16 @@ class TestMPAUserProfileImageViewSet(TestCase):
             data=create_image_request_data, 
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
-        image_pk = create_image_res.data['profiles'][0]['image']['pk']
+        # image_pk = create_image_res.data['profiles'][0]['image']['pk']
+
         update_image_request_data = {
+            'user_profile': self.user['profiles'][0],
             'image': tmp_image('png')
         }
-        print(update_image_request_data)
-        update_image_res = self.client.put(
-            reverse('mpa-user-profile-image-detail', kwargs={'pk': image_pk}), 
-            data=update_image_request_data, 
-            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        update_image_res = self.client.post(
+            reverse('mpa-user-profile-image-list'),
+            data=update_image_request_data,
+            **{ 'HTTP_X_CSRFTOKEN': self.csrftoken }
         )
-        # self.assertEqual(res.status_code, 201)
+        self.assertEqual(create_image_res.status_code, 201)
+        self.assertEqual(update_image_res.status_code, 201)

@@ -1,5 +1,7 @@
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_protect
+from rest_framework.decorators import parser_classes
+from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework import viewsets
 from rest_framework import status
 from rest_framework.response import Response
@@ -7,6 +9,7 @@ from rest_framework.permissions import IsAuthenticated
 from users.serializers import *
 from users.models import UserProfile, UserProfileImage
 from users.ecosystem.methods import Prepare_User_Data
+
 class MPAUserViewSet(viewsets.ViewSet):
     def get_permissions(self):
         permission_classes = [IsAuthenticated]
@@ -76,15 +79,24 @@ class MPAUserProfileViewSet(viewsets.ViewSet):
         return Response(None, status=status.HTTP_401_UNAUTHORIZED)
     
 class MPAUserProfileImageViewSet(viewsets.ViewSet):
+
+    def get_parsers(self):
+        parser_classes = [FormParser, MultiPartParser]
+        return [ parser() for parser in parser_classes]
+
     def get_permissions(self):
         permission_classes = [IsAuthenticated]
         return [permission() for permission in permission_classes]
-    
+
     @method_decorator(csrf_protect)
     def create(self, request):
         User_Serializer = UserSerializer(request.user) 
         user_profile_pks = [ str(profile) for profile in User_Serializer.data['profiles'] ]  
         if str(request.data['user_profile']) in user_profile_pks:
+            is_User_Profile_Image = UserProfileImage.objects.filter(user_profile_id=str(request.data['user_profile'])).exists()
+            if is_User_Profile_Image:
+                User_Profile_Image = UserProfileImage.objects.get(user_profile_id=str(request.data['user_profile']))
+                User_Profile_Image.delete()
             Create_User_Profile_Image_Serializer = CreateUserProfileImageSerializer(data=request.data, context={ 'request': request })
             if Create_User_Profile_Image_Serializer.is_valid():
                 data = Prepare_User_Data(request.user)
@@ -93,14 +105,14 @@ class MPAUserProfileImageViewSet(viewsets.ViewSet):
         return Response(None, status=status.HTTP_401_UNAUTHORIZED)
     
     @method_decorator(csrf_protect)
+    @parser_classes([FormParser, MultiPartParser])
     def update(self, request, pk=None):
         User_Serializer = UserSerializer(request.user) 
-        user_profile_pks = [ profile for profile in User_Serializer.data['profiles'] ] 
-        test = UserProfileImage.objects.filter(user_profile_id=user_profile_pks[0])
-        print(len(test))
-        print('pk = {}'.format(pk))
-        print(request.data['image'])
-        print(request.FILES)
+        # user_profile_pks = [ profile for profile in User_Serializer.data['profiles'] ] 
+        # test = UserProfileImage.objects.filter(user_profile_id=request.data['user_profile'])
+        # print(len(test))
+        print(pk)
+        print(request.upload_handlers)
         return Response(None, status=status.HTTP_200_OK)
         # if str(request.data['user_profile']) in user_profile_pks:
         #     Create_User_Profile_Image_Serializer = CreateUserProfileImageSerializer(data=request.data, context={ 'request': request })
