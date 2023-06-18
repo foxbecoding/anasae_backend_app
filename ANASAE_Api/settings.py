@@ -83,8 +83,9 @@ INSTALLED_APPS = [
     'users.apps.UsersConfig',
     'merchants.apps.MerchantsConfig',
     'departments.apps.DepartmentsConfig',
+    'categories.apps.CategoriesConfig',
     'products.apps.ProductsConfig',
-    'orders.apps.OrdersConfig',
+    'orders.apps.OrdersConfig'
 ]
 
 REST_FRAMEWORK = {
