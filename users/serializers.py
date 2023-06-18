@@ -237,3 +237,17 @@ class CreateUserProfileImageSerializer(serializers.ModelSerializer):
         user_profile_image.save()
         attrs['user_profile_image'] = user_profile_image
         return attrs
+    
+class UserAddressSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserAddress
+        fields = [
+            'full_name',
+            'phone_number',
+            'street_address',
+            'street_address_ext',
+            'country',
+            'state',
+            'city',
+            'postal_code'
+        ]
