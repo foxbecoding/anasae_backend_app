@@ -139,4 +139,11 @@ class MPAUserAddressViewSet(viewsets.ViewSet):
 
     @method_decorator(csrf_protect)
     def destroy(self, request, pk=None):
-        pass
+        User_Serializer = UserSerializer(request.user) 
+        user_address_pks = [ str(address) for address in User_Serializer.data['addresses'] ]  
+        if str(pk) not in user_address_pks:
+            return Response(None, status=status.HTTP_401_UNAUTHORIZED)
+        User_Address_Instance = UserAddress.objects.get(pk=pk)
+        User_Address_Instance.delete()
+        data = Prepare_User_Data(request.user)
+        return Response(data, status=status.HTTP_202_ACCEPTED)
