@@ -108,8 +108,17 @@ class MPAUserAddressViewSet(viewsets.ViewSet):
     
     @method_decorator(csrf_protect)
     def create(self, request):
-        request_data = { 'user': str(request.user.id) }
-        request_data.update(request.data)
+        request_data = { 
+            'user': str(request.user.id),
+            'full_name': request.data['full_name'],
+            'phone_number': request.data['phone_number'],
+            'street_address': request.data['street_address'],
+            'street_address_ext': request.data['street_address_ext'],
+            'country': request.data['country'],
+            'state': request.data['state'],
+            'city': request.data['city'],
+            'postal_code': request.data['postal_code']
+        }
         Create_User_Address_Serializer = CreateUserAddressSerializer(data=request_data)
         if Create_User_Address_Serializer.is_valid():
             Create_User_Address_Serializer.save()
