@@ -517,7 +517,6 @@ class TestMPAUserAddressViewSet(TestCase):
             data=request_data,  
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         ) 
-        print(res.data)
         self.assertEqual(res.status_code, 202)
     
     def test_mpa_user_address_destroy_no_ownership(self):

@@ -1,13 +1,13 @@
 from django.test import SimpleTestCase
 from django.urls import reverse, resolve
 
-class TestMAUserUrls(SimpleTestCase):
+class TestMPAUserUrls(SimpleTestCase):
 
     def test_mpa_user_detail_url_resolves(self):
         url = reverse('mpa-user-detail', kwargs={'pk': 1})
         self.assertEqual(resolve(url).view_name, 'mpa-user-detail')
 
-class TestMAUserProfileUrls(SimpleTestCase):
+class TestMPAUserProfileUrls(SimpleTestCase):
 
     def test_mpa_user_profile_list_url_resolves(self):
         url = reverse('mpa-user-profile-list')
@@ -17,13 +17,13 @@ class TestMAUserProfileUrls(SimpleTestCase):
         url = reverse('mpa-user-profile-detail', kwargs={'pk': 1})
         self.assertEqual(resolve(url).view_name, 'mpa-user-profile-detail')
 
-class TestMAUserProfileImageUrls(SimpleTestCase):
+class TestMPAUserProfileImageUrls(SimpleTestCase):
 
     def test_mpa_user_profile_image_list_url_resolves(self):
         url = reverse('mpa-user-profile-image-list')
         self.assertEqual(resolve(url).view_name, 'mpa-user-profile-image-list')
 
-class TestMAUserAdressUrls(SimpleTestCase):
+class TestMPAUserAdressUrls(SimpleTestCase):
 
     def test_mpa_user_address_list_url_resolves(self):
         url = reverse('mpa-user-address-list')
