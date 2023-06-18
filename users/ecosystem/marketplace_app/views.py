@@ -112,23 +112,26 @@ class MPAUserAddressViewSet(viewsets.ViewSet):
     
     @method_decorator(csrf_protect)
     def create(self, request):
-        # if str(request.user.id) != str(request.data['user']):
-        #     return Response(None, status=status.HTTP_401_UNAUTHORIZED)
-        Create_User_Address_Serializer = CreateUserAddressSerializer(data=request.data, context={'request': request, 'user': request.user})
+        if 'user' not in request.data:
+            return Response(None, status=status.HTTP_401_UNAUTHORIZED)
+        if str(request.user.id) != str(request.data['user']):
+            return Response(None, status=status.HTTP_401_UNAUTHORIZED)
+        Create_User_Address_Serializer = CreateUserAddressSerializer(data=request.data)
         if Create_User_Address_Serializer.is_valid():
             Create_User_Address_Serializer.save()
             data = Prepare_User_Data(request.user)
             return Response(data, status=status.HTTP_201_CREATED)
         return Response(Create_User_Address_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        
-    
-    @method_decorator(csrf_protect)
-    def retrieve(self, request, pk=None):
-        pass
     
     @method_decorator(csrf_protect)
     def update(self, request, pk=None):
-        pass
+        User_Serializer = UserSerializer(request.user) 
+        user_address_pks = [ str(address) for address in User_Serializer.data['addresses'] ]  
+        if str(pk) not in user_address_pks:
+            return Response(None, status=status.HTTP_401_UNAUTHORIZED)
+        
+        User_Address_ = UserAddress.objects.get(pk=pk)
+        return Response(None, status=status.HTTP_200_OK)
 
     @method_decorator(csrf_protect)
     def destroy(self, request, pk=None):
