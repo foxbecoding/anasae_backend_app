@@ -1,14 +1,14 @@
 from django.db import models
 from users.models import User
-from departments.models import Department, DepartmentSection, DepartmentSubSection
+from categories.models import Category, Subcategory, SubcategorySection
 from merchants.models import MerchantStore
 from utils.helpers import create_uid
 
 class Product(models.Model):
     merchant_store = models.ForeignKey(MerchantStore, on_delete=models.CASCADE, related_name="products")
-    department = models.ForeignKey(Department, on_delete=models.SET_NULL, related_name="products", null=True)
-    department_section = models.ForeignKey(DepartmentSection, on_delete=models.SET_NULL, related_name="products", blank=True, null=True)
-    department_sub_section = models.ForeignKey(DepartmentSubSection, on_delete=models.SET_NULL, related_name="products", blank=True, null=True)
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL, related_name="products", null=True)
+    subcategory = models.ForeignKey(Subcategory, on_delete=models.SET_NULL, related_name="products", blank=True, null=True)
+    subcategory_section = models.ForeignKey(SubcategorySection, on_delete=models.SET_NULL, related_name="products", blank=True, null=True)
     uid = models.CharField(max_length=20, blank=True, unique=True)
     sku = models.CharField(max_length=50, blank=False, unique=True)
     isbn = models.CharField(max_length=200, blank=True, null=True, unique=True)
