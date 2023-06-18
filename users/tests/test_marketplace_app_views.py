@@ -198,7 +198,7 @@ class TestMPAUserProfileViewSet(TestCase):
         self.assertEqual(res.status_code, 400)
 
     def test_mpa_user_profile_update_no_ownership(self):
-        profile_pk = 25
+        profile_pk = 1000
         request_data = {'name': 'foxbecoding'}
         res = self.client.put(
             reverse('mpa-user-profile-detail', kwargs={'pk': profile_pk}), 
@@ -422,6 +422,25 @@ class TestMPAUserAddressViewSet(TestCase):
         self.assertEqual(res.status_code, 201)
     
     def test_mpa_user_address_create_error(self):
+        request_data = { 
+            'user': self.user['pk'],
+            'full_name': '',
+            'phone_number': '(504)729-8617',
+            'street_address': '4024 Crossmor dr',
+            'street_address_ext': '',
+            'country': 'United States',
+            'state': 'Louisiana',
+            'city': 'Marrero',
+            'postal_code': '70072'
+        }
+        res = self.client.post(
+            reverse('mpa-user-address-list'), 
+            data=request_data, 
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
+        self.assertEqual(res.status_code, 400)
+
+    def test_mpa_user_address_create_no_ownership(self):
         request_data = {}
         res = self.client.post(
             reverse('mpa-user-address-list'), 
@@ -439,10 +458,53 @@ class TestMPAUserAddressViewSet(TestCase):
             'country': 'United States',
             'state': 'Louisiana',
             'city': 'Marrero',
-            'postal_code': '70072'
+            'postal_code': '70072',
+            'is_default': True
         }
         res = self.client.put(
-            reverse('mpa-user-address-detail', kwargs={'pk': self.user_address}),
+            reverse('mpa-user-address-detail', kwargs={'pk': self.user_address.id}),
+            content_type='application/json',
             data=request_data,  
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         ) 
+        self.assertEqual(res.status_code, 202)
+
+    def test_mpa_user_address_update_error(self):
+        request_data = { 
+            'full_name': '',
+            'phone_number': '(504)729-8617',
+            'street_address': '4024 Crossmor dr',
+            'street_address_ext': '',
+            'country': 'United States',
+            'state': 'Louisiana',
+            'city': 'Marrero',
+            'postal_code': '70072',
+            'is_default': True
+        }
+        res = self.client.put(
+            reverse('mpa-user-address-detail', kwargs={'pk': self.user_address.id}),
+            content_type='application/json',
+            data=request_data,  
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        ) 
+        self.assertEqual(res.status_code, 400)
+
+    def test_mpa_user_address_update_no_ownership(self):
+        request_data = { 
+            'full_name': 'Desmond L Fox',
+            'phone_number': '(504)729-8617',
+            'street_address': '4024 Crossmor dr',
+            'street_address_ext': '',
+            'country': 'United States',
+            'state': 'Louisiana',
+            'city': 'Marrero',
+            'postal_code': '70072',
+            'is_default': True
+        }
+        res = self.client.put(
+            reverse('mpa-user-address-detail', kwargs={'pk': 847}),
+            content_type='application/json',
+            data=request_data,  
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        ) 
+        self.assertEqual(res.status_code, 401)

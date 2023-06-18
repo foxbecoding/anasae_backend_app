@@ -129,9 +129,13 @@ class MPAUserAddressViewSet(viewsets.ViewSet):
         user_address_pks = [ str(address) for address in User_Serializer.data['addresses'] ]  
         if str(pk) not in user_address_pks:
             return Response(None, status=status.HTTP_401_UNAUTHORIZED)
-        
-        User_Address_ = UserAddress.objects.get(pk=pk)
-        return Response(None, status=status.HTTP_200_OK)
+        User_Address_Instance = UserAddress.objects.get(pk=pk)
+        Edit_User_Address_Serializer = EditUserAddressSerializer(User_Address_Instance, data=request.data)
+        if Edit_User_Address_Serializer.is_valid():
+            Edit_User_Address_Serializer.save()
+            data = Prepare_User_Data(request.user)
+            return Response(data, status=status.HTTP_202_ACCEPTED)
+        return Response(Edit_User_Address_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     @method_decorator(csrf_protect)
     def destroy(self, request, pk=None):
