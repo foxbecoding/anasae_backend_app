@@ -259,6 +259,7 @@ class CreateUserAddressSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserAddress
         fields = [
+            'user',
             'full_name',
             'phone_number',
             'street_address',
