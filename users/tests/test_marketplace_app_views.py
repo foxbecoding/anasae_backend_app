@@ -403,6 +403,7 @@ class TestMPAUserAddressViewSet(TestCase):
 
     def test_mpa_user_address_create(self):
         request_data = { 
+            'user': self.user.id,
             'full_name': 'Desmond Fox',
             'phone_number': '(504)729-8617',
             'street_address': '4024 Crossmor dr',
