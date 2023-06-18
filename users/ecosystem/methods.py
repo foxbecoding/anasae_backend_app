@@ -35,6 +35,8 @@ def Prepare_User_Data(User_Instance):
         else:
             profile['image'] = None
 
+    User_Address_Instance = UserAddress.objects.filter(pk__in=User_Data['addresses'])
+    User_Address_Serializer = UserAddressSerializer(User_Address_Instance, many=True)
 
     data = {
         'pk': User_Data['pk'],
@@ -43,6 +45,7 @@ def Prepare_User_Data(User_Instance):
         'last_name': User_Data['last_name'],
         'email': User_Data['email'],
         'logins': user_logins,
-        'profiles': user_profiles
+        'profiles': user_profiles,
+        'addresses': User_Address_Serializer.data
     }
     return data

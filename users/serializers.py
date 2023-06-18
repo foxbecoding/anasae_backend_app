@@ -19,16 +19,17 @@ class UserSerializer(serializers.ModelSerializer):
             'is_active',
             'stripe_customer_id',
             #relationships
+            'addresses',
             'logins',
             'profiles',
             'gender_choice'
         ]
 
-        extra_kwargs = {
-            'logins': {'required': False},
-            'profiles': {'required': False},
-            'gender_choice': {'required': False}
-        }
+        # extra_kwargs = {
+        #     'logins': {'required': False},
+        #     'profiles': {'required': False},
+        #     'gender_choice': {'required': False}
+        # }
 
 class EditUserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -250,7 +251,8 @@ class UserAddressSerializer(serializers.ModelSerializer):
             'country',
             'state',
             'city',
-            'postal_code'
+            'postal_code',
+            'is_default'
         ]
 
 class CreateUserAddressSerializer(serializers.ModelSerializer):
@@ -279,5 +281,6 @@ class EditUserAddressSerializer(serializers.ModelSerializer):
             'country',
             'state',
             'city',
-            'postal_code'
+            'postal_code',
+            'is_default'
         ]

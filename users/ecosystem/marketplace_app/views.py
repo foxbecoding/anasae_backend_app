@@ -108,8 +108,14 @@ class MPAUserAddressViewSet(viewsets.ViewSet):
     
     @method_decorator(csrf_protect)
     def create(self, request):
-        print(request.data)
-        return Response(None, status=status.HTTP_201_CREATED)
+        request_data = { 'user': str(request.user.id) }
+        request_data.update(request.data)
+        Create_User_Address_Serializer = CreateUserAddressSerializer(data=request_data)
+        if Create_User_Address_Serializer.is_valid():
+            Create_User_Address_Serializer.save()
+            data = Prepare_User_Data(request.user)
+            return Response(data, status=status.HTTP_201_CREATED)
+        return Response(Create_User_Address_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
     @method_decorator(csrf_protect)
     def retrieve(self, request, pk=None):

@@ -417,5 +417,6 @@ class TestMPAUserAddressViewSet(TestCase):
             data=request_data, 
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
+        print(res.data)
         # self.assertGreater(len(res.data['profiles']), 1)
         # self.assertEqual(res.status_code, 201)
