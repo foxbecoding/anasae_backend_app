@@ -15,14 +15,14 @@ class MPAUserViewSet(viewsets.ViewSet):
         return [permission() for permission in permission_classes]
 
     def retrieve(self, request, pk=None):
-        if str(pk) == str(request.user.id):
-            data = Prepare_User_Data(request.user)
-            return Response(data, status=status.HTTP_200_OK)
-        return Response(None, status=status.HTTP_401_UNAUTHORIZED)
+        if str(pk) != str(request.user.id):
+            return Response(None, status=status.HTTP_401_UNAUTHORIZED)
+        data = Prepare_User_Data(request.user)
+        return Response(data, status=status.HTTP_200_OK)
         
     @method_decorator(csrf_protect)
     def update(self, request, pk=None):
-        if str(pk) == str(request.user.id):
+        if str(pk) != str(request.user.id):
             return Response(None, status=status.HTTP_401_UNAUTHORIZED)
         User_Instance = request.user
         Edit_User_Serializer = EditUserSerializer(User_Instance, data=request.data)
