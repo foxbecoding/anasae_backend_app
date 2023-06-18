@@ -112,9 +112,9 @@ class MPAUserAddressViewSet(viewsets.ViewSet):
     
     @method_decorator(csrf_protect)
     def create(self, request):
-        if str(request.user.id) != str(request.data['user']):
-            return Response(None, status=status.HTTP_401_UNAUTHORIZED)
-        Create_User_Address_Serializer = CreateUserAddressSerializer(data=request.data)
+        # if str(request.user.id) != str(request.data['user']):
+        #     return Response(None, status=status.HTTP_401_UNAUTHORIZED)
+        Create_User_Address_Serializer = CreateUserAddressSerializer(data=request.data, context={'request': request, 'user': request.user})
         if Create_User_Address_Serializer.is_valid():
             Create_User_Address_Serializer.save()
             data = Prepare_User_Data(request.user)
