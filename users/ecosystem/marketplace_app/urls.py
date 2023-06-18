@@ -5,4 +5,5 @@ router = DefaultRouter()
 router.register(r"mpa-user", MPAUserViewSet, basename="mpa-user")
 router.register(r"mpa-user-profile", MPAUserProfileViewSet, basename="mpa-user-profile")
 router.register(r"mpa-user-profile-image", MPAUserProfileImageViewSet, basename="mpa-user-profile-image")
+router.register(r"mpa-user-address", MPAUserAddressViewSet, basename="mpa-user-address")
 urlpatterns = router.urls

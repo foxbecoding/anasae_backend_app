@@ -22,7 +22,13 @@ class TestMAUserProfileImageUrls(SimpleTestCase):
     def test_mpa_user_profile_image_list_url_resolves(self):
         url = reverse('mpa-user-profile-image-list')
         self.assertEqual(resolve(url).view_name, 'mpa-user-profile-image-list')
+
+class TestMAUserAdressUrls(SimpleTestCase):
+
+    def test_mpa_user_address_list_url_resolves(self):
+        url = reverse('mpa-user-address-list')
+        self.assertEqual(resolve(url).view_name, 'mpa-user-address-list')
     
-    def test_mpa_user_profile_image_detail_url_resolves(self):
-        url = reverse('mpa-user-profile-image-detail', kwargs={'pk': 1})
-        self.assertEqual(resolve(url).view_name, 'mpa-user-profile-image-detail')
+    def test_mpa_user_address_detail_url_resolves(self):
+        url = reverse('mpa-user-address-detail', kwargs={'pk': 1})
+        self.assertEqual(resolve(url).view_name, 'mpa-user-address-detail')
