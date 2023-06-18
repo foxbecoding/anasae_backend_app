@@ -82,7 +82,6 @@ INSTALLED_APPS = [
     'rest_framework',
     'users.apps.UsersConfig',
     'merchants.apps.MerchantsConfig',
-    'departments.apps.DepartmentsConfig',
     'categories.apps.CategoriesConfig',
     'products.apps.ProductsConfig',
     'orders.apps.OrdersConfig'
