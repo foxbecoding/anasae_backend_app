@@ -374,13 +374,13 @@ class TestMPAUserAddressViewSet(TestCase):
         user_address = UserAddress.objects.create(
             user = user,
             full_name = 'Desmond Fox',
-            phone_number = '(504)729-8617',
-            street_address = '4024 Crossmor dr',
+            phone_number = '(504)366-7899',
+            street_address = '1912 Pailet',
             street_address_ext = '',
             country = 'United States',
             state = 'Louisiana',
-            city = 'Marrero',
-            postal_code = '70072'
+            city = 'Harvey',
+            postal_code = '70058'
         )
 
         user_address.save()
@@ -417,6 +417,14 @@ class TestMPAUserAddressViewSet(TestCase):
             data=request_data, 
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
-        print(res.data)
-        # self.assertGreater(len(res.data['profiles']), 1)
-        # self.assertEqual(res.status_code, 201)
+        self.assertEqual(res.data['addresses'][1]['city'], 'Marrero')
+        self.assertEqual(res.status_code, 201)
+    
+    def test_mpa_user_address_create_error(self):
+        request_data = { }
+        res = self.client.post(
+            reverse('mpa-user-address-list'), 
+            data=request_data, 
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
+        self.assertEqual(res.status_code, 400)
