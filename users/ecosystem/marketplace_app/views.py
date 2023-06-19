@@ -17,6 +17,7 @@ class MPAUserViewSet(viewsets.ViewSet):
     def retrieve(self, request, pk=None):
         if str(pk) != str(request.user.id):
             return Response(None, status=status.HTTP_401_UNAUTHORIZED)
+        
         data = Prepare_User_Data(request.user)
         return Response(data, status=status.HTTP_200_OK)
         
@@ -24,12 +25,15 @@ class MPAUserViewSet(viewsets.ViewSet):
     def update(self, request, pk=None):
         if str(pk) != str(request.user.id):
             return Response(None, status=status.HTTP_401_UNAUTHORIZED)
+        
         User_Instance = request.user
         Edit_User_Serializer = EditUserSerializer(User_Instance, data=request.data)
+        
         if Edit_User_Serializer.is_valid():
             Edit_User_Serializer.save()
             data = Prepare_User_Data(User_Instance)
             return Response(data, status=status.HTTP_202_ACCEPTED)
+        
         return Response(Edit_User_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
 
@@ -41,23 +45,29 @@ class MPAUserProfileViewSet(viewsets.ViewSet):
     @method_decorator(csrf_protect)
     def create(self, request):
         Create_User_Profile_Serializer = CreateUserProfileSerializer(data=request.data, context={'user': request.user})
+        
         if Create_User_Profile_Serializer.is_valid(): 
             data = Prepare_User_Data(request.user)
             return Response(data, status=status.HTTP_201_CREATED)
+        
         return Response(Create_User_Profile_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
     @method_decorator(csrf_protect)
     def update(self, request, pk=None):
         User_Serializer = UserSerializer(request.user) 
         user_profile_pks = [ str(profile) for profile in User_Serializer.data['profiles'] ] 
+        
         if str(pk) not in user_profile_pks:
             return Response(None, status=status.HTTP_401_UNAUTHORIZED)
+        
         User_Profile_Instance = UserProfile.objects.get(pk=pk)
         Edit_User_Profile_Serializer = EditUserProfileSerializer(User_Profile_Instance, data=request.data)
+        
         if Edit_User_Profile_Serializer.is_valid():
             Edit_User_Profile_Serializer.save()
             data = Prepare_User_Data(request.user)
             return Response(data, status=status.HTTP_202_ACCEPTED)
+        
         return Response(Edit_User_Profile_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
     
@@ -66,8 +76,10 @@ class MPAUserProfileViewSet(viewsets.ViewSet):
         User_Serializer = UserSerializer(request.user) 
         User_Profile_Instances = UserProfile.objects.filter(pk__in=User_Serializer.data['profiles']).filter(is_account_holder=False)
         user_profile_pks = [ str(upi.id) for upi in User_Profile_Instances ]  
+        
         if str(pk) not in user_profile_pks:
             return Response(None, status=status.HTTP_401_UNAUTHORIZED)
+        
         User_Profile_Instance = UserProfile.objects.get(pk=pk)
         User_Profile_Instance.delete()
         data = Prepare_User_Data(request.user)
@@ -96,6 +108,7 @@ class MPAUserProfileImageViewSet(viewsets.ViewSet):
         if Create_User_Profile_Image_Serializer.is_valid():
             data = Prepare_User_Data(request.user)
             return Response(data, status=status.HTTP_201_CREATED)
+        
         return Response(Create_User_Profile_Image_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 class MPAUserAddressViewSet(viewsets.ViewSet):
@@ -108,35 +121,44 @@ class MPAUserAddressViewSet(viewsets.ViewSet):
     def create(self, request):
         if 'user' not in request.data:
             return Response(None, status=status.HTTP_401_UNAUTHORIZED)
+        
         if str(request.user.id) != str(request.data['user']):
             return Response(None, status=status.HTTP_401_UNAUTHORIZED)
+        
         Create_User_Address_Serializer = CreateUserAddressSerializer(data=request.data)
         if Create_User_Address_Serializer.is_valid():
             Create_User_Address_Serializer.save()
             data = Prepare_User_Data(request.user)
             return Response(data, status=status.HTTP_201_CREATED)
+        
         return Response(Create_User_Address_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
     @method_decorator(csrf_protect)
     def update(self, request, pk=None):
         User_Serializer = UserSerializer(request.user) 
-        user_address_pks = [ str(address) for address in User_Serializer.data['addresses'] ]  
+        user_address_pks = [ str(address) for address in User_Serializer.data['addresses'] ] 
+
         if str(pk) not in user_address_pks:
             return Response(None, status=status.HTTP_401_UNAUTHORIZED)
+        
         User_Address_Instance = UserAddress.objects.get(pk=pk)
         Edit_User_Address_Serializer = EditUserAddressSerializer(User_Address_Instance, data=request.data)
+
         if Edit_User_Address_Serializer.is_valid():
             Edit_User_Address_Serializer.save()
             data = Prepare_User_Data(request.user)
             return Response(data, status=status.HTTP_202_ACCEPTED)
+        
         return Response(Edit_User_Address_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     @method_decorator(csrf_protect)
     def destroy(self, request, pk=None):
         User_Serializer = UserSerializer(request.user) 
-        user_address_pks = [ str(address) for address in User_Serializer.data['addresses'] ]  
+        user_address_pks = [ str(address) for address in User_Serializer.data['addresses'] ]
+
         if str(pk) not in user_address_pks:
             return Response(None, status=status.HTTP_401_UNAUTHORIZED)
+        
         User_Address_Instance = UserAddress.objects.get(pk=pk)
         User_Address_Instance.delete()
         data = Prepare_User_Data(request.user)
