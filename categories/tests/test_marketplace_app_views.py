@@ -102,7 +102,6 @@ class TestMPAUserViewSet(TestCase):
             Subcategory_Section_Instance.save()
             Subcategory_Section_Instances.append(Subcategory_Section_Instance)
 
-
     def test_mpa_category_list(self):
         res = self.client.get(reverse('mpa-category-list'))
         pprint(res.data)
