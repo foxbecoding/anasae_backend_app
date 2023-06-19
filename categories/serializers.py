@@ -3,12 +3,24 @@ from categories.models import *
 from utils.helpers import create_uid
 from PIL import Image
 
-class UserSerializer(serializers.ModelSerializer):
+class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
         fields = [
             'pk',
             'uid',
             'title',
-            'description'
+            'description',
+            'subcategories'
+        ]
+
+class SubcategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Subcategory
+        fields = [
+            'pk',
+            'uid',
+            'title',
+            'description',
+            'sections'
         ]

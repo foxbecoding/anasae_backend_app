@@ -1,4 +1,3 @@
-from django.test.client import encode_multipart, RequestFactory
 from django.test import TestCase, Client
 from django.urls import reverse
 from users.models import User, UserGender, UserProfile, UserAddress
