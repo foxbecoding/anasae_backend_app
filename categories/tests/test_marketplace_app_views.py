@@ -92,7 +92,7 @@ class TestMPAUserViewSet(TestCase):
         Subcategory_Section_Instances = []
         for scats in subcategory_sections:
             data = scats[0]
-            subcategory = scat[0][1]['subcategory']
+            subcategory = scats[1]['subcategory']
             Subcategory_Section_Instance = SubcategorySection.objects.create(
                 subcategory = subcategory,
                 uid = data['uid'],
