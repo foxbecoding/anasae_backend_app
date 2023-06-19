@@ -26,6 +26,7 @@ class MPACategoryViewSet(viewsets.ViewSet):
             if len(cat['subcategories']) == 0:
                 continue
             for scat in cat['subcategories']:
+                sections = []
                 Subcategory_Instance = Subcategory.objects.get(pk=scat)
                 Subcategory_Serializer = SubcategorySerializer(Subcategory_Instance)
                 subcategories.append(Subcategory_Serializer.data)
