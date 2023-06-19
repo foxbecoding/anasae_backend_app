@@ -197,6 +197,21 @@ class UserProfileSerializer(serializers.ModelSerializer):
             'is_active'
         ]
 
+class CreateUserProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserProfile
+        fields = [
+            'name',
+        ]
+    
+    def create(self, attrs):
+        user = self.context['user']
+        User_Profile_Instance = UserProfile.objects.create(
+            user = user,
+            name = attrs.get('user')
+        )
+        User_Profile_Instance.save()
+
 class EditUserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile

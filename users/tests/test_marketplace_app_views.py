@@ -172,7 +172,15 @@ class TestMPAUserProfileViewSet(TestCase):
         )
         self.assertGreater(len(res.data['profiles']), 1)
         self.assertEqual(res.status_code, 201)
-
+    
+    def test_mpa_user_profile_create_error(self):
+        request_data = {}
+        res = self.client.post(
+            reverse('mpa-user-profile-list'), 
+            data=request_data, 
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
+        self.assertEqual(res.status_code, 400)
     
     def test_mpa_user_profile_update(self):
         profile_pk = self.user['profiles'][0]

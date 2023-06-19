@@ -40,17 +40,11 @@ class MPAUserProfileViewSet(viewsets.ViewSet):
     
     @method_decorator(csrf_protect)
     def create(self, request):
-        request_data = {
-            'user': str(request.user.id),
-            'name': request.data['name']
-        }
-        
-        User_Profile_Serializer = UserProfileSerializer(data=request_data)
-        if User_Profile_Serializer.is_valid(): 
-            User_Profile_Serializer.save()
+        Create_User_Profile_Serializer = CreateUserProfileSerializer(data=request.data, context={'user': request.user})
+        if Create_User_Profile_Serializer.is_valid(): 
             data = Prepare_User_Data(request.user)
             return Response(data, status=status.HTTP_201_CREATED)
-        return Response(User_Profile_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(Create_User_Profile_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
     @method_decorator(csrf_protect)
     def update(self, request, pk=None):
