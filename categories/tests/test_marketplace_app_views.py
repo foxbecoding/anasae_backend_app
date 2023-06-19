@@ -104,4 +104,4 @@ class TestMPAUserViewSet(TestCase):
 
     def test_mpa_category_list(self):
         res = self.client.get(reverse('mpa-category-list'))
-        pprint(res.data)
+        self.assertEqual(res.status_code, 200)
