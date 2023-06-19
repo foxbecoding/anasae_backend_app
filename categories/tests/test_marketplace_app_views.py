@@ -70,7 +70,7 @@ class TestMPAUserViewSet(TestCase):
             Subcategory_Instances.append(Subcategory_Instance)
 
         Subcategory_Instances = [ {'subcategory': SCI } for SCI in Subcategory_Instances ]
-        subcategories_sections = [
+        subcategory_sections = [
             {
                 'uid': create_uid('scats-'),
                 'title': "Leggings",
@@ -87,7 +87,21 @@ class TestMPAUserViewSet(TestCase):
                 'description': "Shop women's flats"
             }, 
         ]
-            
+
+        subcategory_sections = zip(subcategory_sections, Subcategory_Instances)
+        Subcategory_Section_Instances = []
+        for scats in subcategory_sections:
+            data = scats[0]
+            subcategory = scat[1]['subcategory']
+            Subcategory_Section_Instance = SubcategorySection.objects.create(
+                subcategory = subcategory,
+                uid = data['uid'],
+                title = data['title'],
+                description = data['description']
+            )
+            Subcategory_Section_Instance.save()
+            Subcategory_Section_Instances.append(Subcategory_Section_Instance)
+
 
     def test_mpa_category_list(self):
         res = self.client.get(reverse('mpa-category-list'))
