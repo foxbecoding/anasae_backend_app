@@ -24,3 +24,13 @@ class SubcategorySerializer(serializers.ModelSerializer):
             'description',
             'sections'
         ]
+
+class SubcategorySectionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SubcategorySection
+        fields = [
+            'pk',
+            'uid',
+            'title',
+            'description'
+        ]

@@ -4,8 +4,8 @@ from rest_framework import viewsets
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
-from categories.models import Category, Subcategory
-from categories.serializers import CategorySerializer, SubcategorySerializer
+from categories.models import Category, Subcategory, SubcategorySection
+from categories.serializers import *
 
 class MPACategoryViewSet(viewsets.ViewSet):
     def get_permissions(self):
@@ -26,11 +26,19 @@ class MPACategoryViewSet(viewsets.ViewSet):
             if len(cat['subcategories']) == 0:
                 continue
             for scat in cat['subcategories']:
-                sections = []
                 Subcategory_Instance = Subcategory.objects.get(pk=scat)
                 Subcategory_Serializer = SubcategorySerializer(Subcategory_Instance)
                 subcategories.append(Subcategory_Serializer.data)
+
+                sections = []
+                if len(scat['sections']) == 0:
+                    continue
+                for scats in scat['sections']:
+                    Subcategory_Section_Instance = SubcategorySection.objects.get(pk=scats)
+                    Subcategory_Section_Serializer = SubcategorySectionSerializer(Subcategory_Section_Instance)
+                    sections.append(Subcategory_Section_Serializer.data)
+                scat['sections'] = sections
+            
             cat['subcategories'] = subcategories
             data.append(cat)
-
         return data
