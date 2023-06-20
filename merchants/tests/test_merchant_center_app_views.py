@@ -10,6 +10,5 @@ class TestMCMerchantViewSet(TestCase):
         self.client = Client()
 
     def test_mc_merchant_list(self):
-        pass
         # res = self.client.get(reverse('mc-merchant-list'))
         # self.assertEqual(res.status_code, 200)
