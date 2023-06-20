@@ -10,7 +10,7 @@ from categories.serializers import *
 class MPACategoryViewSet(viewsets.ViewSet):
     def get_permissions(self):
         permission_classes = [AllowAny]
-        return [permission() for permission in permission_classes]
+        return [ permission() for permission in permission_classes ]
 
     def list(self, request):
         self.Category_Instance = Category.objects.all()
