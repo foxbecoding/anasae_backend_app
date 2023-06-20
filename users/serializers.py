@@ -204,13 +204,15 @@ class CreateUserProfileSerializer(serializers.ModelSerializer):
             'name',
         ]
     
-    def create(self, attrs):
+    def validate(self, attrs):
         user = self.context['user']
         User_Profile_Instance = UserProfile.objects.create(
             user = user,
-            name = attrs.get('user')
+            name = attrs.get('name')
         )
         User_Profile_Instance.save()
+        attrs['profile'] = User_Profile_Instance
+        return attrs  
 
 class EditUserProfileSerializer(serializers.ModelSerializer):
     class Meta:
@@ -274,7 +276,6 @@ class CreateUserAddressSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserAddress
         fields = [
-            'user',
             'full_name',
             'phone_number',
             'street_address',
@@ -284,6 +285,22 @@ class CreateUserAddressSerializer(serializers.ModelSerializer):
             'city',
             'postal_code'
         ]
+    
+    def validate(self, attrs):
+        User_Address_Instance = UserAddress.objects.create(
+            user = self.context['user'],
+            full_name = attrs.get('full_name'),
+            phone_number = attrs.get('phone_number'),
+            street_address = attrs.get('street_address'),
+            street_address_ext = attrs.get('street_address_ext'),
+            country = attrs.get('country'),
+            state = attrs.get('state'),
+            city = attrs.get('city'),
+            postal_code = attrs.get('postal_code')
+        )
+        User_Address_Instance.save()
+        attrs['address'] = User_Address_Instance
+        return attrs 
 
 class EditUserAddressSerializer(serializers.ModelSerializer):
     class Meta:
