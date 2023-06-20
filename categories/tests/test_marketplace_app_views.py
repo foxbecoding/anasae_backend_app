@@ -114,6 +114,7 @@ class TestMPAUserViewSet(TestCase):
         category = self.category_data.uid
         subcategory = self.subcategory_data.uid
         subcategory_section = self.subcategory_section_data.uid
-        pprint(category+' '+subcategory+' '+subcategory_section)
-        # res = self.client.get(reverse('mpa-category-detail', kwargs={'pk': ''}))
+        category_res = self.client.get(reverse('mpa-category-detail', kwargs={'uid': category}))
+        subcategory_res = self.client.get(reverse('mpa-category-detail', kwargs={'uid': subcategory}))
+        subcategory_section_res = self.client.get(reverse('mpa-category-detail', kwargs={'uid': subcategory_section}))
         # print(res.data)

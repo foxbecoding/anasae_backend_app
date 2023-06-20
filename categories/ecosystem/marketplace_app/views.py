@@ -8,6 +8,8 @@ from categories.models import Category, Subcategory, SubcategorySection
 from categories.serializers import *
 
 class MPACategoryViewSet(viewsets.ViewSet):
+    lookup_field = "uid"
+    
     def get_permissions(self):
         permission_classes = [AllowAny]
         return [ permission() for permission in permission_classes ]
@@ -16,6 +18,20 @@ class MPACategoryViewSet(viewsets.ViewSet):
         self.Category_Instance = Category.objects.all()
         data = self.prepare_category_data()
         return Response(data, status=status.HTTP_200_OK)
+    
+    def retrieve(self, request, uid=None):
+        identifier = str(uid).split('-')[0]
+        if identifier == 'cat':
+            if Category.objects.filter(uid=uid).exists():
+                Category_Instance = Category.objects.get(uid=uid)
+                Category_Serializer = CategorySerializer(Category_Instance)
+                print(Category_Serializer.data)
+        elif identifier == 'scat':
+            pass
+        else:
+            pass
+        return Response(None, status=status.HTTP_200_OK)
+
     
     def prepare_category_data(self):
         Category_Serializer = CategorySerializer(self.Category_Instance, many=True)
