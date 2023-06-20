@@ -10,9 +10,9 @@ class Category(models.Model):
     updated = models.DateTimeField(auto_now_add=True, null=True)
     deleted = models.DateTimeField(null=True)
 
-    # def save(self, *args, **kwargs):
-    #     self.uid = create_uid('cat-')
-    #     super(Category, self).save(*args, **kwargs)
+    def save(self, *args, **kwargs):
+        self.uid = create_uid('cat-')
+        super(Category, self).save(*args, **kwargs)
 
 class CategoryCoverImage(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="cover_images")
@@ -40,9 +40,9 @@ class Subcategory(models.Model):
     updated = models.DateTimeField(auto_now_add=True, null=True)
     deleted = models.DateTimeField(null=True)
 
-    # def save(self, *args, **kwargs):
-    #     self.uid = create_uid('scat-')
-    #     super(Category, self).save(*args, **kwargs)
+    def save(self, *args, **kwargs):
+        self.uid = create_uid('scat-')
+        super(Category, self).save(*args, **kwargs)
 
 class SubcategoryCoverImage(models.Model):
     subcategory = models.ForeignKey(Subcategory, on_delete=models.CASCADE, related_name="cover_images")
@@ -70,9 +70,9 @@ class SubcategorySection(models.Model):
     updated = models.DateTimeField(auto_now_add=True, null=True)
     deleted = models.DateTimeField(null=True)
 
-    # def save(self, *args, **kwargs):
-    #     self.uid = create_uid('scats-')
-    #     super(SubcategorySection, self).save(*args, **kwargs)
+    def save(self, *args, **kwargs):
+        self.uid = create_uid('scats-')
+        super(SubcategorySection, self).save(*args, **kwargs)
 
 class SubcategorySectionCoverImage(models.Model):
     subcategory_section = models.ForeignKey(SubcategorySection, on_delete=models.CASCADE, related_name="cover_images", blank=True, null=True)
