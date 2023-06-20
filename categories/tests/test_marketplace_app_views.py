@@ -36,6 +36,7 @@ class TestMPAUserViewSet(TestCase):
             Category_Instance.save()
             Category_Instances.append(Category_Instance)
 
+        self.category_data = Category_Instances[0]
         Category_Instances = [ {'category': CI } for CI in Category_Instances ]
         subcategories = [
             {
@@ -69,6 +70,7 @@ class TestMPAUserViewSet(TestCase):
             Subcategory_Instance.save()
             Subcategory_Instances.append(Subcategory_Instance)
 
+        self.subcategory_data = Subcategory_Instances[0]
         Subcategory_Instances = [ {'subcategory': SCI } for SCI in Subcategory_Instances ]
         subcategory_sections = [
             {
@@ -101,7 +103,17 @@ class TestMPAUserViewSet(TestCase):
             )
             Subcategory_Section_Instance.save()
             Subcategory_Section_Instances.append(Subcategory_Section_Instance)
+        
+        self.subcategory_section_data = Subcategory_Section_Instances[0]
 
     def test_mpa_category_list(self):
         res = self.client.get(reverse('mpa-category-list'))
         self.assertEqual(res.status_code, 200)
+
+    def test_mpa_category_retrieve(self):
+        category = self.category_data.uid
+        subcategory = self.subcategory_data.uid
+        subcategory_section = self.subcategory_section_data.uid
+        pprint(category+' '+subcategory+' '+subcategory_section)
+        # res = self.client.get(reverse('mpa-category-detail', kwargs={'pk': ''}))
+        # print(res.data)
