@@ -42,7 +42,7 @@ class Subcategory(models.Model):
 
     def save(self, *args, **kwargs):
         self.uid = create_uid('scat-')
-        super(Category, self).save(*args, **kwargs)
+        super(Subcategory, self).save(*args, **kwargs)
 
 class SubcategoryCoverImage(models.Model):
     subcategory = models.ForeignKey(Subcategory, on_delete=models.CASCADE, related_name="cover_images")
