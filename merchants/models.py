@@ -11,10 +11,6 @@ class Merchant(models.Model):
     updated = models.DateTimeField(auto_now_add=True, null=True)
     deleted = models.DateTimeField(null=True)
 
-    def save(self, *args, **kwargs):
-        self.uid = create_uid('m-')
-        super(Merchant, self).save(*args, **kwargs)
-
 class MerchantPlan(models.Model):
     title = models.CharField(max_length=200, blank=False)
     description = models.CharField(max_length=2000, blank=False)
@@ -62,10 +58,6 @@ class MerchantStore(models.Model):
     created = models.DateTimeField(auto_now_add=True, null=True)
     updated = models.DateTimeField(auto_now_add=True, null=True)
     deleted = models.DateTimeField(null=True)
-
-    def save(self, *args, **kwargs):
-        self.uid = create_uid('ms-')
-        super(MerchantStore, self).save(*args, **kwargs)
 
 class MerchantStoreView(models.Model):
     merchant_store = models.ForeignKey(MerchantStore, on_delete=models.CASCADE, related_name="views")

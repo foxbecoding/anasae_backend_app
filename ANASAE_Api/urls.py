@@ -20,9 +20,8 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('mpa/api/', include('users.ecosystem.marketplace_app.urls')),
-    path('mpa/api/', include('categories.ecosystem.marketplace_app.urls')),
     path('account/api/', include('users.ecosystem.account_app.urls')),
-    path('secure/api/', include('users.ecosystem.security.urls'))
+    path('secure/api/', include('users.ecosystem.security.urls')),
+    path('mpa/api/', include('categories.ecosystem.marketplace_app.urls')),
+    path('mc/api/', include('merchants.ecosystem.merchant_center_app.urls'))
 ]
-
-
