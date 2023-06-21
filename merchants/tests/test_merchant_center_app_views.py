@@ -110,5 +110,17 @@ class TestMCMerchantSubscriptionViewSet(TestCase):
         self.user = res.data
         self.csrftoken = self.client.cookies['csrftoken'].value
 
+        # Create Merchants plans, prices and features
+        merchant_plans = [
+            {'title': '', 'description': '', 'merchant_plan_listings'}
+        ]
+        MerchantPlan.objects.create(
+            title = '',
+            description = '',
+            merchant_plan_listings = '',
+            is_active = True
+        )
+        
+
     def test_mc_merchant_subscription_create(self):
         pass

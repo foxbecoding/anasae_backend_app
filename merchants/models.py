@@ -13,7 +13,7 @@ class Merchant(models.Model):
 class MerchantPlan(models.Model):
     title = models.CharField(max_length=200, blank=False)
     description = models.CharField(max_length=2000, blank=False)
-    merchant_plan_listings = models.IntegerField(blank=False)
+    product_listings = models.IntegerField(blank=False, default=0)
     is_active = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True, null=True)
     updated = models.DateTimeField(auto_now_add=True, null=True)
