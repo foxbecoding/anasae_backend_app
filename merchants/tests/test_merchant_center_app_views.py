@@ -116,7 +116,7 @@ class TestMCMerchantSubscriptionViewSet(TestCase):
             {'title': 'Pro', 'description': '', 'product_listings': 20, 'is_active': True},
             {'title': 'Plus', 'description': '', 'product_listings': 50, 'is_active': True}
         ]
-        Merchant_Plan_Instances = []
+        self.Merchant_Plan_Instances = []
         for plan in merchant_plans:
             Merchant_Plan_Instance = MerchantPlan.objects.create(
                 title = plan['title'],
@@ -125,7 +125,7 @@ class TestMCMerchantSubscriptionViewSet(TestCase):
                 is_active = plan['is_active']
             )
             Merchant_Plan_Instance.save()
-            Merchant_Plan_Instances.append(Merchant_Plan_Instance)
+            self.Merchant_Plan_Instances.append(Merchant_Plan_Instance)
         
         merchant_plan_prices = [
             {
@@ -150,8 +150,8 @@ class TestMCMerchantSubscriptionViewSet(TestCase):
                 'is_active': True
             }
         ]
-        merchant_plan_prices = zip(merchant_plan_prices, Merchant_Plan_Instances)
-        Merchant_Plan_Prices_Instances = []
+        merchant_plan_prices = zip(merchant_plan_prices, self.Merchant_Plan_Instances)
+        self.Merchant_Plan_Prices_Instances = []
         for plan_price in merchant_plan_prices:
             data = plan_price[0]
             merchant_plan = plan_price[1]
@@ -164,7 +164,8 @@ class TestMCMerchantSubscriptionViewSet(TestCase):
                 is_active = data['is_active']
             ) 
             Merchant_Plan_Prices_Instance.save()
-            Merchant_Plan_Prices_Instances.append(Merchant_Plan_Prices_Instance)
+            self.Merchant_Plan_Prices_Instances.append(Merchant_Plan_Prices_Instance)
 
     def test_mc_merchant_subscription_create(self):
+        print(self.Merchant_Plan_Prices_Instances[0].title)
         pass
