@@ -17,5 +17,8 @@ class MCMerchantViewSet(viewsets.ViewSet):
     def list(self, request):
         return Response(None, status=status.HTTP_200_OK)
     
+    def create(self, request):
+        return Response(None, status=status.HTTP_200_OK)
+    
     def retrieve(self, request, uid=None):
         return Response(None, status=status.HTTP_200_OK)
