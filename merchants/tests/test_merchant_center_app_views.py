@@ -128,6 +128,15 @@ class TestMCMerchantSubscriptionViewSet(TestCase):
             Merchant_Plan_Instance.save()
             Merchant_Plan_Instances.append(Merchant_Plan_Instance)
         
+        merchant_plan_prices = []
+        # class MerchantPlanPrice(models.Model):
+        # merchant_plan = models.ForeignKey(MerchantPlan, on_delete=models.CASCADE, related_name="plan_prices")
+        # title = models.CharField(max_length=200, blank=False)
+        # description = models.CharField(max_length=2000, blank=True, null=True)
+        # price = models.FloatField(blank=False)
+        # stripe_price_key = models.CharField(max_length=200, blank=False)
+        # is_active = models.BooleanField(default=False)
+        
 
     def test_mc_merchant_subscription_create(self):
         pass
