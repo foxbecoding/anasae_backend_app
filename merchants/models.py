@@ -20,7 +20,7 @@ class MerchantPlan(models.Model):
     deleted = models.DateTimeField(null=True)
 
 class MerchantPlanPrice(models.Model):
-    merchant_plan = models.ForeignKey(MerchantPlan, on_delete=models.CASCADE, related_name="plan_prices")
+    merchant_plan = models.ForeignKey(MerchantPlan, on_delete=models.CASCADE, related_name="prices")
     title = models.CharField(max_length=200, blank=False)
     description = models.CharField(max_length=2000, blank=True, null=True)
     price = models.IntegerField(blank=False, default=0)
