@@ -65,18 +65,18 @@ class MerchantStoreView(models.Model):
     updated = models.DateTimeField(auto_now_add=True, null=True)
     deleted = models.DateTimeField(null=True)
 
-class MerchantStoreDepartment(models.Model):
-    merchant_store = models.ForeignKey(MerchantStore, on_delete=models.CASCADE, related_name="departments")
+class MerchantStoreCategory(models.Model):
+    merchant_store = models.ForeignKey(MerchantStore, on_delete=models.CASCADE, related_name="categories")
     title = models.CharField(max_length=200, blank=False)
     description = models.CharField(max_length=1000, blank=True, null=True)
-    banner_image = models.ImageField(upload_to="images/merchant_store_media/departments/banners/", blank=True, null=True)
+    banner_image = models.ImageField(upload_to="images/merchant_store_media/categories/banners/", blank=True, null=True)
     is_active = models.BooleanField(default=True)
     created = models.DateTimeField(auto_now_add=True, null=True)
     updated = models.DateTimeField(auto_now_add=True, null=True)
     deleted = models.DateTimeField(null=True)
 
-class MerchantStoreDepartmentView(models.Model):
-    merchant_store_department = models.ForeignKey(MerchantStoreDepartment, on_delete=models.CASCADE, related_name="views")
+class MerchantStoreCategoryView(models.Model):
+    merchant_store_category = models.ForeignKey(MerchantStoreCategory, on_delete=models.CASCADE, related_name="views", default=0)
     created = models.DateTimeField(auto_now_add=True, null=True)
     updated = models.DateTimeField(auto_now_add=True, null=True)
     deleted = models.DateTimeField(null=True)
