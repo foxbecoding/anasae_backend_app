@@ -13,12 +13,12 @@ class MCMerchantViewSet(viewsets.ViewSet):
     def get_permissions(self):
         permission_classes = [IsAuthenticated]
         return [ permission() for permission in permission_classes ]
-
-    def list(self, request):
-        return Response(None, status=status.HTTP_200_OK)
     
+    @method_decorator(csrf_protect)
     def create(self, request):
+        print(str(request.user.id))
         return Response(None, status=status.HTTP_200_OK)
     
+    @method_decorator(csrf_protect)
     def retrieve(self, request, uid=None):
         return Response(None, status=status.HTTP_200_OK)
