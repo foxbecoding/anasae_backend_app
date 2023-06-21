@@ -6,6 +6,8 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from merchants.models import *
 from merchants.serializers import *
+from merchants.permissions import IsMerchantPermission
+from users.models import User
 
 class MCMerchantViewSet(viewsets.ViewSet):
     lookup_field = "uid"
@@ -30,13 +32,17 @@ class MCMerchantViewSet(viewsets.ViewSet):
     
 class MCMerchantSubcriptionViewSet(viewsets.ViewSet):
     def get_permissions(self):
-        permission_classes = [IsAuthenticated]
+        permission_classes = [IsAuthenticated, IsMerchantPermission]
         return [ permission() for permission in permission_classes ]
     
     @method_decorator(csrf_protect)
     def create(self, request):
+        self.check_object_permissions(request=request, obj={})
+        print('create: '+self.check_object_permissions(request=request, obj={}))
         return Response(None, status=status.HTTP_200_OK)
     
     @method_decorator(csrf_protect)
     def retrieve(self, request, uid=None):
+        self.check_object_permissions(request=request, obj={})
+        print('retrieve: '+self.check_object_permissions(request=request, obj={}))
         return Response(None, status=status.HTTP_200_OK)

@@ -167,5 +167,9 @@ class TestMCMerchantSubscriptionViewSet(TestCase):
             self.Merchant_Plan_Prices_Instances.append(Merchant_Plan_Prices_Instance)
 
     def test_mc_merchant_subscription_create(self):
-        print(self.Merchant_Plan_Prices_Instances[0].title)
+        res = self.client.post(
+            reverse('mc-merchant-subscription-list'),
+            data = {},
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
         pass
