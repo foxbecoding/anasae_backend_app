@@ -36,3 +36,7 @@ class MCMerchantSubcriptionViewSet(viewsets.ViewSet):
     @method_decorator(csrf_protect)
     def create(self, request):
         return Response(None, status=status.HTTP_200_OK)
+    
+    @method_decorator(csrf_protect)
+    def retrieve(self, request, uid=None):
+        return Response(None, status=status.HTTP_200_OK)
