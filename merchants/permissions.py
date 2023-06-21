@@ -1,16 +1,12 @@
 from rest_framework.permissions import BasePermission
 from merchants.models import Merchant
-from users.models import User
-
-SAFE_METHODS = ['GET', 'POST']
 
 class IsMerchantPermission(BasePermission):
     message = "Access Denied!"
 
     def has_permission(self, request, view) -> bool:
-        if request.method in SAFE_METHODS:
-            return True
-        return False     
+        return Merchant.objects.filter(user_id=str(request.user.id)).exists()    
 
     def has_object_permission(self, request, view, obj) -> bool:
+        print(Merchant.objects.filter(user_id=str(request.user.id)).exists())
         return Merchant.objects.filter(user_id=str(request.user.id)).exists()

@@ -110,6 +110,13 @@ class TestMCMerchantSubscriptionViewSet(TestCase):
         self.user = res.data
         self.csrftoken = self.client.cookies['csrftoken'].value
 
+        # Create Merchant Account
+        self.client.post(
+            reverse('mc-merchant-list'),
+            data = {'title': 'Fenty Beauty'},
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
+
         # Create Merchants plans, prices and features
         merchant_plans = [
             {'title': 'Basic', 'description': '', 'product_listings': 5, 'is_active': True},

@@ -13,7 +13,7 @@ class MCMerchantViewSet(viewsets.ViewSet):
     lookup_field = "uid"
     
     def get_permissions(self):
-        permission_classes = [IsAuthenticated]
+        permission_classes = [ IsAuthenticated ]
         return [ permission() for permission in permission_classes ]
     
     @method_decorator(csrf_protect)
@@ -32,17 +32,19 @@ class MCMerchantViewSet(viewsets.ViewSet):
     
 class MCMerchantSubcriptionViewSet(viewsets.ViewSet):
     def get_permissions(self):
-        permission_classes = [IsAuthenticated, IsMerchantPermission]
+        permission_classes = [ IsAuthenticated, IsMerchantPermission ]
         return [ permission() for permission in permission_classes ]
     
     @method_decorator(csrf_protect)
     def create(self, request):
-        self.check_object_permissions(request=request, obj={})
-        print('create: '+self.check_object_permissions(request=request, obj={}))
+        # self.check_object_permissions(request=request, obj={})
+        # print('create: '+str(self.check_object_permissions(request=request, obj={})))
+        print('create')
         return Response(None, status=status.HTTP_200_OK)
     
     @method_decorator(csrf_protect)
     def retrieve(self, request, uid=None):
-        self.check_object_permissions(request=request, obj={})
-        print('retrieve: '+self.check_object_permissions(request=request, obj={}))
+        # self.check_object_permissions(request=request, obj={})
+        print('retrieve')
+        # print('retrieve: '+str(self.check_object_permissions(request=request, obj={})))
         return Response(None, status=status.HTTP_200_OK)
