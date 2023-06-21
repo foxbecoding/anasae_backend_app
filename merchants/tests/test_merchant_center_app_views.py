@@ -111,7 +111,7 @@ class TestMCMerchantSubscriptionViewSet(TestCase):
         self.csrftoken = self.client.cookies['csrftoken'].value
 
         # Create Merchant Account
-        self.client.post(
+        self.merchant_res = self.client.post(
             reverse('mc-merchant-list'),
             data = {'title': 'Fenty Beauty'},
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
@@ -176,6 +176,17 @@ class TestMCMerchantSubscriptionViewSet(TestCase):
     def test_mc_merchant_subscription_create(self):
         res = self.client.post(
             reverse('mc-merchant-subscription-list'),
+            data = {},
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
+        pass
+
+    def test_mc_merchant_subscription_retrieve(self):
+        res = self.client.post(
+            reverse(
+                'mc-merchant-subscription-detail', 
+                kwargs=self.merchant_res.data['pk']
+            ),
             data = {},
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
