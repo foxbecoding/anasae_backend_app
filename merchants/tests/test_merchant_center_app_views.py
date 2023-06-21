@@ -128,20 +128,43 @@ class TestMCMerchantSubscriptionViewSet(TestCase):
             Merchant_Plan_Instances.append(Merchant_Plan_Instance)
         
         merchant_plan_prices = [
-            {'title': 'Free', 'description': '', 'price': 0},
-            {'title': '$9.99', 'description': '', 'price': 999},
-            {'title': '$19.99', 'description': '', 'price': 1999}
+            {
+                'title': 'Free', 
+                'description': '', 
+                'stripe_price_key': 'price_1NLUImIXJRFgDdeh0yyCtHUQ', 
+                'price': 0, 
+                'is_active': True
+            },
+            {
+                'title': '$9.99', 
+                'description': '', 
+                'stripe_price_key': 'price_1NLUKWIXJRFgDdehiEcufcrB',
+                'price': 999,
+                'is_active': True
+            },
+            {
+                'title': '$19.99', 
+                'description': '',
+                'stripe_price_key': 'price_1NLVCYIXJRFgDdehvHzX0w4o', 
+                'price': 1999,
+                'is_active': True
+            }
         ]
-        merchant_plan_prices
+        merchant_plan_prices = zip(merchant_plan_prices, Merchant_Plan_Instances)
+        Merchant_Plan_Prices_Instances = []
         for plan_price in merchant_plan_prices:
-            MerchantPlanPrice.objects.create(
-                merchant_plan = models.ForeignKey(MerchantPlan, on_delete=models.CASCADE, related_name="plan_prices")
-                title = models.CharField(max_length=200, blank=False)
-                description = models.CharField(max_length=2000, blank=True, null=True)
-                price = models.FloatField(blank=False)
-                stripe_price_key = models.CharField(max_length=200, blank=False)
-                is_active = models.BooleanField(default=False)
+            data = plan_price[0]
+            merchant_plan = plan_price[1]
+            Merchant_Plan_Prices_Instance = MerchantPlanPrice.objects.create(
+                merchant_plan = merchant_plan,
+                title = data['title'],
+                description = data['description'],
+                price = data['price'],
+                stripe_price_key = data['stripe_price_key'],
+                is_active = data['is_active']
             ) 
+            Merchant_Plan_Prices_Instance.save()
+            Merchant_Plan_Prices_Instances.append(Merchant_Plan_Prices_Instance)
 
     def test_mc_merchant_subscription_create(self):
         pass
