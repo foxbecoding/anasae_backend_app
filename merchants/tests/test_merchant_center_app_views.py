@@ -55,4 +55,13 @@ class TestMCMerchantViewSet(TestCase):
             data = {'title': 'Fenty Beauty'},
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
-        # self.assertEqual(res.status_code, 200)
+        self.assertEqual(res.data['title'], 'Fenty Beauty')
+        self.assertEqual(res.status_code, 201)
+    
+    def test_mc_merchant_create_error(self):
+        res = self.client.post(
+            reverse('mc-merchant-list'),
+            data = {},
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
+        self.assertEqual(res.status_code, 400)
