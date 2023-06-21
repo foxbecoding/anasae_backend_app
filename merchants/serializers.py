@@ -19,8 +19,6 @@ class CreateMerchantSerializer(serializers.ModelSerializer):
     class Meta:
         model = Merchant
         fields = [
-            'user',
-            'uid',
             'title'
         ]
     

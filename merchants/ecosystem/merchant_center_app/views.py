@@ -16,8 +16,10 @@ class MCMerchantViewSet(viewsets.ViewSet):
     
     @method_decorator(csrf_protect)
     def create(self, request):
-        print(str(request.user.id))
-        return Response(None, status=status.HTTP_200_OK)
+        Merchant_Serializer = MerchantSerializer(data=request.data, context={ 'user': request.user })
+        if Merchant_Serializer.is_valid():
+            Merchant_Serializer.validated_data['merchant']
+            return Response(None, status=status.HTTP_201_CREATED)
     
     @method_decorator(csrf_protect)
     def retrieve(self, request, uid=None):
