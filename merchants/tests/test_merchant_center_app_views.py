@@ -65,3 +65,6 @@ class TestMCMerchantViewSet(TestCase):
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
         self.assertEqual(res.status_code, 400)
+
+    def test_mc_merchant_subscription_create(self):
+        pass
