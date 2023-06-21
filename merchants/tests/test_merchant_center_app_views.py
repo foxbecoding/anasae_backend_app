@@ -112,14 +112,21 @@ class TestMCMerchantSubscriptionViewSet(TestCase):
 
         # Create Merchants plans, prices and features
         merchant_plans = [
-            {'title': '', 'description': '', 'merchant_plan_listings'}
+            {'title': 'Basic', 'description': '', 'product_listings': 5, 'is_active': True},
+            {'title': 'Pro', 'description': '', 'product_listings': 20, 'is_active': True},
+            {'title': 'Plus', 'description': '', 'product_listings': 50, 'is_active': True}
         ]
-        MerchantPlan.objects.create(
-            title = '',
-            description = '',
-            merchant_plan_listings = '',
-            is_active = True
-        )
+
+        Merchant_Plan_Instances = []
+        for plan in merchant_plans:
+            Merchant_Plan_Instance = MerchantPlan.objects.create(
+                title = plan['title'],
+                description = plan['description'],
+                product_listings = plan['product_listings'],
+                is_active = plan['is_active']
+            )
+            Merchant_Plan_Instance.save()
+            Merchant_Plan_Instances.append(Merchant_Plan_Instance)
         
 
     def test_mc_merchant_subscription_create(self):
