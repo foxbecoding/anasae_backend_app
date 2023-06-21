@@ -1,6 +1,5 @@
 from django.db import models
 from users.models import User
-from utils.helpers import create_uid
 
 class Merchant(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="merchant")
