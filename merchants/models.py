@@ -23,7 +23,7 @@ class MerchantPlanPrice(models.Model):
     merchant_plan = models.ForeignKey(MerchantPlan, on_delete=models.CASCADE, related_name="plan_prices")
     title = models.CharField(max_length=200, blank=False)
     description = models.CharField(max_length=2000, blank=True, null=True)
-    price = models.FloatField(blank=False)
+    price = models.IntegerField(blank=False, default=0)
     stripe_price_key = models.CharField(max_length=200, blank=False)
     is_active = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True, null=True)
