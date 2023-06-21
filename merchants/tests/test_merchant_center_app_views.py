@@ -116,7 +116,6 @@ class TestMCMerchantSubscriptionViewSet(TestCase):
             {'title': 'Pro', 'description': '', 'product_listings': 20, 'is_active': True},
             {'title': 'Plus', 'description': '', 'product_listings': 50, 'is_active': True}
         ]
-
         Merchant_Plan_Instances = []
         for plan in merchant_plans:
             Merchant_Plan_Instance = MerchantPlan.objects.create(
@@ -128,15 +127,21 @@ class TestMCMerchantSubscriptionViewSet(TestCase):
             Merchant_Plan_Instance.save()
             Merchant_Plan_Instances.append(Merchant_Plan_Instance)
         
-        merchant_plan_prices = []
-        # class MerchantPlanPrice(models.Model):
-        # merchant_plan = models.ForeignKey(MerchantPlan, on_delete=models.CASCADE, related_name="plan_prices")
-        # title = models.CharField(max_length=200, blank=False)
-        # description = models.CharField(max_length=2000, blank=True, null=True)
-        # price = models.FloatField(blank=False)
-        # stripe_price_key = models.CharField(max_length=200, blank=False)
-        # is_active = models.BooleanField(default=False)
-        
+        merchant_plan_prices = [
+            {'title': 'Free', 'description': '', 'price': 0},
+            {'title': '$9.99', 'description': '', 'price': 999},
+            {'title': '$19.99', 'description': '', 'price': 1999}
+        ]
+        merchant_plan_prices
+        for plan_price in merchant_plan_prices:
+            MerchantPlanPrice.objects.create(
+                merchant_plan = models.ForeignKey(MerchantPlan, on_delete=models.CASCADE, related_name="plan_prices")
+                title = models.CharField(max_length=200, blank=False)
+                description = models.CharField(max_length=2000, blank=True, null=True)
+                price = models.FloatField(blank=False)
+                stripe_price_key = models.CharField(max_length=200, blank=False)
+                is_active = models.BooleanField(default=False)
+            ) 
 
     def test_mc_merchant_subscription_create(self):
         pass
