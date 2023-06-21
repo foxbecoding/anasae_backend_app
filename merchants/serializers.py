@@ -10,7 +10,9 @@ class MerchantSerializer(serializers.ModelSerializer):
         fields = [
             'pk',
             'uid',
-            'title'
+            'title',
+            'user',
+            'is_active'
         ]
 
 class CreateMerchantSerializer(serializers.ModelSerializer):

@@ -49,7 +49,10 @@ class TestMCMerchantViewSet(TestCase):
         self.user = res.data
         self.csrftoken = self.client.cookies['csrftoken'].value
 
-    def test_mc_merchant_list(self):
-        pass
-        # res = self.client.post(reverse('mc-merchant-list'))
+    def test_mc_merchant_create(self):
+        res = self.client.post(
+            reverse('mc-merchant-list'),
+            data = {'title': 'Fenty Beauty'},
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
         # self.assertEqual(res.status_code, 200)
