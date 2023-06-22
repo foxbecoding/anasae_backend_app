@@ -96,7 +96,7 @@ class TestMPAUserViewSet(TestCase):
         )               
         self.assertEqual(res.status_code, 400)
 
-    def test_mpa_user_update_pk_mismatch(self):
+    def test_mpa_user_update_permissions_failed(self):
         request_data = {
             'first_name': 'Slugga',
             'last_name': 'Fox'
@@ -107,7 +107,7 @@ class TestMPAUserViewSet(TestCase):
             data=request_data, 
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
-        self.assertEqual(res.status_code, 401)
+        self.assertEqual(res.status_code, 403)
 
 class TestMPAUserProfileViewSet(TestCase):
     
