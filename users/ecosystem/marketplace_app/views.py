@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from users.serializers import *
 from users.models import UserProfile, UserProfileImage
-from users.permissions import UserPermission
+from users.permissions import UserPermission, UserProfilePermission
 from users.ecosystem.methods import Prepare_User_Data
 import os
 

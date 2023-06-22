@@ -15,7 +15,7 @@ class UserProfilePermission(BasePermission):
     message = "Access Denied!"   
 
     def has_permission(self, request, view):
-        SAFE_METHODS = ['GET', 'POST', 'PUT']
+        SAFE_METHODS = ['POST', 'PUT', 'DELETE']
         if request.method in SAFE_METHODS:
             return True
         return False
