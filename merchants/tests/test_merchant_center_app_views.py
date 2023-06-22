@@ -142,11 +142,11 @@ class TestMCMerchantSubscriptionViewSet(TestCase):
         )
 
         # Create Merchants plans, prices and features
-        merchant_plans = [
+        merchant_plans = (
             {'title': 'Basic', 'description': '', 'product_listings': 5, 'is_active': True},
             {'title': 'Pro', 'description': '', 'product_listings': 20, 'is_active': True},
             {'title': 'Plus', 'description': '', 'product_listings': 50, 'is_active': True}
-        ]
+        )
         self.Merchant_Plan_Instances = []
         for plan in merchant_plans:
             Merchant_Plan_Instance = MerchantPlan.objects.create(
@@ -158,7 +158,7 @@ class TestMCMerchantSubscriptionViewSet(TestCase):
             Merchant_Plan_Instance.save()
             self.Merchant_Plan_Instances.append(Merchant_Plan_Instance)
         
-        merchant_plan_prices = [
+        merchant_plan_prices = (
             {
                 'title': 'Free', 
                 'description': '', 
@@ -180,7 +180,7 @@ class TestMCMerchantSubscriptionViewSet(TestCase):
                 'price': 1999,
                 'is_active': True
             }
-        ]
+        )
         merchant_plan_prices = zip(merchant_plan_prices, self.Merchant_Plan_Instances)
         self.Merchant_Plan_Prices_Instances = []
         for plan_price in merchant_plan_prices:
