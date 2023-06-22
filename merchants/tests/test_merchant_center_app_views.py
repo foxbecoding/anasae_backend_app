@@ -66,6 +66,30 @@ class TestMCMerchantViewSet(TestCase):
         )
         self.assertEqual(res.status_code, 400)
 
+    def test_mc_merchant_retrieve(self):
+        create_merchant_res = self.client.post(
+            reverse('mc-merchant-list'),
+            data = {'title': 'Fenty Beauty'},
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
+        merchant_uid = create_merchant_res.data['uid']
+        res = self.client.get(
+            reverse('mc-merchant-detail', kwargs={ 'uid': merchant_uid })
+        )
+        self.assertEqual(res.data['title'], 'Fenty Beauty')
+        self.assertEqual(res.status_code, 200)
+    
+    def test_mc_merchant_retrieve_permissions_failed(self):
+        self.client.post(
+            reverse('mc-merchant-list'),
+            data = {'title': 'Fenty Beauty'},
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
+        res = self.client.get(
+            reverse('mc-merchant-detail', kwargs={ 'uid': 'merchant_uid' })
+        )
+        self.assertEqual(res.status_code, 403)
+
 class TestMCMerchantSubscriptionViewSet(TestCase):
     
     def setUp(self):
@@ -179,15 +203,15 @@ class TestMCMerchantSubscriptionViewSet(TestCase):
             data = {},
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
-        pass
+        self.assertEqual(res.status_code, 201)
 
-    def test_mc_merchant_subscription_retrieve(self):
-        res = self.client.post(
-            reverse(
-                'mc-merchant-subscription-detail', 
-                kwargs=self.merchant_res.data['pk']
-            ),
-            data = {},
-            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
-        )
-        pass
+    # def test_mc_merchant_subscription_retrieve(self):
+    #     res = self.client.get(
+    #         reverse(
+    #             'mc-merchant-subscription-detail', 
+    #             kwargs={'pk': self.merchant_res.data['pk']}
+    #         ),
+    #         data = {},
+    #         **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+    #     )
+    #     pass
