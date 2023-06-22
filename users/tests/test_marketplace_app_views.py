@@ -204,7 +204,7 @@ class TestMPAUserProfileViewSet(TestCase):
         )
         self.assertEqual(res.status_code, 400)
 
-    def test_mpa_user_profile_update_no_ownership(self):
+    def test_mpa_user_profile_update_permissions_failed(self):
         profile_pk = 1000
         request_data = {'name': 'foxbecoding'}
         res = self.client.put(
@@ -213,7 +213,7 @@ class TestMPAUserProfileViewSet(TestCase):
             data=request_data, 
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
-        self.assertEqual(res.status_code, 401)
+        self.assertEqual(res.status_code, 403)
 
     def test_mpa_user_profile_destroy(self):
         profile_pk = self.user['profiles'][1]
@@ -226,7 +226,7 @@ class TestMPAUserProfileViewSet(TestCase):
         self.assertEqual(len(res.data['profiles']), 1)
         self.assertEqual(res.status_code, 202)
     
-    def test_mpa_user_profile_destroy_error(self):
+    def test_mpa_user_profile_destroy_permissions_failed(self):
         profile_pk = self.user['profiles'][0]
         request_data = {}
         res = self.client.delete(
@@ -234,7 +234,7 @@ class TestMPAUserProfileViewSet(TestCase):
             data=request_data, 
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
-        self.assertEqual(res.status_code, 401)
+        self.assertEqual(res.status_code, 403)
 
 class TestMPAUserProfileImageViewSet(TestCase):
     
