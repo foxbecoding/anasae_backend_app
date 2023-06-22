@@ -12,11 +12,11 @@ import os
 
 class MPAUserViewSet(viewsets.ViewSet):
     def get_permissions(self):
-        permission_classes = [ IsAuthenticated, UserPermission ]
+        permission_classes = [IsAuthenticated, UserPermission]
         return [ permission() for permission in permission_classes ]
 
     def retrieve(self, request, pk=None):
-        self.check_object_permissions(request=request, obj={ 'pk': pk })
+        self.check_object_permissions(request=request, obj={'pk': pk})
         data = Prepare_User_Data(request.user)
         return Response(data, status=status.HTTP_200_OK)
         
@@ -54,7 +54,7 @@ class MPAUserProfileViewSet(viewsets.ViewSet):
     @method_decorator(csrf_protect)
     def update(self, request, pk=None):
         User_Serializer = UserSerializer(request.user) 
-        user_profile_pks = [ str(profile) for profile in User_Serializer.data['profiles'] ] 
+        user_profile_pks = [str(profile) for profile in User_Serializer.data['profiles']] 
         
         if str(pk) not in user_profile_pks:
             return Response(None, status=status.HTTP_401_UNAUTHORIZED)
@@ -118,7 +118,10 @@ class MPAUserAddressViewSet(viewsets.ViewSet):
     
     @method_decorator(csrf_protect)
     def create(self, request):
-        Create_User_Address_Serializer = CreateUserAddressSerializer(data=request.data, context={'user': request.user})
+        Create_User_Address_Serializer = CreateUserAddressSerializer(
+            data=request.data, 
+            context={'user': request.user}
+        )
         if Create_User_Address_Serializer.is_valid():
             data = Prepare_User_Data(request.user)
             return Response(data, status=status.HTTP_201_CREATED)

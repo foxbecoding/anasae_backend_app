@@ -67,7 +67,7 @@ class TestMPAUserViewSet(TestCase):
 
     def test_mpa_user_retrieve_permissions_failed(self):
         res = self.client.get(reverse('mpa-user-detail', kwargs={'pk': 0}))
-        self.assertEqual(res.status_code, 401)
+        self.assertEqual(res.status_code, 403)
 
     def test_mpa_user_update(self):
         request_data = {
