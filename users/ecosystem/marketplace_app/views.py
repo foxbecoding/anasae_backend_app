@@ -16,13 +16,13 @@ class MPAUserViewSet(viewsets.ViewSet):
         return [permission() for permission in permission_classes]
 
     def retrieve(self, request, pk=None):
-        self.check_object_permissions(request=request, obj={'pk': pk})
+        self.check_object_permissions(request=request, obj={'user_pk': pk})
         data = Prepare_User_Data(request.user)
         return Response(data, status=status.HTTP_200_OK)
         
     @method_decorator(csrf_protect)
     def update(self, request, pk=None):
-        self.check_object_permissions(request=request, obj={'pk': pk})
+        self.check_object_permissions(request=request, obj={'user_pk': pk})
         User_Instance = request.user
         Edit_User_Serializer = EditUserSerializer(User_Instance, data=request.data)
         
@@ -51,12 +51,7 @@ class MPAUserProfileViewSet(viewsets.ViewSet):
     
     @method_decorator(csrf_protect)
     def update(self, request, pk=None):
-        User_Serializer = UserSerializer(request.user) 
-        user_profile_pks = [str(profile) for profile in User_Serializer.data['profiles']] 
-        
-        if str(pk) not in user_profile_pks:
-            return Response(None, status=status.HTTP_401_UNAUTHORIZED)
-        
+        self.check_object_permissions(request=request, obj={'profile_pk': pk})
         User_Profile_Instance = UserProfile.objects.get(pk=pk)
         Edit_User_Profile_Serializer = EditUserProfileSerializer(User_Profile_Instance, data=request.data)
         
