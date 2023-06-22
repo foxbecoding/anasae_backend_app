@@ -1,5 +1,5 @@
 from rest_framework.permissions import BasePermission
-from users.models import User
+from users.models import User, UserProfile
 from users.serializers import UserSerializer
 
 class UserPermission(BasePermission):
@@ -21,8 +21,18 @@ class UserProfilePermission(BasePermission):
         return False
 
     def has_object_permission(self, request, view, obj) -> bool:
-        User_Serializer = UserSerializer(request.user) 
+        User_Serializer = UserSerializer(request.user)
+        profile_pk = str(obj['profile_pk'])
+        
+        if request.method == 'DELETE':
+            User_Profile_Instances = UserProfile.objects.filter(pk__in=User_Serializer.data['profiles']).filter(is_account_holder=False)
+            user_profile_pks = [ str(upi.id) for upi in User_Profile_Instances ]  
+            
+            if str(profile_pk) not in user_profile_pks:
+                return False
+            return True
+            
         user_profile_pks = [str(profile) for profile in User_Serializer.data['profiles']] 
-        if str(obj['profile_pk']) not in user_profile_pks:
+        if profile_pk not in user_profile_pks:
             return False
         return True

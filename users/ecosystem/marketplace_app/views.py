@@ -35,7 +35,7 @@ class MPAUserViewSet(viewsets.ViewSet):
 
 class MPAUserProfileViewSet(viewsets.ViewSet):
     def get_permissions(self):
-        permission_classes = [IsAuthenticated]
+        permission_classes = [IsAuthenticated, UserProfilePermission]
         return [permission() for permission in permission_classes]
     
     @method_decorator(csrf_protect)
