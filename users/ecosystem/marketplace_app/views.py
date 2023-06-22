@@ -29,12 +29,12 @@ class MPAUserViewSet(viewsets.ViewSet):
         User_Instance = request.user
         Edit_User_Serializer = EditUserSerializer(User_Instance, data=request.data)
         
-        if Edit_User_Serializer.is_valid():
-            Edit_User_Serializer.save()
-            data = Prepare_User_Data(User_Instance)
-            return Response(data, status=status.HTTP_202_ACCEPTED)
+        if not Edit_User_Serializer.is_valid():
+            return Response(Edit_User_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        Edit_User_Serializer.save()
+        data = Prepare_User_Data(User_Instance)
+        return Response(data, status=status.HTTP_202_ACCEPTED)
         
-        return Response(Edit_User_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
 
 class MPAUserProfileViewSet(viewsets.ViewSet):

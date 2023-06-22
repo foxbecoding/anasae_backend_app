@@ -65,7 +65,7 @@ class TestMPAUserViewSet(TestCase):
         res = self.client.get(reverse('mpa-user-detail', kwargs={'pk': self.user['pk']}))
         self.assertEqual(res.status_code, 200)
 
-    def test_mpa_user_retrieve_pk_mismatch(self):
+    def test_mpa_user_retrieve_permissions_failed(self):
         res = self.client.get(reverse('mpa-user-detail', kwargs={'pk': 0}))
         self.assertEqual(res.status_code, 401)
 
