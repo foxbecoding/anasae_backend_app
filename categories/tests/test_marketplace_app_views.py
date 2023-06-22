@@ -8,7 +8,7 @@ class TestMPAUserViewSet(TestCase):
     
     def setUp(self):
         self.client = Client()
-        categories = [
+        categories = (
             {
                 'title': "Women's Fashion",
                 'description': "Best black women's fashion trends"
@@ -21,7 +21,7 @@ class TestMPAUserViewSet(TestCase):
                 'title': "Bags & Shoes",
                 'description': "Best bags & shoes by black designers"
             },
-        ]
+        )
         
         Category_Instances = []
         for cat in categories:
@@ -34,7 +34,7 @@ class TestMPAUserViewSet(TestCase):
 
         self.category_data = Category_Instances[0]
         Category_Instances = [ {'category': CI } for CI in Category_Instances ]
-        subcategories = [
+        subcategories = (
             {
                 'title': "Bottoms",
                 'description': "Shop women's pants, leggings, shorts and more."
@@ -47,7 +47,7 @@ class TestMPAUserViewSet(TestCase):
                 'title': "Women's Shoes",
                 'description': "Shop top black brands for women shoes"
             }, 
-        ]
+        )
 
         subcategories = zip(subcategories, Category_Instances)
         Subcategory_Instances = []
@@ -64,7 +64,7 @@ class TestMPAUserViewSet(TestCase):
 
         self.subcategory_data = Subcategory_Instances[0]
         Subcategory_Instances = [ {'subcategory': SCI } for SCI in Subcategory_Instances ]
-        subcategory_sections = [
+        subcategory_sections = (
             {
                 'title': "Leggings",
                 'description': "Shop women's leggings."
@@ -77,7 +77,7 @@ class TestMPAUserViewSet(TestCase):
                 'title': "Women's Shoes",
                 'description': "Shop women's flats"
             }, 
-        ]
+        )
 
         subcategory_sections = zip(subcategory_sections, Subcategory_Instances)
         Subcategory_Section_Instances = []
