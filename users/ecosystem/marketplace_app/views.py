@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from users.serializers import *
 from users.models import UserProfile, UserProfileImage
-from users.permissions import UserPermission, UserProfilePermission
+from users.permissions import *
 from users.ecosystem.methods import Prepare_User_Data
 import os
 
@@ -74,7 +74,7 @@ class MPAUserProfileViewSet(viewsets.ViewSet):
 class MPAUserProfileImageViewSet(viewsets.ViewSet):
 
     def get_permissions(self):
-        permission_classes = [IsAuthenticated]
+        permission_classes = [IsAuthenticated, UserProfileImagePermission]
         return [permission() for permission in permission_classes]
 
     @method_decorator(csrf_protect)
