@@ -7,7 +7,6 @@ from rest_framework.permissions import IsAuthenticated
 from merchants.models import *
 from merchants.serializers import *
 from merchants.permissions import MerchantPermission, MerchantSubscriptionPermission
-from users.models import User
 
 class MCMerchantViewSet(viewsets.ViewSet):
     
