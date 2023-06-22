@@ -6,18 +6,17 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from users.serializers import *
 from users.models import UserProfile, UserProfileImage
+from users.permissions import UserPermission
 from users.ecosystem.methods import Prepare_User_Data
 import os
 
 class MPAUserViewSet(viewsets.ViewSet):
     def get_permissions(self):
-        permission_classes = [IsAuthenticated]
-        return [permission() for permission in permission_classes]
+        permission_classes = [ IsAuthenticated, UserPermission ]
+        return [ permission() for permission in permission_classes ]
 
     def retrieve(self, request, pk=None):
-        if str(pk) != str(request.user.id):
-            return Response(None, status=status.HTTP_401_UNAUTHORIZED)
-        
+        self.check_object_permissions(request=request, obj={ 'pk': pk })
         data = Prepare_User_Data(request.user)
         return Response(data, status=status.HTTP_200_OK)
         
