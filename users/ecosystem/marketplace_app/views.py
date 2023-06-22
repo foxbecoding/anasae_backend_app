@@ -13,7 +13,7 @@ import os
 class MPAUserViewSet(viewsets.ViewSet):
     def get_permissions(self):
         permission_classes = [IsAuthenticated, UserPermission]
-        return [ permission() for permission in permission_classes ]
+        return [permission() for permission in permission_classes]
 
     def retrieve(self, request, pk=None):
         self.check_object_permissions(request=request, obj={'pk': pk})
@@ -22,19 +22,16 @@ class MPAUserViewSet(viewsets.ViewSet):
         
     @method_decorator(csrf_protect)
     def update(self, request, pk=None):
-        if str(pk) != str(request.user.id):
-            return Response(None, status=status.HTTP_401_UNAUTHORIZED)
-        
+        self.check_object_permissions(request=request, obj={'pk': pk})
         User_Instance = request.user
         Edit_User_Serializer = EditUserSerializer(User_Instance, data=request.data)
         
         if not Edit_User_Serializer.is_valid():
             return Response(Edit_User_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
         Edit_User_Serializer.save()
         data = Prepare_User_Data(User_Instance)
-        return Response(data, status=status.HTTP_202_ACCEPTED)
-        
-        
+        return Response(data, status=status.HTTP_202_ACCEPTED)      
 
 class MPAUserProfileViewSet(viewsets.ViewSet):
     def get_permissions(self):
@@ -68,8 +65,7 @@ class MPAUserProfileViewSet(viewsets.ViewSet):
             return Response(data, status=status.HTTP_202_ACCEPTED)
         
         return Response(Edit_User_Profile_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        
-    
+          
     @method_decorator(csrf_protect)
     def destroy(self, request, pk=None):
         User_Serializer = UserSerializer(request.user) 
