@@ -307,7 +307,7 @@ class TestMPAUserProfileImageViewSet(TestCase):
         )
         self.assertEqual(res.status_code, 400)
     
-    def test_mpa_user_profile_image_create_no_ownership(self):
+    def test_mpa_user_profile_image_create_permissions_failed(self):
         request_data = {
             'user_profile': 1111,
             'image': tmp_image('png')
@@ -317,8 +317,9 @@ class TestMPAUserProfileImageViewSet(TestCase):
             data=request_data, 
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
-        self.assertEqual(res.status_code, 401)
+        self.assertEqual(res.status_code, 403)
 
+    # This test uses the create method to update
     def test_mpa_user_profile_image_update(self):
         create_image_request_data = {
             'user_profile': self.user['profiles'][0],
@@ -342,7 +343,7 @@ class TestMPAUserProfileImageViewSet(TestCase):
         self.assertEqual(update_image_res.status_code, 201)
 
 class TestMPAUserAddressViewSet(TestCase):
-    
+ 
     def setUp(self):
         self.client = Client(enforce_csrf_checks=is_CSRF)
         date_time_str = '12/31/1990'
