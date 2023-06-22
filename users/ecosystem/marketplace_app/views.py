@@ -64,13 +64,7 @@ class MPAUserProfileViewSet(viewsets.ViewSet):
           
     @method_decorator(csrf_protect)
     def destroy(self, request, pk=None):
-        User_Serializer = UserSerializer(request.user) 
-        User_Profile_Instances = UserProfile.objects.filter(pk__in=User_Serializer.data['profiles']).filter(is_account_holder=False)
-        user_profile_pks = [ str(upi.id) for upi in User_Profile_Instances ]  
-        
-        if str(pk) not in user_profile_pks:
-            return Response(None, status=status.HTTP_401_UNAUTHORIZED)
-        
+        self.check_object_permissions(request=request, obj={'profile_pk': pk})
         User_Profile_Instance = UserProfile.objects.get(pk=pk)
         User_Profile_Instance.delete()
         data = Prepare_User_Data(request.user)
