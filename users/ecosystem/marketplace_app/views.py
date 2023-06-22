@@ -107,20 +107,17 @@ class MPAUserAddressViewSet(viewsets.ViewSet):
             data=request.data, 
             context={'user': request.user}
         )
-        if Create_User_Address_Serializer.is_valid():
-            data = Prepare_User_Data(request.user)
-            return Response(data, status=status.HTTP_201_CREATED)
+
+        if not Create_User_Address_Serializer.is_valid():
+            return Response(Create_User_Address_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
-        return Response(Create_User_Address_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        data = Prepare_User_Data(request.user)
+        return Response(data, status=status.HTTP_201_CREATED)
+        
     
     @method_decorator(csrf_protect)
     def update(self, request, pk=None):
-        User_Serializer = UserSerializer(request.user) 
-        user_address_pks = [ str(address) for address in User_Serializer.data['addresses'] ] 
-
-        if str(pk) not in user_address_pks:
-            return Response(None, status=status.HTTP_401_UNAUTHORIZED)
-        
+        self.check_object_permissions(request=request, obj={'address_pk': pk})
         User_Address_Instance = UserAddress.objects.get(pk=pk)
         Edit_User_Address_Serializer = EditUserAddressSerializer(User_Address_Instance, data=request.data)
 
@@ -133,12 +130,7 @@ class MPAUserAddressViewSet(viewsets.ViewSet):
 
     @method_decorator(csrf_protect)
     def destroy(self, request, pk=None):
-        User_Serializer = UserSerializer(request.user) 
-        user_address_pks = [ str(address) for address in User_Serializer.data['addresses'] ]
-
-        if str(pk) not in user_address_pks:
-            return Response(None, status=status.HTTP_401_UNAUTHORIZED)
-        
+        self.check_object_permissions(request=request, obj={'address_pk': pk})
         User_Address_Instance = UserAddress.objects.get(pk=pk)
         User_Address_Instance.delete()
         data = Prepare_User_Data(request.user)
