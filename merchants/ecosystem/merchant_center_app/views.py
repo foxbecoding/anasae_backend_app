@@ -19,12 +19,13 @@ class MCMerchantViewSet(viewsets.ViewSet):
     @method_decorator(csrf_protect)
     def create(self, request):
         Create_Merchant_Serializer = CreateMerchantSerializer(data=request.data, context={'request': request, 'user': request.user })
-        if Create_Merchant_Serializer.is_valid():
-            merchant_data = Create_Merchant_Serializer.validated_data['merchant']
-            Merchant_Serializer = MerchantSerializer(merchant_data)
-            data = Merchant_Serializer.data
-            return Response(data, status=status.HTTP_201_CREATED)
-        return Response(Create_Merchant_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        if not Create_Merchant_Serializer.is_valid():
+            return Response(Create_Merchant_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        merchant_data = Create_Merchant_Serializer.validated_data['merchant']
+        Merchant_Serializer = MerchantSerializer(merchant_data)
+        data = Merchant_Serializer.data
+        return Response(data, status=status.HTTP_201_CREATED)
+    
     
     def retrieve(self, request, uid=None):
         self.check_object_permissions(request=request, obj={ 'uid': uid })
