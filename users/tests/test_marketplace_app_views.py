@@ -486,7 +486,7 @@ class TestMPAUserAddressViewSet(TestCase):
         ) 
         self.assertEqual(res.status_code, 400)
 
-    def test_mpa_user_address_update_no_ownership(self):
+    def test_mpa_user_address_update_permissions_failed(self):
         request_data = { 
             'full_name': 'Desmond L Fox',
             'phone_number': '(504)729-8617',
@@ -504,7 +504,7 @@ class TestMPAUserAddressViewSet(TestCase):
             data=request_data,  
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         ) 
-        self.assertEqual(res.status_code, 401)
+        self.assertEqual(res.status_code, 403)
     
     def test_mpa_user_address_destroy(self):
         request_data = {}
@@ -516,7 +516,7 @@ class TestMPAUserAddressViewSet(TestCase):
         ) 
         self.assertEqual(res.status_code, 202)
     
-    def test_mpa_user_address_destroy_no_ownership(self):
+    def test_mpa_user_address_destroy_permissions_failed(self):
         request_data = {}
         res = self.client.delete(
             reverse('mpa-user-address-detail', kwargs={'pk': 847}),
@@ -524,4 +524,4 @@ class TestMPAUserAddressViewSet(TestCase):
             data=request_data,  
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         ) 
-        self.assertEqual(res.status_code, 401)
+        self.assertEqual(res.status_code, 403)

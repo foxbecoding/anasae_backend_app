@@ -72,7 +72,6 @@ class MPAUserProfileViewSet(viewsets.ViewSet):
         return Response(data, status=status.HTTP_202_ACCEPTED)
     
 class MPAUserProfileImageViewSet(viewsets.ViewSet):
-
     def get_permissions(self):
         permission_classes = [IsAuthenticated, UserProfileImagePermission]
         return [permission() for permission in permission_classes]
@@ -93,12 +92,10 @@ class MPAUserProfileImageViewSet(viewsets.ViewSet):
         
         data = Prepare_User_Data(request.user)
         return Response(data, status=status.HTTP_201_CREATED)
-        
-    
+           
 class MPAUserAddressViewSet(viewsets.ViewSet):
-
     def get_permissions(self):
-        permission_classes = [IsAuthenticated, UserAddress]
+        permission_classes = [IsAuthenticated, UserAddressPermission]
         return [permission() for permission in permission_classes]
     
     @method_decorator(csrf_protect)
@@ -113,8 +110,7 @@ class MPAUserAddressViewSet(viewsets.ViewSet):
         
         data = Prepare_User_Data(request.user)
         return Response(data, status=status.HTTP_201_CREATED)
-        
-    
+          
     @method_decorator(csrf_protect)
     def update(self, request, pk=None):
         self.check_object_permissions(request=request, obj={'address_pk': pk})
@@ -128,7 +124,6 @@ class MPAUserAddressViewSet(viewsets.ViewSet):
         data = Prepare_User_Data(request.user)
         return Response(data, status=status.HTTP_202_ACCEPTED)
         
-
     @method_decorator(csrf_protect)
     def destroy(self, request, pk=None):
         self.check_object_permissions(request=request, obj={'address_pk': pk})
