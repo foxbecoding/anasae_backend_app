@@ -58,8 +58,8 @@ class CreateMerchantPaymentMethodSerializer(serializers.ModelSerializer):
             type="card",
             card={
                 "number": str(attrs.get('card_number')),
-                "exp_month": attrs.get('card_exp_month'),
-                "exp_year": attrs.get('card_exp_year'),
+                "exp_month": int(attrs.get('card_exp_month')),
+                "exp_year": int(attrs.get('card_exp_year')),
                 "cvc": str(attrs.get('card_cvc')),
             }
         )
