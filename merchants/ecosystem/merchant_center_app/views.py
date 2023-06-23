@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from merchants.models import *
 from merchants.serializers import *
-from merchants.permissions import MerchantPermission, MerchantSubscriptionPermission
+from merchants.permissions import *
 
 class MCMerchantViewSet(viewsets.ViewSet):
     
@@ -36,16 +36,16 @@ class MCMerchantViewSet(viewsets.ViewSet):
 class MCMerchantPaymentMethodViewSet(viewsets.ViewSet):
     
     def get_permissions(self):
-        permission_classes = [ IsAuthenticated, MerchantPermission ]
+        permission_classes = [ IsAuthenticated, MerchantPaymentMethodPermission ]
         return [ permission() for permission in permission_classes ]
     
     @method_decorator(csrf_protect)
     def create(self, request):
-        
+        print(request.data)
         return Response(None, status=status.HTTP_201_CREATED)
     
     def retrieve(self, request, pk=None):
-        self.check_object_permissions(request=request, obj={ 'pk': pk })
+        # self.check_object_permissions(request=request, obj={ 'pk': pk })
         # Merchant_Instance = Merchant.objects.get(pk=pk)
         # Merchant_Serializer = MerchantSerializer(Merchant_Instance)
         # data = Merchant_Serializer.data
