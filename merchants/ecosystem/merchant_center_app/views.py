@@ -25,6 +25,24 @@ class MCMerchantViewSet(viewsets.ViewSet):
         data = Merchant_Serializer.data
         return Response(data, status=status.HTTP_201_CREATED)
     
+    def retrieve(self, request, uid=None):
+        self.check_object_permissions(request=request, obj={ 'uid': uid })
+        Merchant_Instance = Merchant.objects.get(uid=uid)
+        Merchant_Serializer = MerchantSerializer(Merchant_Instance)
+        data = Merchant_Serializer.data
+        return Response(data, status=status.HTTP_200_OK)
+
+class MCMerchantBillingInfoViewSet(viewsets.ViewSet):
+    lookup_field = "uid"
+    
+    def get_permissions(self):
+        permission_classes = [ IsAuthenticated, MerchantPermission ]
+        return [ permission() for permission in permission_classes ]
+    
+    @method_decorator(csrf_protect)
+    def create(self, request):
+        
+        return Response(None, status=status.HTTP_201_CREATED)
     
     def retrieve(self, request, uid=None):
         self.check_object_permissions(request=request, obj={ 'uid': uid })
