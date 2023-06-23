@@ -54,6 +54,9 @@ class CreateMerchantPaymentMethodSerializer(serializers.ModelSerializer):
         ]
 
     def validate(self, attrs):
+        user_id = str(self.context['request'].user.id)
+        Merchant_Instance = Merchant.objects.get(user_id=user_id)
+        
         res = stripe.PaymentMethod.create(
             type="card",
             card={
@@ -64,5 +67,6 @@ class CreateMerchantPaymentMethodSerializer(serializers.ModelSerializer):
             }
         )
         print(res)
+        
         # attrs['merchant'] = Merchant_Instance
         return attrs 
