@@ -43,6 +43,7 @@ class MCMerchantPaymentMethodViewSet(viewsets.ViewSet):
     def create(self, request):
         Create_Merchant_Payment_Method_Serializer = CreateMerchantPaymentMethodSerializer(data=request.data, context={'request': request})
         if not Create_Merchant_Payment_Method_Serializer.is_valid():
+            print(Create_Merchant_Payment_Method_Serializer.errors)           
             return Response(None, status=status.HTTP_400_BAD_REQUEST)
         return Response(None, status=status.HTTP_200_OK)
     

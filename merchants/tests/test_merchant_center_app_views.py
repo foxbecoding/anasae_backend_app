@@ -145,10 +145,10 @@ class TestMCMerchantPaymentMethodViewSet(TestCase):
         res = self.client.post(
             reverse('mc-merchant-payment-method-list'),
             data = {
-                "number": "4242424242424242",
-                "exp_month": 8,
-                "exp_year": 2024,
-                "cvc": "504",
+                "card_number": "4242424242424242",
+                "card_exp_month": 8,
+                "card_exp_year": 2024,
+                "card_cvc": "504",
             },
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
