@@ -41,8 +41,10 @@ class MCMerchantPaymentMethodViewSet(viewsets.ViewSet):
     
     @method_decorator(csrf_protect)
     def create(self, request):
-        print(request.data)
-        return Response(None, status=status.HTTP_201_CREATED)
+        Create_Merchant_Payment_Method_Serializer = CreateMerchantPaymentMethodSerializer(data=request.data, context={'request': request})
+        if not Create_Merchant_Payment_Method_Serializer.is_valid():
+            return Response(None, status=status.HTTP_400_BAD_REQUEST)
+        return Response(None, status=status.HTTP_200_OK)
     
     def retrieve(self, request, pk=None):
         # self.check_object_permissions(request=request, obj={ 'pk': pk })
