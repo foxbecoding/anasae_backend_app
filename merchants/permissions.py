@@ -2,6 +2,7 @@ from rest_framework.permissions import BasePermission
 from merchants.models import Merchant, MerchantSubcription
 
 class MerchantPermission(BasePermission):
+    
     message = "Access Denied!"
 
     def has_permission(self, request, view) -> bool:
@@ -25,7 +26,15 @@ class MerchantPermission(BasePermission):
         
         return True
 
+class MerchantPaymentMethodPermission(BasePermission):
+
+    message = "Access Denied!"
+    
+    def has_permission(self, request, view) -> bool:
+        return Merchant.objects.filter(user_id=str(request.user.id)).exists() 
+    
 class MerchantSubscriptionPermission(BasePermission):
+    
     message = "Access Denied!"
 
     def has_permission(self, request, view) -> bool:
