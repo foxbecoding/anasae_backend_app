@@ -49,6 +49,7 @@ class MerchantSubcription(models.Model):
 class MerchantStore(models.Model):
     merchant = models.ForeignKey(Merchant, on_delete=models.CASCADE, related_name="stores")
     uid = models.CharField(max_length=20, blank=True, unique=True)
+    stripe_account_id = models.CharField(max_length=100, blank=True, unique=True)
     name = models.CharField(max_length=500, blank=False)
     description = models.CharField(max_length=2000, blank=False)
     logo = models.ImageField(upload_to="images/merchant_store_media/logos/", blank=True, null=True)
