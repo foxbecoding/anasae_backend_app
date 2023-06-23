@@ -49,7 +49,7 @@ class MerchantSubcription(models.Model):
 class MerchantStore(models.Model):
     merchant = models.ForeignKey(Merchant, on_delete=models.CASCADE, related_name="stores")
     uid = models.CharField(max_length=20, blank=True, unique=True)
-    stripe_account_id = models.CharField(max_length=100, blank=True, unique=True)
+    stripe_account_id = models.CharField(max_length=120, blank=True, unique=True)
     name = models.CharField(max_length=500, blank=False)
     description = models.CharField(max_length=2000, blank=False)
     logo = models.ImageField(upload_to="images/merchant_store_media/logos/", blank=True, null=True)
@@ -77,6 +77,13 @@ class MerchantStoreCategory(models.Model):
 
 class MerchantStoreCategoryView(models.Model):
     merchant_store_category = models.ForeignKey(MerchantStoreCategory, on_delete=models.CASCADE, related_name="views", default=0)
+    created = models.DateTimeField(auto_now_add=True, null=True)
+    updated = models.DateTimeField(auto_now_add=True, null=True)
+    deleted = models.DateTimeField(null=True)
+
+class MerchantPaymentMethod(models.Model):
+    merchant = models.ForeignKey(Merchant, on_delete=models.CASCADE, related_name="payment_methods", default='')
+    stripe_pm_id = models.CharField(max_length=120, blank=False)
     created = models.DateTimeField(auto_now_add=True, null=True)
     updated = models.DateTimeField(auto_now_add=True, null=True)
     deleted = models.DateTimeField(null=True)
