@@ -47,7 +47,6 @@ class CreateMerchantPaymentMethodSerializer(serializers.ModelSerializer):
     class Meta:
         model = MerchantPaymentMethod
         fields = [
-            'merchant',
             'card_number',
             'card_exp_month',
             'card_exp_year',
