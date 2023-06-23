@@ -23,12 +23,13 @@ class CreateMerchantSerializer(serializers.ModelSerializer):
         ]
     
     def validate(self, attrs):
+        user = self.context['user']
         Merchant_Instance = Merchant.objects.create(
-            user = self.context['user'],
+            user = user,
             uid = create_uid('m-'),
             title = attrs.get('title'),
         )
+
         Merchant_Instance.save()
         attrs['merchant'] = Merchant_Instance
         return attrs 
-
