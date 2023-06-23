@@ -59,7 +59,7 @@ class CreateMerchantPaymentMethodSerializer(serializers.ModelSerializer):
                 "exp_month": attrs.get('card_exp_month'),
                 "exp_year": attrs.get('card_exp_year'),
                 "cvc": str(attrs.get('card_cvc')),
-            },
+            }
         )
         print(res)
         # attrs['merchant'] = Merchant_Instance
