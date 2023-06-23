@@ -5,6 +5,7 @@ from PIL import Image
 import stripe
 
 class MerchantSerializer(serializers.ModelSerializer):
+    
     class Meta:
         model = Merchant
         fields = [
@@ -16,6 +17,7 @@ class MerchantSerializer(serializers.ModelSerializer):
         ]
 
 class CreateMerchantSerializer(serializers.ModelSerializer):
+    
     class Meta:
         model = Merchant
         fields = [
@@ -35,6 +37,7 @@ class CreateMerchantSerializer(serializers.ModelSerializer):
         return attrs 
     
 class CreateMerchantPaymentMethodSerializer(serializers.ModelSerializer):
+    
     # Create fields for card info
     card_number = serializers.CharField(write_only=True)
     card_exp_month = serializers.IntegerField(write_only=True)
