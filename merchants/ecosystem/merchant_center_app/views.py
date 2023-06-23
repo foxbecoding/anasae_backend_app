@@ -9,7 +9,6 @@ from merchants.serializers import *
 from merchants.permissions import MerchantPermission, MerchantSubscriptionPermission
 
 class MCMerchantViewSet(viewsets.ViewSet):
-    
     lookup_field = "uid"
     
     def get_permissions(self):
@@ -35,7 +34,6 @@ class MCMerchantViewSet(viewsets.ViewSet):
         return Response(data, status=status.HTTP_200_OK)
     
 class MCMerchantSubcriptionViewSet(viewsets.ViewSet):
-    
     def get_permissions(self):
         permission_classes = [ IsAuthenticated, MerchantSubscriptionPermission ]
         return [ permission() for permission in permission_classes ]
