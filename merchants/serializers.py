@@ -2,7 +2,7 @@ from rest_framework import serializers
 from merchants.models import *
 from utils.helpers import create_uid
 from PIL import Image
-import stripe
+import stripe, os
 
 class MerchantSerializer(serializers.ModelSerializer):
     
@@ -57,16 +57,17 @@ class CreateMerchantPaymentMethodSerializer(serializers.ModelSerializer):
         user_id = str(self.context['request'].user.id)
         Merchant_Instance = Merchant.objects.get(user_id=user_id)
         print(user_id)
-        res = stripe.PaymentMethod.create(
-            type="card",
-            card={
-                "number": str(attrs.get('card_number')),
-                "exp_month": int(attrs.get('card_exp_month')),
-                "exp_year": int(attrs.get('card_exp_year')),
-                "cvc": str(attrs.get('card_cvc')),
-            }
-        )
-        print(res)
+        if os.getenv('IS_DEVELOPMENT') == 'False':
+            res = stripe.PaymentMethod.create(
+                type="card",
+                card={
+                    "number": str(attrs.get('card_number')),
+                    "exp_month": int(attrs.get('card_exp_month')),
+                    "exp_year": int(attrs.get('card_exp_year')),
+                    "cvc": str(attrs.get('card_cvc')),
+                }
+            )
+            print(res)
         
         # attrs['merchant'] = Merchant_Instance
         return attrs 
