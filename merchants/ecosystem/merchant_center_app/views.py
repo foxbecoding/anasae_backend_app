@@ -38,12 +38,25 @@ class MCMerchantPaymentMethodViewSet(viewsets.ViewSet):
     def get_permissions(self):
         permission_classes = [ IsAuthenticated, MerchantPaymentMethodPermission ]
         return [ permission() for permission in permission_classes ]
-    
+
+    def list(self, request):
+        setup_intent_res = stripe.SetupIntent.create(
+            customer=request.user.stripe_customer_id,
+            payment_method_types=["card"],
+        )
+        return Response(setup_intent_res.client_secret, status=status.HTTP_200_OK)
+
     @method_decorator(csrf_protect)
     def create(self, request):
-        Create_Merchant_Payment_Method_Serializer = CreateMerchantPaymentMethodSerializer(data=request.data, context={'request': request})
-        if not Create_Merchant_Payment_Method_Serializer.is_valid():
-            return Response(Create_Merchant_Payment_Method_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        Merchant_Instance = Merchant.objects.get(user_id=str(request.user.id))
+        payment_method_res = stripe.PaymentMethod.retrieve(id=request.data['intent_id'])
+        data = {
+            'merchant': Merchant_Instance,
+            'stripe_pm_id': ''
+        }
+        # Create_Merchant_Payment_Method_Serializer = CreateMerchantPaymentMethodSerializer(data=data)
+        # if not Create_Merchant_Payment_Method_Serializer.is_valid():
+        #     return Response(Create_Merchant_Payment_Method_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         return Response(None, status=status.HTTP_200_OK)
     
     def retrieve(self, request, pk=None):

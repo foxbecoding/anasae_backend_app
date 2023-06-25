@@ -4,6 +4,7 @@ from merchants.models import *
 from users.models import UserGender
 from pprint import pprint
 from datetime import datetime
+import stripe
 
 class TestMCMerchantViewSet(TestCase):
     
@@ -141,15 +142,24 @@ class TestMCMerchantPaymentMethodViewSet(TestCase):
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
 
+    def test_mc_merchant_payment_method_get_client_secret_list(self):
+        res = self.client.get(reverse('mc-merchant-payment-method-list'))
+        self.assertEqual(res.status_code, 200)
+        
     def test_mc_merchant_payment_method_create(self):
+        setup_intent_create_res = stripe.SetupIntent.create(
+            customer=self.user['stripe_customer_id'],
+            payment_method="pm_card_visa"
+        )
+        
+        setup_intent_confirm_res = stripe.SetupIntent.confirm(
+            setup_intent_create_res,
+            payment_method="pm_card_visa",
+        )
+        
         res = self.client.post(
             reverse('mc-merchant-payment-method-list'),
-            data = {
-                "card_number": "4242424242424242",
-                "card_exp_month": 8,
-                "card_exp_year": 2024,
-                "card_cvc": "504",
-            },
+            data = {'intent_id': setup_intent_confirm_res.payment_method},
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
         # self.assertEqual(res.status_code, 201)

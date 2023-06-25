@@ -38,36 +38,9 @@ class CreateMerchantSerializer(serializers.ModelSerializer):
     
 class CreateMerchantPaymentMethodSerializer(serializers.ModelSerializer):
     
-    # Create fields for card info
-    card_number = serializers.CharField(write_only=True)
-    card_exp_month = serializers.IntegerField(write_only=True)
-    card_exp_year = serializers.IntegerField(write_only=True)
-    card_cvc = serializers.CharField(write_only=True)
-    
     class Meta:
         model = MerchantPaymentMethod
         fields = [
-            'card_number',
-            'card_exp_month',
-            'card_exp_year',
-            'card_cvc'
+            'merchant',
+            'stripe_pm_id'
         ]
-
-    def validate(self, attrs):
-        user_id = str(self.context['request'].user.id)
-        Merchant_Instance = Merchant.objects.get(user_id=user_id)
-        print(user_id)
-        if os.getenv('IS_DEVELOPMENT') == 'False':
-            res = stripe.PaymentMethod.create(
-                type="card",
-                card={
-                    "number": str(attrs.get('card_number')),
-                    "exp_month": int(attrs.get('card_exp_month')),
-                    "exp_year": int(attrs.get('card_exp_year')),
-                    "cvc": str(attrs.get('card_cvc')),
-                }
-            )
-            print(res)
-        
-        # attrs['merchant'] = Merchant_Instance
-        return attrs 
