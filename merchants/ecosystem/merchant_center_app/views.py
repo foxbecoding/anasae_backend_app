@@ -52,7 +52,7 @@ class MCMerchantPaymentMethodViewSet(viewsets.ViewSet):
         payment_method_res = stripe.PaymentMethod.retrieve(id=request.data['intent_id'])
         
         data = {
-            'merchant': Merchant_Instance,
+            'merchant': Merchant_Instance.id,
             'stripe_pm_id': payment_method_res.id
         }
         
@@ -63,8 +63,7 @@ class MCMerchantPaymentMethodViewSet(viewsets.ViewSet):
         Create_Merchant_Payment_Method_Serializer.save()
         Merchant_Serializer = MerchantSerializer(Merchant_Instance)
         data = Merchant_Serializer.data
-        print(data)
-        return Response(data, status=status.HTTP_200_OK)
+        return Response(data, status=status.HTTP_201_CREATED)
     
     def retrieve(self, request, pk=None):
         # self.check_object_permissions(request=request, obj={ 'pk': pk })

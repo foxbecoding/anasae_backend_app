@@ -162,7 +162,9 @@ class TestMCMerchantPaymentMethodViewSet(TestCase):
             data = {'intent_id': setup_intent_confirm_res.payment_method},
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
-        # self.assertEqual(res.status_code, 201)
+        print(res.data)
+        self.assertGreater(len(res.data['payment_methods']), 0)
+        self.assertEqual(res.status_code, 201)
 
 
 class TestMCMerchantSubscriptionViewSet(TestCase):
