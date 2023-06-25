@@ -13,7 +13,8 @@ class MerchantSerializer(serializers.ModelSerializer):
             'uid',
             'title',
             'user',
-            'is_active'
+            'is_active',
+            'payment_methods'
         ]
 
 class CreateMerchantSerializer(serializers.ModelSerializer):
