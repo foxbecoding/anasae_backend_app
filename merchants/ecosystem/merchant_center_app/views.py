@@ -49,7 +49,7 @@ class MCMerchantPaymentMethodViewSet(viewsets.ViewSet):
     @method_decorator(csrf_protect)
     def create(self, request):
         Merchant_Instance = Merchant.objects.get(user_id=str(request.user.id))
-        payment_method_res = stripe.PaymentMethod.retrieve(id=request.data['intent_id'])
+        payment_method_res = stripe.PaymentMethod.retrieve(id=request.data['payment_method_id'])
         
         data = {
             'merchant': Merchant_Instance.id,
