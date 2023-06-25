@@ -39,7 +39,7 @@ class MerchantPaymentMethodPermission(BasePermission):
             if 'payment_method_id' not in obj['payment_method_id']:
                 return False
             try:
-                stripe.PaymentMethod.retrieve(id=request.data['payment_method_id'])
+                stripe.PaymentMethod.retrieve(id=obj['payment_method_id'])
                 return True
             except:
                 return False
