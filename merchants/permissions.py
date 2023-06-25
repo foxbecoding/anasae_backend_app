@@ -35,14 +35,19 @@ class MerchantPaymentMethodPermission(BasePermission):
         return Merchant.objects.filter(user_id=str(request.user.id)).exists() 
     
     def has_object_permission(self, request, view, obj):
-        if request.method == 'LIST':
-            if 'payment_method_id' not in obj['payment_method_id']:
+        if request.method == 'POST':
+            if 'payment_method_id' not in request.data['payment_method_id']:
+                print(1)
                 return False
             try:
+                print(2)
                 stripe.PaymentMethod.retrieve(id=obj['payment_method_id'])
                 return True
             except:
+                print(3)
                 return False
+            
+            print(4)
     
 class MerchantSubscriptionPermission(BasePermission):
     
