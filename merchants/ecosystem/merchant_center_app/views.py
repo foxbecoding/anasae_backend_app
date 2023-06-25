@@ -65,7 +65,7 @@ class MCMerchantPaymentMethodViewSet(viewsets.ViewSet):
         data = Merchant_Serializer.data
         return Response(data, status=status.HTTP_201_CREATED)
     
-    def retrieve(self, request, pk=None):
+    def destroy(self, request, pk=None):
         # self.check_object_permissions(request=request, obj={ 'pk': pk })
         # Merchant_Instance = Merchant.objects.get(pk=pk)
         # Merchant_Serializer = MerchantSerializer(Merchant_Instance)
