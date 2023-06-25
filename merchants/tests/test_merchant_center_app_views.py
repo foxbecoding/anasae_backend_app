@@ -153,11 +153,10 @@ class TestMCMerchantPaymentMethodViewSet(TestCase):
         )
         
         setup_intent_confirm_res = stripe.SetupIntent.confirm(
-            setup_intent_create_res,
-            payment_method="pm_card_visa",
+            setup_intent_create_res.id,
+            payment_method="pm_card_visa"
         )
         
-        print(setup_intent_confirm_res)
         res = self.client.post(
             reverse('mc-merchant-payment-method-list'),
             data = {'payment_method_id': setup_intent_confirm_res.payment_method},
