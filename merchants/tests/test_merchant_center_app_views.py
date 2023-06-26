@@ -329,8 +329,6 @@ class TestMCMerchantSubscriptionViewSet(TestCase):
         )
 
     def test_mc_merchant_subscription_create(self):
-        # Create payment method 
-        
         # print(create_payment_method_res.data['payment_methods'][0]['stripe_pm_id'])
 
         res = self.client.post(
