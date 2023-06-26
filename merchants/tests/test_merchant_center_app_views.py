@@ -180,8 +180,25 @@ class TestMCMerchantPaymentMethodViewSet(TestCase):
             ),
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
-        # self.assertGreater(len(res.data['payment_methods']), 0)
-        # self.assertEqual(res.status_code, 201)
+        self.assertEqual(len(delete_res.data['payment_methods']), 0)
+        self.assertEqual(delete_res.status_code, 202)
+
+    def test_mc_merchant_payment_method_destroy_permissions_failed(self):
+        self.client.post(
+            reverse('mc-merchant-payment-method-list'),
+            data = {'payment_method_id': self.setup_intent_confirm_res.payment_method},
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
+
+        delete_res = self.client.delete(
+            reverse(
+                'mc-merchant-payment-method-detail',
+                kwargs={'pk': 18}
+            ),
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
+
+        self.assertEqual(delete_res.status_code, 403)
 
 
 class TestMCMerchantSubscriptionViewSet(TestCase):
