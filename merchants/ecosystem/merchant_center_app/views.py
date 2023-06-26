@@ -101,7 +101,7 @@ def get_merchant_data(merchant: Merchant):
         many=True
     )
 
-    return  {
+    return {
         'pk': Merchant_Serializer.data['pk'], 
         'uid': Merchant_Serializer.data['uid'], 
         'title': Merchant_Serializer.data['title'],
