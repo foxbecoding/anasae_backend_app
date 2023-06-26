@@ -142,24 +142,24 @@ class TestMCMerchantPaymentMethodViewSet(TestCase):
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
 
-    def test_mc_merchant_payment_method_get_client_secret_list(self):
-        res = self.client.get(reverse('mc-merchant-payment-method-list'))
-        self.assertEqual(res.status_code, 200)
-        
-    def test_mc_merchant_payment_method_create(self):
         setup_intent_create_res = stripe.SetupIntent.create(
             customer=self.user['stripe_customer_id'],
             payment_method="pm_card_visa"
         )
         
-        setup_intent_confirm_res = stripe.SetupIntent.confirm(
+        self.setup_intent_confirm_res = stripe.SetupIntent.confirm(
             setup_intent_create_res.id,
             payment_method="pm_card_visa"
         )
+
+    def test_mc_merchant_payment_method_get_client_secret_list(self):
+        res = self.client.get(reverse('mc-merchant-payment-method-list'))
+        self.assertEqual(res.status_code, 200)
         
+    def test_mc_merchant_payment_method_create(self):
         res = self.client.post(
             reverse('mc-merchant-payment-method-list'),
-            data = {'payment_method_id': setup_intent_confirm_res.payment_method},
+            data = {'payment_method_id': self.setup_intent_confirm_res.payment_method},
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
         
