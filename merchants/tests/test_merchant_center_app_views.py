@@ -328,7 +328,9 @@ class TestMCMerchantSubscriptionViewSet(TestCase):
             data = {'payment_method_id': self.setup_intent_confirm_res.payment_method},
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
-        print(res.data['payment_methods'][0]['stripe_pm_id'])
+        # print(self.Merchant_Plan_Prices_Instances[0].id)
+        Merchant_Plan_Instance = MerchantPlan.objects.get(pk=self.Merchant_Plan_Instances[0].id)
+        print(Merchant_Plan_Instance.id)
 
         res = self.client.post(
             reverse('mc-merchant-subscription-list'),
