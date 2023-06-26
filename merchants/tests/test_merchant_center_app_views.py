@@ -167,12 +167,19 @@ class TestMCMerchantPaymentMethodViewSet(TestCase):
         self.assertEqual(res.status_code, 201)
     
     def test_mc_merchant_payment_method_destroy(self):
-        res = self.client.post(
+        create_res = self.client.post(
             reverse('mc-merchant-payment-method-list'),
             data = {'payment_method_id': self.setup_intent_confirm_res.payment_method},
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
-        print(res.data)
+        
+        delete_res = self.client.delete(
+            reverse(
+                'mc-merchant-payment-method-detail',
+                kwargs={'pk': create_res.data['pk']}
+            ),
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
         # self.assertGreater(len(res.data['payment_methods']), 0)
         # self.assertEqual(res.status_code, 201)
 
