@@ -83,6 +83,7 @@ class MCMerchantSubcriptionViewSet(viewsets.ViewSet):
     
     @method_decorator(csrf_protect)
     def create(self, request):
+        self.check_object_permissions(request=request, obj={})
         print(request.data)
         # stripe.PaymentIntent.create(
         #     amount=2000,
