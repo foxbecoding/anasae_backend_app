@@ -479,3 +479,4 @@ class TestMCMerchantPlanViewSet(TestCase):
 
     def test_mc_merchant_plan_list(self):
         res = self.client.get(reverse('mc-merchant-plan-list'))
+        self.assertEqual(res.status_code, 200)
