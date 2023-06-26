@@ -32,17 +32,7 @@ class MerchantPaymentMethodPermission(BasePermission):
     message = "Access Denied!"
     
     def has_permission(self, request, view) -> bool:
-        return Merchant.objects.filter(user_id=str(request.user.id)).exists() 
-    
-    def has_object_permission(self, request, view, obj):
-        if request.method == 'POST':
-            if 'payment_method_id' not in request.data:
-                return False 
-            try: 
-                stripe.PaymentMethod.retrieve(id=request.data['payment_method_id'])
-                return True
-            except:
-                return False        
+        return Merchant.objects.filter(user_id=str(request.user.id)).exists()        
     
 class MerchantSubscriptionPermission(BasePermission):
     

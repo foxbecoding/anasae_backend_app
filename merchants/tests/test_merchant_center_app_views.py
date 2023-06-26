@@ -153,7 +153,6 @@ class TestMCMerchantPaymentMethodViewSet(TestCase):
         )
         
         setup_intent_confirm_res = stripe.SetupIntent.confirm(
-            # 'ddss',
             setup_intent_create_res.id,
             payment_method="pm_card_visa"
         )
