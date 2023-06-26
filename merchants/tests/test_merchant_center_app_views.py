@@ -403,7 +403,7 @@ class TestMCMerchantPlanViewSet(TestCase):
             {'title': 'Plus', 'description': '', 'product_listings': 50, 'is_active': True}
         )
         
-        self.Merchant_Plan_Instances = []
+        Merchant_Plan_Instances = []
         for plan in merchant_plans:
             Merchant_Plan_Instance = MerchantPlan.objects.create(
                 title = plan['title'],
@@ -412,7 +412,7 @@ class TestMCMerchantPlanViewSet(TestCase):
                 is_active = plan['is_active']
             )
             Merchant_Plan_Instance.save()
-            self.Merchant_Plan_Instances.append(Merchant_Plan_Instance)
+            Merchant_Plan_Instances.append(Merchant_Plan_Instance)
         
         merchant_plan_prices = (
             {
@@ -438,8 +438,8 @@ class TestMCMerchantPlanViewSet(TestCase):
             }
         )
 
-        merchant_plan_prices = zip(merchant_plan_prices, self.Merchant_Plan_Instances)
-        self.Merchant_Plan_Prices_Instances = []
+        merchant_plan_prices = zip(merchant_plan_prices, Merchant_Plan_Instances)
+        Merchant_Plan_Prices_Instances = []
         
         for plan_price in merchant_plan_prices:
             data = plan_price[0]
@@ -454,4 +454,29 @@ class TestMCMerchantPlanViewSet(TestCase):
             ) 
             
             Merchant_Plan_Prices_Instance.save()
-            self.Merchant_Plan_Prices_Instances.append(Merchant_Plan_Prices_Instance)
+            Merchant_Plan_Prices_Instances.append(Merchant_Plan_Prices_Instance)
+
+        merchant_plan_features = [
+            ['5 product listings', 'Product analytics', 'Sales analytics'],
+            ['20 product listings', 'Product analytics', 'Sales analytics'],
+            ['50 product listings', 'Product analytics', 'Sales analytics'],
+        ]
+
+        merchant_plan_features = zip(merchant_plan_features, Merchant_Plan_Instances)
+        self.Merchant_Plan_Features_Instances = []
+        
+        for plan_feature in merchant_plan_features:
+            features = plan_feature[0]
+            merchant_plan = plan_price[1]
+
+            for feature in features:
+                Merchant_Plan_Feature_Instance = MerchantPlanFeature.objects.create(
+                    merchant_plan = merchant_plan,
+                    title = feature
+                )
+                Merchant_Plan_Feature_Instance.save()
+
+
+    def test_mc_merchant_plan_list(self):
+        print('FOX')
+        pass
