@@ -180,6 +180,7 @@ class TestMCMerchantPaymentMethodViewSet(TestCase):
             ),
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
+        
         self.assertEqual(len(delete_res.data['payment_methods']), 0)
         self.assertEqual(delete_res.status_code, 202)
 
