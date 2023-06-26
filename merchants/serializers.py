@@ -67,3 +67,23 @@ class MerchantPlanSerializer(serializers.ModelSerializer):
             'prices',
             'features'
         ]
+
+class MerchantPlanPriceSerializer(serializers.ModelSerializer):
+     
+    class Meta:
+        model = MerchantPlanPrice
+        fields = [
+            'pk',
+            'title',
+            'description',
+            'price'
+        ]
+
+class MerchantPlanFeatureSerializer(serializers.ModelSerializer):
+     
+    class Meta:
+        model = MerchantPlanFeature
+        fields = [
+            'pk',
+            'title'
+        ]
