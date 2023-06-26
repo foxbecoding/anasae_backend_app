@@ -6,6 +6,7 @@ def Prepare_User_Data(User_Instance):
     User_Data = User_Serializer.data
     User_Login_Instances = UserLogin.objects.filter(pk__in=User_Data['logins'])
     User_Account_Login_Serializer = UserLoginSerializer(User_Login_Instances, many=True)
+    
     user_logins = [
         {
             'pk': login['pk'],
@@ -13,6 +14,7 @@ def Prepare_User_Data(User_Instance):
         }
         for login in User_Account_Login_Serializer.data
     ]
+    
     User_Profile_Instance = UserProfile.objects.filter(pk__in=User_Data['profiles'])
     User_Profile_Serializer = UserProfileSerializer(User_Profile_Instance, many=True)
     user_profiles = [
@@ -48,4 +50,5 @@ def Prepare_User_Data(User_Instance):
         'profiles': user_profiles,
         'addresses': User_Address_Serializer.data
     }
+    
     return data
