@@ -51,6 +51,9 @@ class MerchantSubscriptionPermission(BasePermission):
         if request.method == 'POST':
             if 'merchant_plan' not in request.data:
                 return False
+            
+            if not MerchantPlan.objects.filter(pk=request.data['merchant_plan']).exists():
+                return False
         # Merchant_Instance = Merchant.objects.get(user_id=request.user.id)
         # if MerchantSubcription.objects.filter(merchant_id=Merchant_Instance.id).exists() == False:
         #     return False
