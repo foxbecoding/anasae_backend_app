@@ -243,6 +243,7 @@ class TestMCMerchantSubscriptionViewSet(TestCase):
             login_credentials, 
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
+
         self.user = res.data
         self.csrftoken = self.client.cookies['csrftoken'].value
 
@@ -316,26 +317,28 @@ class TestMCMerchantSubscriptionViewSet(TestCase):
             payment_method="pm_card_visa"
         )
         
-        self.setup_intent_confirm_res = stripe.SetupIntent.confirm(
+        setup_intent_confirm_res = stripe.SetupIntent.confirm(
             setup_intent_create_res.id,
             payment_method="pm_card_visa"
         )
 
-    def test_mc_merchant_subscription_create(self):
-        # Create payment method 
-        create_payment_method_res = self.client.post(
+        self.client.post(
             reverse('mc-merchant-payment-method-list'),
-            data = {'payment_method_id': self.setup_intent_confirm_res.payment_method},
+            data = {'payment_method_id': setup_intent_confirm_res.payment_method},
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
 
-        print(create_payment_method_res.data)
+    def test_mc_merchant_subscription_create(self):
+        # Create payment method 
+        
+        # print(create_payment_method_res.data['payment_methods'][0]['stripe_pm_id'])
 
         res = self.client.post(
             reverse('mc-merchant-subscription-list'),
-            data = {},
+            data = {'merchant_plan': self.Merchant_Plan_Instances[0].id},
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
+
         self.assertEqual(res.status_code, 201)
 
     # def test_mc_merchant_subscription_retrieve(self):

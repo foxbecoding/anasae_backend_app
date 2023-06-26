@@ -48,12 +48,15 @@ class MerchantSubscriptionPermission(BasePermission):
         return Merchant.objects.filter(user_id=str(request.user.id)).exists() 
     
     def has_object_permission(self, request, view, obj) -> bool:
+        if request.method == 'POST':
+            if 'merchant_plan' not in request.data:
+                return False
         # Merchant_Instance = Merchant.objects.get(user_id=request.user.id)
         # if MerchantSubcription.objects.filter(merchant_id=Merchant_Instance.id).exists() == False:
         #     return False
 
-        if MerchantSubcription.objects.filter(pk=obj['pk']).exists() == False:
-            return False
+        # if MerchantSubcription.objects.filter(pk=obj['pk']).exists() == False:
+        #     return False
         # Merchant_Subcription_Instance = MerchantSubcription.objects.get(pk=obj['pk'])
         # print(Merchant_Subcription_Instance.merchant_id)
         # Merchant_Subcription_Instance = MerchantSubcription.objects.get(merchant_id=Merchant_Instance.id)
