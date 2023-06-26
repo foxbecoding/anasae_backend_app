@@ -63,6 +63,7 @@ class MCMerchantPaymentMethodViewSet(viewsets.ViewSet):
             return Response(Create_Merchant_Payment_Method_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
         Create_Merchant_Payment_Method_Serializer.save()
+        get_merchant_data(Merchant_Instance)
         Merchant_Serializer = MerchantSerializer(Merchant_Instance)
         data = Merchant_Serializer.data
         return Response(data, status=status.HTTP_201_CREATED)
@@ -88,3 +89,21 @@ class MCMerchantSubcriptionViewSet(viewsets.ViewSet):
         self.check_object_permissions(request=request, obj={'pk': str(pk)})
         print('retrieve')
         return Response(None, status=status.HTTP_200_OK)
+    
+def get_merchant_data(merchant: Merchant):
+    Merchant_Serializer = MerchantSerializer(merchant)
+    Merchant_Payment_Method_Instances = MerchantPaymentMethod.objects.filter(
+        pk__in=Merchant_Serializer.data['payment_methods']
+    )
+    
+    Merchant_Payment_Method_Serializer = MerchantPaymentMethodSerializer(
+        Merchant_Payment_Method_Instances, 
+        many=True
+    )
+
+    return  {
+        'pk': Merchant_Serializer.data['pk'], 
+        'uid': Merchant_Serializer.data['uid'], 
+        'title': Merchant_Serializer.data['title'],
+        'payment_methods': Merchant_Payment_Method_Serializer.data
+    }   
