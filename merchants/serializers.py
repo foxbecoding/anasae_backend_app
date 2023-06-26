@@ -59,7 +59,7 @@ class MerchantPlanSerializer(serializers.ModelSerializer):
      
     class Meta:
         model = MerchantPlan
-        field = [
+        fields = [
             'pk',
             'description',
             'product_listings',

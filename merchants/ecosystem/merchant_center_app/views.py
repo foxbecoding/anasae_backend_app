@@ -103,6 +103,9 @@ class MCMerchantPlanViewSet(viewsets.ViewSet):
         return [permission() for permission in permission_classes]
     
     def list(self, request, pk=None):
+        Merchant_Plan_Instances = MerchantPlan.objects.all()
+        Merchant_Plan_Serializer = MerchantPlanSerializer(Merchant_Plan_Instances, many=True)
+        print(Merchant_Plan_Serializer.data)
         return Response(None, status=status.HTTP_200_OK)
 
 def get_merchant_data(merchant: Merchant):
