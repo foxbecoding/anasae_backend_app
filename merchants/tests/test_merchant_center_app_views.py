@@ -317,23 +317,25 @@ class TestMCMerchantSubscriptionViewSet(TestCase):
             payment_method="pm_card_visa"
         )
         
-        setup_intent_confirm_res = stripe.SetupIntent.confirm(
+        self.setup_intent_confirm_res = stripe.SetupIntent.confirm(
             setup_intent_create_res.id,
             payment_method="pm_card_visa"
         )
 
-        self.client.post(
+    def test_mc_merchant_subscription_create(self):
+        res = self.client.post(
             reverse('mc-merchant-payment-method-list'),
-            data = {'payment_method_id': setup_intent_confirm_res.payment_method},
+            data = {'payment_method_id': self.setup_intent_confirm_res.payment_method},
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
-
-    def test_mc_merchant_subscription_create(self):
-        # print(create_payment_method_res.data['payment_methods'][0]['stripe_pm_id'])
+        print(res.data['payment_methods'][0]['stripe_pm_id'])
 
         res = self.client.post(
             reverse('mc-merchant-subscription-list'),
-            data = {'merchant_plan': self.Merchant_Plan_Instances[0].id},
+            data = {
+                'merchant_plan': self.Merchant_Plan_Instances[0].id,
+                'payment_method': res.data['payment_methods'][0]['stripe_pm_id']
+            },
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
 
