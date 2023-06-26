@@ -63,9 +63,7 @@ class MCMerchantPaymentMethodViewSet(viewsets.ViewSet):
             return Response(Create_Merchant_Payment_Method_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
         Create_Merchant_Payment_Method_Serializer.save()
-        get_merchant_data(Merchant_Instance)
-        Merchant_Serializer = MerchantSerializer(Merchant_Instance)
-        data = Merchant_Serializer.data
+        data = get_merchant_data(Merchant_Instance)
         return Response(data, status=status.HTTP_201_CREATED)
     
     def destroy(self, request, pk=None):
