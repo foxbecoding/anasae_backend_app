@@ -61,6 +61,7 @@ class MerchantPlanSerializer(serializers.ModelSerializer):
         model = MerchantPlan
         fields = [
             'pk',
+            'title',
             'description',
             'product_listings',
             'prices',

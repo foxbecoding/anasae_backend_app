@@ -467,7 +467,7 @@ class TestMCMerchantPlanViewSet(TestCase):
         
         for plan_feature in merchant_plan_features:
             features = plan_feature[0]
-            merchant_plan = plan_price[1]
+            merchant_plan = plan_feature[1]
 
             for feature in features:
                 Merchant_Plan_Feature_Instance = MerchantPlanFeature.objects.create(
