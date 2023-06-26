@@ -67,11 +67,12 @@ class MCMerchantPaymentMethodViewSet(viewsets.ViewSet):
         return Response(data, status=status.HTTP_201_CREATED)
     
     def destroy(self, request, pk=None):
-        self.check_object_permissions(request=request, obj={'pk': pk})
-        Merchant_Payment_Method_Instance = MerchantPaymentMethod.objects.get(pk=str(pk))
-        Merchant_Payment_Method_Instance.delete()
-        Merchant_Instance = Merchant.objects.get(user_id=str(request.user.id))
-        data = get_merchant_data(Merchant_Instance)
+        print(pk)
+        # self.check_object_permissions(request=request, obj={'pk': pk})
+        # Merchant_Payment_Method_Instance = MerchantPaymentMethod.objects.get(pk=str(pk))
+        # Merchant_Payment_Method_Instance.delete()
+        # Merchant_Instance = Merchant.objects.get(user_id=str(request.user.id))
+        # data = get_merchant_data(Merchant_Instance)
         return Response(None, status=status.HTTP_200_OK)
     
 class MCMerchantSubcriptionViewSet(viewsets.ViewSet):

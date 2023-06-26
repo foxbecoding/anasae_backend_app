@@ -1,5 +1,5 @@
 from rest_framework.permissions import BasePermission
-from merchants.models import Merchant, MerchantSubcription
+from merchants.models import *
 import stripe
 
 class MerchantPermission(BasePermission):
@@ -32,7 +32,13 @@ class MerchantPaymentMethodPermission(BasePermission):
     message = "Access Denied!"
     
     def has_permission(self, request, view) -> bool:
-        return Merchant.objects.filter(user_id=str(request.user.id)).exists()        
+        return Merchant.objects.filter(user_id=str(request.user.id)).exists()      
+
+    def has_object_permission(self, request, view, obj):
+        if request.method == 'DELETE':
+            if not MerchantPaymentMethod.objects.filter(pk__in=obj['pk']).exists():
+                return False
+            return True
     
 class MerchantSubscriptionPermission(BasePermission):
     
