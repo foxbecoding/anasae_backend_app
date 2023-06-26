@@ -437,8 +437,10 @@ class TestMCMerchantPlanViewSet(TestCase):
                 'is_active': True
             }
         )
+
         merchant_plan_prices = zip(merchant_plan_prices, self.Merchant_Plan_Instances)
         self.Merchant_Plan_Prices_Instances = []
+        
         for plan_price in merchant_plan_prices:
             data = plan_price[0]
             merchant_plan = plan_price[1]
@@ -450,5 +452,6 @@ class TestMCMerchantPlanViewSet(TestCase):
                 stripe_price_key = data['stripe_price_key'],
                 is_active = data['is_active']
             ) 
+            
             Merchant_Plan_Prices_Instance.save()
             self.Merchant_Plan_Prices_Instances.append(Merchant_Plan_Prices_Instance)
