@@ -34,11 +34,11 @@ class MerchantPaymentMethodPermission(BasePermission):
     def has_permission(self, request, view) -> bool:
         return Merchant.objects.filter(user_id=str(request.user.id)).exists()      
 
-    # def has_object_permission(self, request, view, obj):
-    #     if request.method == 'DELETE':
-    #         if not MerchantPaymentMethod.objects.filter(pk__in=obj['pk']).exists():
-    #             return False
-    #         return True
+    def has_object_permission(self, request, view, obj):
+        if request.method == 'DELETE':
+            if not MerchantPaymentMethod.objects.filter(pk__in=obj['pk']).exists():
+                return False
+        return True
     
 class MerchantSubscriptionPermission(BasePermission):
     
