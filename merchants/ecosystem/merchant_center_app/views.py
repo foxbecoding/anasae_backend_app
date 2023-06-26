@@ -96,6 +96,15 @@ class MCMerchantSubcriptionViewSet(viewsets.ViewSet):
         print('retrieve')
         return Response(None, status=status.HTTP_200_OK)
     
+class MCMerchantPlanViewSet(viewsets.ViewSet):
+
+    def get_permissions(self):
+        permission_classes = [IsAuthenticated]
+        return [permission() for permission in permission_classes]
+    
+    def list():
+        return Response(None, status=status.HTTP_200_OK)
+
 def get_merchant_data(merchant: Merchant):
     Merchant_Serializer = MerchantSerializer(merchant)
     Merchant_Payment_Method_Instances = MerchantPaymentMethod.objects.filter(
@@ -113,3 +122,4 @@ def get_merchant_data(merchant: Merchant):
         'title': Merchant_Serializer.data['title'],
         'payment_methods': Merchant_Payment_Method_Serializer.data
     }   
+

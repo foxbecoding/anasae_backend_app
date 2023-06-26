@@ -36,7 +36,7 @@ class CreateMerchantSerializer(serializers.ModelSerializer):
         Merchant_Instance.save()
         attrs['merchant'] = Merchant_Instance
         return attrs 
-    
+         
 class MerchantPaymentMethodSerializer(serializers.ModelSerializer):
     
     class Meta:
@@ -53,4 +53,12 @@ class CreateMerchantPaymentMethodSerializer(serializers.ModelSerializer):
         fields = [
             'merchant',
             'stripe_pm_id'
+        ]
+
+class MerchantPlanSerializer(serializers.ModelSerializer):
+     
+    class Meta:
+        model = MerchantPlan
+        field = [
+            'pk',
         ]
