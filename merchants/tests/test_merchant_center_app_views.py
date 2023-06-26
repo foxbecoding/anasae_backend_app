@@ -172,11 +172,11 @@ class TestMCMerchantPaymentMethodViewSet(TestCase):
             data = {'payment_method_id': self.setup_intent_confirm_res.payment_method},
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
-        
+
         delete_res = self.client.delete(
             reverse(
                 'mc-merchant-payment-method-detail',
-                kwargs={'pk': create_res.data['pk']}
+                kwargs={'pk': create_res.data['payment_methods'][0]['pk']}
             ),
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
