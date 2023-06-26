@@ -83,6 +83,11 @@ class MCMerchantSubcriptionViewSet(viewsets.ViewSet):
     
     @method_decorator(csrf_protect)
     def create(self, request):
+        # stripe.PaymentIntent.create(
+        #     amount=2000,
+        #     currency="usd",
+        #     automatic_payment_methods={"enabled": True},
+        # )
         return Response(None, status=status.HTTP_201_CREATED)
     
     def retrieve(self, request, pk=None):

@@ -180,7 +180,7 @@ class TestMCMerchantPaymentMethodViewSet(TestCase):
             ),
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
-        
+
         self.assertEqual(len(delete_res.data['payment_methods']), 0)
         self.assertEqual(delete_res.status_code, 202)
 
@@ -259,6 +259,7 @@ class TestMCMerchantSubscriptionViewSet(TestCase):
             {'title': 'Pro', 'description': '', 'product_listings': 20, 'is_active': True},
             {'title': 'Plus', 'description': '', 'product_listings': 50, 'is_active': True}
         )
+        
         self.Merchant_Plan_Instances = []
         for plan in merchant_plans:
             Merchant_Plan_Instance = MerchantPlan.objects.create(
@@ -275,7 +276,7 @@ class TestMCMerchantSubscriptionViewSet(TestCase):
                 'title': 'Free', 
                 'description': '', 
                 'stripe_price_key': 'price_1NLUImIXJRFgDdeh0yyCtHUQ', 
-                'price': 0, 
+                'price': 000, 
                 'is_active': True
             },
             {
@@ -309,7 +310,27 @@ class TestMCMerchantSubscriptionViewSet(TestCase):
             Merchant_Plan_Prices_Instance.save()
             self.Merchant_Plan_Prices_Instances.append(Merchant_Plan_Prices_Instance)
 
+        # Get Payment method
+        setup_intent_create_res = stripe.SetupIntent.create(
+            customer=self.user['stripe_customer_id'],
+            payment_method="pm_card_visa"
+        )
+        
+        self.setup_intent_confirm_res = stripe.SetupIntent.confirm(
+            setup_intent_create_res.id,
+            payment_method="pm_card_visa"
+        )
+
     def test_mc_merchant_subscription_create(self):
+        # Create payment method 
+        create_payment_method_res = self.client.post(
+            reverse('mc-merchant-payment-method-list'),
+            data = {'payment_method_id': self.setup_intent_confirm_res.payment_method},
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
+
+        print(create_payment_method_res.data)
+
         res = self.client.post(
             reverse('mc-merchant-subscription-list'),
             data = {},
