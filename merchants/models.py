@@ -41,6 +41,7 @@ class MerchantPlanFeature(models.Model):
 class MerchantSubcription(models.Model):
     merchant = models.OneToOneField(Merchant, on_delete=models.CASCADE, related_name="subscription")
     merchant_plan = models.ForeignKey(MerchantPlan, on_delete=models.CASCADE, related_name="subscribers")
+    stripe_sub_id = models.CharField(max_length=200, blank=False, default='')
     is_active = models.BooleanField(default=True)
     created = models.DateTimeField(auto_now_add=True, null=True)
     updated = models.DateTimeField(auto_now_add=True, null=True)
