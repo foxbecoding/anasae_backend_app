@@ -73,8 +73,7 @@ class MCMerchantPaymentMethodViewSet(viewsets.ViewSet):
         stripe.PaymentMethod.detach(Merchant_Payment_Method_Instance.stripe_pm_id)
         Merchant_Instance = Merchant.objects.get(user_id=str(request.user.id))
         data = get_merchant_data(Merchant_Instance)
-        print(data)
-        return Response(None, status=status.HTTP_200_OK)
+        return Response(data, status=status.HTTP_200_OK)
     
 class MCMerchantSubcriptionViewSet(viewsets.ViewSet):
     
