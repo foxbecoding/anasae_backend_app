@@ -49,8 +49,7 @@ class MerchantSubscriptionPermission(BasePermission):
     
     def has_object_permission(self, request, view, obj) -> bool:
         if request.method == 'POST':
-            if 'merchant_plan' not in request.data:
-                return False
+            if 'merchant_plan' not in request.data: return False
             
             if not MerchantPlan.objects.filter(pk=request.data['merchant_plan']).exists():
                 return False
