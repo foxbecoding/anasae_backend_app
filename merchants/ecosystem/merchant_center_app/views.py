@@ -102,7 +102,7 @@ class MCMerchantPlanViewSet(viewsets.ViewSet):
         permission_classes = [IsAuthenticated]
         return [permission() for permission in permission_classes]
     
-    def list():
+    def list(self, request, pk=None):
         return Response(None, status=status.HTTP_200_OK)
 
 def get_merchant_data(merchant: Merchant):
@@ -121,5 +121,4 @@ def get_merchant_data(merchant: Merchant):
         'uid': Merchant_Serializer.data['uid'], 
         'title': Merchant_Serializer.data['title'],
         'payment_methods': Merchant_Payment_Method_Serializer.data
-    }   
-
+    }  

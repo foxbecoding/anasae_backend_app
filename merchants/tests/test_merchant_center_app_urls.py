@@ -31,7 +31,7 @@ class TestMCMerchantPaymentMethodUrls(SimpleTestCase):
         url = reverse('mc-merchant-payment-method-detail', kwargs={'pk': 1})
         self.assertEqual(resolve(url).view_name, 'mc-merchant-payment-method-detail')
 
-class TestMCMerchantPaymentMethodUrls(SimpleTestCase):
+class TestMCMerchantPlanUrls(SimpleTestCase):
 
     def test_mc_merchant_payment_method_list_url_resolves(self):
         url = reverse('mc-merchant-plan-list')
