@@ -85,11 +85,14 @@ class MCMerchantSubcriptionViewSet(viewsets.ViewSet):
     @method_decorator(csrf_protect)
     def create(self, request):
         self.check_object_permissions(request=request, obj={})
-        # stripe.PaymentIntent.create(
-        #     amount=2000,
-        #     currency="usd",
-        #     automatic_payment_methods={"enabled": True},
-        # )
+        stripe_price = stripe.Price.retrieve(request.data['price_key'])
+        print(stripe_price)
+        stripe.PaymentIntent.create(
+            amount=stripe_price.unit_amount,
+            currency="usd",
+            automatic_payment_methods={"enabled": True},
+            payment_method=request.data['payment_method'],
+        )
         return Response(None, status=status.HTTP_201_CREATED)
     
     def retrieve(self, request, pk=None):
