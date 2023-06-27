@@ -359,7 +359,7 @@ class TestMCMerchantSubscriptionViewSet(TestCase):
             'payment_method': payment_method_res.data['payment_methods'][0]['stripe_pm_id'],
             'price_key': plans_res.data[0]['prices'][0]['stripe_price_key']
         }
-        print(data)
+        
         res = self.client.post(
             reverse('mc-merchant-subscription-list'),
             data = data,
