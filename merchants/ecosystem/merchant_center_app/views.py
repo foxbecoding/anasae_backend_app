@@ -157,7 +157,7 @@ def get_merchant_plan_data():
                 'features': [ feature for feature in Merchant_Plan_Feature_Serializer.data if feature['pk'] in plan_data['features'] ]
             }
         )
-
+        
     return data
 
 def get_merchant_data(merchant: Merchant):
