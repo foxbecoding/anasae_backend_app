@@ -355,11 +355,11 @@ class TestMCMerchantSubscriptionViewSet(TestCase):
         plans_res = self.client.get(reverse('mc-merchant-plan-list'))
         
         data = {
-            'merchant_plan': plans_res.data[0]['pk'],
+            'merchant_plan': plans_res.data[1]['pk'],
             'payment_method': payment_method_res.data['payment_methods'][0]['stripe_pm_id'],
-            'price_key': plans_res.data[0]['prices'][0]['stripe_price_key']
+            'price_key': plans_res.data[1]['prices'][0]['stripe_price_key']
         }
-        
+
         res = self.client.post(
             reverse('mc-merchant-subscription-list'),
             data = data,
