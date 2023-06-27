@@ -354,7 +354,7 @@ class TestMCMerchantSubscriptionViewSet(TestCase):
 
         Stripe_Payment_Method = stripe.PaymentMethod.attach(
             payment_method_res.data['payment_methods'][0]['stripe_pm_id'],
-            customer=self.user.stripe_customer_id,
+            customer=self.user['stripe_customer_id'],
         )
 
         plans_res = self.client.get(reverse('mc-merchant-plan-list'))
