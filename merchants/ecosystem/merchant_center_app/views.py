@@ -106,12 +106,12 @@ class MCMerchantSubcriptionViewSet(viewsets.ViewSet):
             return_url = 'http://127.0.0.1:3001'
         )
 
-        # Stripe_Subscription = stripe.Subscription.create(
-        #     customer=request.user.stripe_customer_id,
-        #     items=[
-        #         {"price": request.data['price_key']},
-        #     ],
-        # )
+        Stripe_Subscription = stripe.Subscription.create(
+            customer=request.user.stripe_customer_id,
+            items=[
+                {"price": request.data['price_key']},
+            ],
+        )
 
         # print(Stripe_Payment_Intent)
         # print(Stripe_Subscription)
