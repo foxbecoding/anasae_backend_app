@@ -50,9 +50,18 @@ class MerchantSubscriptionPermission(BasePermission):
     def has_object_permission(self, request, view, obj) -> bool:
         if request.method == 'POST':
             if 'merchant_plan' not in request.data: return False
+            if 'payment_method' not in request.data: return False
+            if 'price_key' not in request.data: return False
             
-            if not MerchantPlan.objects.filter(pk=request.data['merchant_plan']).exists():
+            if not MerchantPlan.objects.filter(pk=request.data['merchant_plan']).exists(): return False
+            if not MerchantPlanPrice.objects.filter(stripe_price_key=request.data['price_key']): return False
+            
+            Merchant_Instance = Merchant.objects.get(user_id=str(request.user.id))
+            Merchant_Payment_Method_Instances = MerchantPaymentMethod.objects.filter(merchant_id=Merchant_Instance.id)
+            payment_methods = [pm.stripe_pm_id for pm in Merchant_Payment_Method_Instances]
+            if request.data['payment_method'] not in payment_methods:
                 return False
+            
         # Merchant_Instance = Merchant.objects.get(user_id=request.user.id)
         # if MerchantSubcription.objects.filter(merchant_id=Merchant_Instance.id).exists() == False:
         #     return False
