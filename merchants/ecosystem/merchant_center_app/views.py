@@ -53,7 +53,7 @@ class MCMerchantPaymentMethodViewSet(viewsets.ViewSet):
 
         Merchant_Instance = Merchant.objects.get(user_id=str(request.user.id))
         payment_method_res = stripe.PaymentMethod.retrieve(id=request.data['payment_method_id'])
-        
+
         data = {
             'merchant': Merchant_Instance.id,
             'stripe_pm_id': payment_method_res.id
