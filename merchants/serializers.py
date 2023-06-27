@@ -76,7 +76,8 @@ class MerchantPlanPriceSerializer(serializers.ModelSerializer):
             'pk',
             'title',
             'description',
-            'price'
+            'price',
+            'stripe_price_key'
         ]
 
 class MerchantPlanFeatureSerializer(serializers.ModelSerializer):

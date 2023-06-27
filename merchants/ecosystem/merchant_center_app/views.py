@@ -120,6 +120,7 @@ def get_merchant_plan_data():
     for plan_data in Merchant_Plan_Serializer.data:
         data.append(
             {
+                'pk': plan_data['pk'],
                 'title': plan_data['title'],
                 'description': plan_data['description'],
                 'product_listings': plan_data['product_listings'],
