@@ -121,8 +121,7 @@ class CreateMerchantSubscriptionSerializer(serializers.ModelSerializer):
 
             Stripe_Payment_Intent = stripe.PaymentIntent.confirm(
                 Stripe_Payment_Intent.id,
-                payment_method = 'pm_card_visa_chargeDeclined',
-                # payment_method = request.data['payment_method'],
+                payment_method = request.data['payment_method'],
                 return_url = 'http://127.0.0.1:3001'
             )
 

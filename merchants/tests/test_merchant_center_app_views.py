@@ -367,6 +367,29 @@ class TestMCMerchantSubscriptionViewSet(TestCase):
         )
 
         self.assertEqual(res.status_code, 201)
+    
+    def test_mc_merchant_subscription_create_permissions_failed(self):
+        self.client.post(
+            reverse('mc-merchant-payment-method-list'),
+            data = {'payment_method_id': self.setup_intent_confirm_res.payment_method},
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
+
+        plans_res = self.client.get(reverse('mc-merchant-plan-list'))
+        
+        data = {
+            'merchant_plan': plans_res.data[1]['pk'],
+            'payment_method': 'pm_card_visa_chargeDeclined',
+            'price_key': plans_res.data[1]['prices'][0]['stripe_price_key']
+        }
+
+        res = self.client.post(
+            reverse('mc-merchant-subscription-list'),
+            data = data,
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
+
+        self.assertEqual(res.status_code, 403)
 
     # def test_mc_merchant_subscription_retrieve(self):
     #     res = self.client.get(
