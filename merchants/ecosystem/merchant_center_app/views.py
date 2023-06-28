@@ -89,13 +89,13 @@ class MCMerchantSubcriptionViewSet(viewsets.ViewSet):
             data={'merchant_plan': request.data['merchant_plan']}, 
             context={'request': request}
         )
-
+        
         if not Create_Merchant_Subscription_Serializer.is_valid():
             return Response(Create_Merchant_Subscription_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
-        print()
-        # data = get_merchant_data(Create_Merchant_Subscription_Serializer.validated_data['merchant_subscription']['merchant'])
-        return Response(None, status=status.HTTP_201_CREATED)
+        data = get_merchant_data(Create_Merchant_Subscription_Serializer.validated_data['merchant'])
+        print(data)
+        return Response(data, status=status.HTTP_201_CREATED)
     
     def retrieve(self, request, pk=None):
         self.check_object_permissions(request=request, obj={'pk': str(pk)})
