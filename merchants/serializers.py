@@ -93,11 +93,47 @@ class CreateMerchantSubscriptionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = MerchantSubcription
-        fields = [
-            'merchant', 
-            'merchant_plan',
-            'stripe_sub_id'
+        fields = [ 
+            'merchant_plan'
         ]
     
     def validate(self, attrs):
-        
+        request = self.context['request']
+        Stripe_Price = stripe.Price.retrieve(request.data['price_key'])
+
+        Stripe_Payment_Intent = stripe.PaymentIntent.create(
+            amount=Stripe_Price.unit_amount,
+            currency="usd",
+            customer=request.user.stripe_customer_id,
+            automatic_payment_methods={"enabled": True},
+            payment_method=request.data['payment_method']
+        )
+
+        Stripe_Payment_Intent = stripe.PaymentIntent.confirm(
+            Stripe_Payment_Intent.id,
+            payment_method = request.data['payment_method'],
+            return_url = 'http://127.0.0.1:3001'
+        )
+
+        # Test & validate on the PaymentIntent confirm statuses
+
+        Stripe_Subscription = stripe.Subscription.create(
+            customer=request.user.stripe_customer_id,
+            items=[
+                {"price": request.data['price_key']},
+            ],
+            default_payment_method = request.data['payment_method']
+        )
+
+        # print(Stripe_Payment_Intent)
+        # print(Stripe_Subscription)
+        Merchant_Subcription_Instance = MerchantSubcription.objects.create(
+            merchant = Merchant.objects.get(user_id=str(request.user.id)),
+            merchant_plan = attrs.get('merchant_plan'),
+            stripe_sub_id = Stripe_Subscription.id
+        )
+
+        Merchant_Subcription_Instance.save()
+
+        attrs['merchant_subscription'] = Merchant_Subcription_Instance
+        return attrs 
