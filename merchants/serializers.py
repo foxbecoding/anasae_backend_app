@@ -126,6 +126,7 @@ class CreateMerchantSubscriptionSerializer(serializers.ModelSerializer):
         )
 
         # Test & validate on the PaymentIntent confirm statuses
+        print(Stripe_Payment_Intent)
 
         Stripe_Subscription = stripe.Subscription.create(
             customer=request.user.stripe_customer_id,
@@ -135,7 +136,6 @@ class CreateMerchantSubscriptionSerializer(serializers.ModelSerializer):
             default_payment_method = request.data['payment_method']
         )
 
-        # print(Stripe_Payment_Intent)
         # print(Stripe_Subscription)
         Merchant_Subcription_Instance = MerchantSubcription.objects.create(
             merchant = Merchant.objects.get(user_id=str(request.user.id)),
