@@ -138,18 +138,25 @@ def get_merchant_plan_data():
 
 def get_merchant_data(instance: Merchant):
     Merchant_Serializer = MerchantSerializer(instance)
+    
     Merchant_Payment_Method_Instances = MerchantPaymentMethod.objects.filter(
         pk__in=Merchant_Serializer.data['payment_methods']
     )
-    
     Merchant_Payment_Method_Serializer = MerchantPaymentMethodSerializer(
         Merchant_Payment_Method_Instances, 
         many=True
     )
 
+
+    subscription_data = None
+    if Merchant_Serializer.data['subscription']:
+        Merchant_Subcription_Instance = MerchantSubcription.objects.get(pk=Merchant_Serializer.data['subscription'])
+        subscription_data = MerchantSubscriptionSerializer(Merchant_Subcription_Instance)
+    
     return {
         'pk': Merchant_Serializer.data['pk'], 
         'uid': Merchant_Serializer.data['uid'], 
         'title': Merchant_Serializer.data['title'],
-        'payment_methods': Merchant_Payment_Method_Serializer.data
+        'payment_methods': Merchant_Payment_Method_Serializer.data,
+        'subscription': subscription_data
     }  

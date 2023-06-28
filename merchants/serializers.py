@@ -90,6 +90,15 @@ class MerchantPlanFeatureSerializer(serializers.ModelSerializer):
             'title'
         ]
 
+class MerchantSubscriptionSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = MerchantSubcription
+        fields = [ 
+            'pk',
+            'stripe_sub_id'
+        ]
+
 class CreateMerchantSubscriptionSerializer(serializers.ModelSerializer):
 
     class Meta:
