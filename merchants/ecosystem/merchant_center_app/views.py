@@ -151,7 +151,8 @@ def get_merchant_data(instance: Merchant):
     subscription_data = None
     if Merchant_Serializer.data['subscription']:
         Merchant_Subcription_Instance = MerchantSubcription.objects.get(pk=Merchant_Serializer.data['subscription'])
-        subscription_data = MerchantSubscriptionSerializer(Merchant_Subcription_Instance)
+        Merchant_Subscription_Serializer = MerchantSubscriptionSerializer(Merchant_Subcription_Instance)
+        subscription_data = Merchant_Subscription_Serializer.data
     
     return {
         'pk': Merchant_Serializer.data['pk'], 
