@@ -135,4 +135,5 @@ class CreateMerchantSubscriptionSerializer(serializers.ModelSerializer):
 
         Merchant_Subcription_Instance.save()
         attrs['merchant_subscription'] = Merchant_Subcription_Instance
+        attrs['merchant'] = Merchant.objects.get(pk=Merchant_Subcription_Instance.merchant)
         return attrs 

@@ -92,7 +92,9 @@ class MCMerchantSubcriptionViewSet(viewsets.ViewSet):
 
         if not Create_Merchant_Subscription_Serializer.is_valid():
             return Response(Create_Merchant_Subscription_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
+        
+        print()
+        # data = get_merchant_data(Create_Merchant_Subscription_Serializer.validated_data['merchant_subscription']['merchant'])
         return Response(None, status=status.HTTP_201_CREATED)
     
     def retrieve(self, request, pk=None):
@@ -134,8 +136,8 @@ def get_merchant_plan_data():
         
     return data
 
-def get_merchant_data(merchant: Merchant):
-    Merchant_Serializer = MerchantSerializer(merchant)
+def get_merchant_data(instance: Merchant):
+    Merchant_Serializer = MerchantSerializer(instance)
     Merchant_Payment_Method_Instances = MerchantPaymentMethod.objects.filter(
         pk__in=Merchant_Serializer.data['payment_methods']
     )
