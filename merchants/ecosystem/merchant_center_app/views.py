@@ -53,11 +53,6 @@ class MCMerchantPaymentMethodViewSet(viewsets.ViewSet):
 
         Merchant_Instance = Merchant.objects.get(user_id=str(request.user.id))
         payment_method_res = stripe.PaymentMethod.retrieve(id=request.data['payment_method_id'])
-        
-        Stripe_Payment_Method = stripe.PaymentMethod.attach(
-            request.data['payment_method_id'],
-            customer=request.user.stripe_customer_id,
-        )
 
         data = {
             'merchant': Merchant_Instance.id,
@@ -90,35 +85,7 @@ class MCMerchantSubcriptionViewSet(viewsets.ViewSet):
     @method_decorator(csrf_protect)
     def create(self, request):
         self.check_object_permissions(request=request, obj={})
-        Stripe_Price = stripe.Price.retrieve(request.data['price_key'])
-
-        Stripe_Payment_Intent = stripe.PaymentIntent.create(
-            amount=Stripe_Price.unit_amount,
-            currency="usd",
-            customer=request.user.stripe_customer_id,
-            automatic_payment_methods={"enabled": True},
-            payment_method=request.data['payment_method']
-        )
-
-        Stripe_Payment_Intent = stripe.PaymentIntent.confirm(
-            Stripe_Payment_Intent.id,
-            payment_method = request.data['payment_method'],
-            return_url = 'http://127.0.0.1:3001'
-        )
-
-        # Finish working on subscriptions creation
-        # Move subscription code to a serializer
-        # Test & validate on the PaymentIntent confirm statuses
-
-        # Stripe_Subscription = stripe.Subscription.create(
-        #     customer=request.user.stripe_customer_id,
-        #     items=[
-        #         {"price": request.data['price_key']},
-        #     ],
-        # )
-
-        # print(Stripe_Payment_Intent)
-        # print(Stripe_Subscription)
+        CreateMerchantSubscriptionSerializer(data=request.data, context={'request': request})
         return Response(None, status=status.HTTP_201_CREATED)
     
     def retrieve(self, request, pk=None):

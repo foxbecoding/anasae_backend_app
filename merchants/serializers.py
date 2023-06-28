@@ -88,3 +88,16 @@ class MerchantPlanFeatureSerializer(serializers.ModelSerializer):
             'pk',
             'title'
         ]
+
+class CreateMerchantSubscriptionSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = MerchantSubcription
+        fields = [
+            'merchant', 
+            'merchant_plan',
+            'stripe_sub_id'
+        ]
+    
+    def validate(self, attrs):
+        
