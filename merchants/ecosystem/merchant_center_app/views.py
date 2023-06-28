@@ -85,7 +85,14 @@ class MCMerchantSubcriptionViewSet(viewsets.ViewSet):
     @method_decorator(csrf_protect)
     def create(self, request):
         self.check_object_permissions(request=request, obj={})
-        CreateMerchantSubscriptionSerializer(data=request.data, context={'request': request})
+        Create_Merchant_Subscription_Serializer = CreateMerchantSubscriptionSerializer(
+            data={'merchant_plan': request.data['merchant_plan']}, 
+            context={'request': request}
+        )
+
+        if not Create_Merchant_Subscription_Serializer.is_valid():
+            return Response(Create_Merchant_Subscription_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
         return Response(None, status=status.HTTP_201_CREATED)
     
     def retrieve(self, request, pk=None):
