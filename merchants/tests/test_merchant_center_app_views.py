@@ -73,11 +73,11 @@ class TestMCMerchantViewSet(TestCase):
             data = {'title': 'Fenty Beauty'},
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
-        # print(create_merchant_res.data)
-        # merchant_uid = create_merchant_res.data['uid']
+        
         res = self.client.get(
-            reverse('mc-merchant-detail', kwargs={ 'uid': create_merchant_res.data['pk'] })
+            reverse('mc-merchant-detail', kwargs={ 'pk': create_merchant_res.data['pk'] })
         )
+  
         self.assertEqual(res.data['title'], 'Fenty Beauty')
         self.assertEqual(res.status_code, 200)
     

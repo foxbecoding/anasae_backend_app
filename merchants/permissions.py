@@ -15,14 +15,14 @@ class MerchantPermission(BasePermission):
     def has_object_permission(self, request, view, obj) -> bool:
         pk = obj['pk']
         
-        if Merchant.objects.filter(user_id=str(request.user.id)).exists() == False:
+        if not Merchant.objects.filter(user_id=str(request.user.id)).exists():
             return False
         
-        if Merchant.objects.filter(pk=pk).exists() == False:
+        if not Merchant.objects.filter(pk=pk).exists():
             return False
         
         Merchant_Instance = Merchant.objects.get(user_id=str(request.user.id))
-        if Merchant_Instance.id != pk:
+        if str(Merchant_Instance.id) != str(pk):
             return False
         
         return True

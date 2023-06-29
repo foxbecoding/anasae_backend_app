@@ -8,7 +8,7 @@ class TestMCMerchantUrls(SimpleTestCase):
         self.assertEqual(resolve(url).view_name, 'mc-merchant-list')
     
     def test_mc_merchant_detail_url_resolves(self):
-        url = reverse('mc-merchant-detail', kwargs={'uid': 'm-IH4io44f'})
+        url = reverse('mc-merchant-detail', kwargs={'pk': 1})
         self.assertEqual(resolve(url).view_name, 'mc-merchant-detail')
 
 class TestMCMerchantSubscriptionUrls(SimpleTestCase):
