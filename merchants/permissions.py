@@ -60,15 +60,4 @@ class MerchantSubscriptionPermission(BasePermission):
             Merchant_Payment_Method_Instances = MerchantPaymentMethod.objects.filter(merchant_id=Merchant_Instance.id)
             payment_methods = [pm.stripe_pm_id for pm in Merchant_Payment_Method_Instances]
             if request.data['payment_method'] not in payment_methods: return False
-            
-        # Merchant_Instance = Merchant.objects.get(user_id=request.user.id)
-        # if MerchantSubcription.objects.filter(merchant_id=Merchant_Instance.id).exists() == False:
-        #     return False
-
-        # if MerchantSubcription.objects.filter(pk=obj['pk']).exists() == False:
-        #     return False
-        # Merchant_Subcription_Instance = MerchantSubcription.objects.get(pk=obj['pk'])
-        # print(Merchant_Subcription_Instance.merchant_id)
-        # Merchant_Subcription_Instance = MerchantSubcription.objects.get(merchant_id=Merchant_Instance.id)
-        # print(str(Merchant_Subcription_Instance.id))
         return True
