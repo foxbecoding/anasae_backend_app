@@ -122,7 +122,7 @@ class CreateMerchantSubscriptionSerializer(serializers.ModelSerializer):
             Stripe_Payment_Intent = stripe.PaymentIntent.confirm(
                 Stripe_Payment_Intent.id,
                 payment_method = request.data['payment_method'],
-                return_url = 'http://127.0.0.1:3001'
+                return_url = os.getenv('STRIPE_PAYMENT_INTENT_RETURN_URL')
             )
 
             Stripe_Subscription = stripe.Subscription.create(
@@ -146,3 +146,38 @@ class CreateMerchantSubscriptionSerializer(serializers.ModelSerializer):
         except: 
             msg = 'Please use a different payment method.'
             raise serializers.ValidationError({"payment_method": msg}, code='authorization')
+        
+class CreateMerchantStoreSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = MerchantSubcription
+        fields = [
+            'name',
+            'description'
+        ]
+    
+    def validate(self, attrs):
+        request = self.context['request']
+
+        Stripe_Account = stripe.Account.create(
+            currency="usd",
+            type="custom",
+            country="US",
+            email=request.user.email,
+            capabilities={
+                "card_payments": {"requested": True},
+                "transfers": {"requested": True},
+            },
+        )
+
+        Merchant_Store_Instance = MerchantStore.objects.create(
+            merchant = Merchant.objects.get(user_id=str(request.user.id)),
+            uid = create_uid('ms-'),
+            stripe_account_id = Stripe_Account.id,
+            name = attrs.get('name'),
+            description = attrs.get('description')
+        )
+        
+        Merchant_Store_Instance.save()
+        attrs['merchant_store'] = Merchant_Store_Instance
+        return attrs
