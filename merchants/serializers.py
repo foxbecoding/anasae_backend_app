@@ -199,5 +199,5 @@ class CreateMerchantStoreSerializer(serializers.ModelSerializer):
             },
         )
         
-        attrs['merchant_store'] = Merchant_Store_Instance
+        attrs['merchant'] = Merchant_Instance
         return attrs
