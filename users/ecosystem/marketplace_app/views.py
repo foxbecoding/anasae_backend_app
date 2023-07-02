@@ -81,7 +81,7 @@ class MPAUserProfileImageViewSet(viewsets.ViewSet):
         is_User_Profile_Image = UserProfileImage.objects.filter(user_profile_id=str(request.data['user_profile'])).exists()
         if is_User_Profile_Image:
             User_Profile_Image = UserProfileImage.objects.get(user_profile_id=str(request.data['user_profile']))
-            # os.remove(os.getenv('MEDIA_ROOT')+str(User_Profile_Image.image))
+            # remove image from cdn maybe??? idk yet
             User_Profile_Image.delete()
         
         Create_User_Profile_Image_Serializer = CreateUserProfileImageSerializer(data=request.data, context={ 'request': request })
