@@ -6,6 +6,8 @@ from PIL import Image
 import stripe, requests, os, calendar, time
 from utils.helpers import create_uid
 
+env = os.getenv
+
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
@@ -261,12 +263,12 @@ class CreateUserProfileImageSerializer(serializers.ModelSerializer):
         current_GMT = time.gmtime()
         time_stamp = calendar.timegm(current_GMT)
         image_name = create_uid('up-')+f'-{time_stamp}.{img.format.lower()}'
-        image_path = str(os.getenv('CDN_USER_PROFILE_DIR')+image_name)
+        image_path = str(env('CDN_USER_PROFILE_DIR')+image_name)
     
         upload = requests.post(
-            f'{os.getenv("CDN_PATH")}/upload-image/',
+            f'{env("CDN_HOST_API")}{env("CDN_UPLOAD_IMAGE")}',
             data = {
-                "file_path": os.getenv('CDN_USER_PROFILE_DIR'),
+                "file_path": env('CDN_USER_PROFILE_DIR'),
                 "image_name": image_name
             },
             files={ "image": image.file.getvalue() }
