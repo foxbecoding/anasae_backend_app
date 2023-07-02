@@ -705,6 +705,5 @@ class TestMCMerchantStoreViewSet(TestCase):
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
 
-        # print(res.data)
-
-        # self.assertEqual(res.status_code, 201)
+        self.assertGreater(len(res.data['stores']), 0)
+        self.assertEqual(res.status_code, 201)
