@@ -239,8 +239,17 @@ class CreateUserProfileImageSerializer(serializers.ModelSerializer):
         ]
 
     def validate(self, attrs):
-        image = self.context['request'].data['image']
-        # image = attrs.get('image')
+        request_data = self.context['request'].data
+
+        if 'image' not in request_data:
+            msg = 'Please upload an image'
+            raise serializers.ValidationError({"image": msg}, code='authorization')
+        
+        if not request_data['image']:
+            msg = 'Please upload an image'
+            raise serializers.ValidationError({"image": msg}, code='authorization')
+
+        image = request_data['image']
         user_profile = attrs.get('user_profile')
 
         img = Image.open(image)
@@ -264,6 +273,10 @@ class CreateUserProfileImageSerializer(serializers.ModelSerializer):
         )
 
         print(upload.status_code)
+
+        if upload.status_code != 200:
+            msg = 'Please try again'
+            raise serializers.ValidationError({"image": msg}, code='authorization')
 
         user_profile_image = UserProfileImage(
             user_profile = user_profile,
