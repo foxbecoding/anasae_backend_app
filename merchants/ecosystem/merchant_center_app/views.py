@@ -122,7 +122,7 @@ class MCMerchantStoreViewSet(viewsets.ViewSet):
             return Response(Create_Merchant_Store_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         data = Create_Merchant_Store_Serializer.validated_data['merchant_store']
         # get_merchant_data()
-        print(data)
+        # print(data)
         return Response(None, status=status.HTTP_200_OK)  
     
     def retrieve(self, request, pk=None):

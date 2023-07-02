@@ -150,7 +150,7 @@ class CreateMerchantSubscriptionSerializer(serializers.ModelSerializer):
 class CreateMerchantStoreSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = MerchantSubcription
+        model = MerchantStore
         fields = [
             'name',
             'description'
