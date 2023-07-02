@@ -78,8 +78,6 @@ class MPAUserProfileImageViewSet(viewsets.ViewSet):
 
     @method_decorator(csrf_protect)
     def create(self, request):
-        # self.check_permissions(request=request)
-        
         is_User_Profile_Image = UserProfileImage.objects.filter(user_profile_id=str(request.data['user_profile'])).exists()
         if is_User_Profile_Image:
             User_Profile_Image = UserProfileImage.objects.get(user_profile_id=str(request.data['user_profile']))
