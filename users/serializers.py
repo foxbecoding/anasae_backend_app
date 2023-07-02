@@ -274,8 +274,6 @@ class CreateUserProfileImageSerializer(serializers.ModelSerializer):
             files={ "image": image.file.getvalue() }
         )
 
-        print(upload.status_code)
-
         if upload.status_code != 200:
             msg = 'Please try again'
             raise serializers.ValidationError({"image": msg}, code='authorization')
