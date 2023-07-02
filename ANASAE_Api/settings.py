@@ -20,7 +20,7 @@ env = os.getenv
 
 #Set Stripe api key
 stripe.api_key = env('STRIPE_DEVELOPMENT_SECRET_KEY')
-if env('IS_DEVELOPMENT') == 'False':
+if env('ENVIRONMENT') == 'production':
     stripe.api_key = env('STRIPE_PRODUCTION_SECRET_KEY')
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -34,7 +34,7 @@ SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-if env('IS_DEVELOPMENT') == 'False':
+if env('ENVIRONMENT') == 'production':
     DEBUG = False
 
 ALLOWED_HOSTS = [
