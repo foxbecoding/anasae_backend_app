@@ -53,8 +53,22 @@ class MerchantStore(models.Model):
     stripe_account_id = models.CharField(max_length=120, blank=True, unique=True)
     name = models.CharField(max_length=500, blank=False)
     description = models.CharField(max_length=2000, blank=False)
-    logo = models.ImageField(upload_to="images/merchant_store_media/logos/", blank=True, null=True)
-    banner_image = models.ImageField(upload_to="images/merchant_store_media/banners/", blank=True, null=True)
+    is_active = models.BooleanField(default=True)
+    created = models.DateTimeField(auto_now_add=True, null=True)
+    updated = models.DateTimeField(auto_now_add=True, null=True)
+    deleted = models.DateTimeField(null=True)
+
+class MerchantStoreLogo(models.Model):
+    merchant_store = models.OneToOneField(Merchant, on_delete=models.CASCADE, related_name="logo")
+    image = models.CharField(max_length=200, blank=False, default='')
+    is_active = models.BooleanField(default=True)
+    created = models.DateTimeField(auto_now_add=True, null=True)
+    updated = models.DateTimeField(auto_now_add=True, null=True)
+    deleted = models.DateTimeField(null=True)
+
+class MerchantStoreBanner(models.Model):
+    merchant_store = models.OneToOneField(Merchant, on_delete=models.CASCADE, related_name="banner")
+    image = models.CharField(max_length=200, blank=False, default='')
     is_active = models.BooleanField(default=True)
     created = models.DateTimeField(auto_now_add=True, null=True)
     updated = models.DateTimeField(auto_now_add=True, null=True)
@@ -70,7 +84,14 @@ class MerchantStoreCategory(models.Model):
     merchant_store = models.ForeignKey(MerchantStore, on_delete=models.CASCADE, related_name="categories")
     title = models.CharField(max_length=200, blank=False)
     description = models.CharField(max_length=1000, blank=True, null=True)
-    banner_image = models.ImageField(upload_to="images/merchant_store_media/categories/banners/", blank=True, null=True)
+    is_active = models.BooleanField(default=True)
+    created = models.DateTimeField(auto_now_add=True, null=True)
+    updated = models.DateTimeField(auto_now_add=True, null=True)
+    deleted = models.DateTimeField(null=True)
+
+class MerchantStoreCategoryBanner(models.Model):
+    merchant_store_category = models.OneToOneField(MerchantStore, on_delete=models.CASCADE, related_name="banner")
+    image = models.CharField(max_length=200, blank=False, default='')
     is_active = models.BooleanField(default=True)
     created = models.DateTimeField(auto_now_add=True, null=True)
     updated = models.DateTimeField(auto_now_add=True, null=True)
