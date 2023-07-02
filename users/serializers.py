@@ -3,7 +3,8 @@ from rest_framework import serializers
 from users.models import *
 from utils.helpers import create_uid
 from PIL import Image
-import stripe
+import stripe, requests, os, calendar, time
+from utils.helpers import create_uid
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -234,12 +235,12 @@ class CreateUserProfileImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfileImage
         fields = [
-            'user_profile',
-            'image'
+            'user_profile'
         ]
 
     def validate(self, attrs):
-        image = attrs.get('image')
+        image = self.context['request'].data['image']
+        # image = attrs.get('image')
         user_profile = attrs.get('user_profile')
 
         img = Image.open(image)
@@ -247,11 +248,28 @@ class CreateUserProfileImageSerializer(serializers.ModelSerializer):
         if img.format not in valid_formats:
             msg = 'Image must be in PNG or JPEG format'
             raise serializers.ValidationError({"image": msg}, code='authorization')
+        
+        current_GMT = time.gmtime()
+        time_stamp = calendar.timegm(current_GMT)
+        image_name = create_uid('up-')+f'-{time_stamp}.{img.format.lower()}'
+        image_path = str(os.getenv('CDN_USER_PROFILE_DIR')+image_name)
+    
+        upload = requests.post(
+            f'{os.getenv("CDN_PATH")}/upload-image/',
+            data = {
+                "file_path": os.getenv('CDN_USER_PROFILE_DIR'),
+                "image_name": image_name
+            },
+            files={ "image": image.file.getvalue() }
+        )
+
+        print(upload.status_code)
 
         user_profile_image = UserProfileImage(
             user_profile = user_profile,
-            image = image
+            image = image_path
         )
+
         user_profile_image.save()
         attrs['user_profile_image'] = user_profile_image
         return attrs

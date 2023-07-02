@@ -8,7 +8,7 @@ from users.serializers import *
 from users.models import UserProfile, UserProfileImage
 from users.permissions import *
 from users.ecosystem.methods import Prepare_User_Data
-import os
+import os, requests
 
 class MPAUserViewSet(viewsets.ViewSet):
     def get_permissions(self):
@@ -78,12 +78,12 @@ class MPAUserProfileImageViewSet(viewsets.ViewSet):
 
     @method_decorator(csrf_protect)
     def create(self, request):
-        self.check_permissions(request=request)
+        # self.check_permissions(request=request)
         
         is_User_Profile_Image = UserProfileImage.objects.filter(user_profile_id=str(request.data['user_profile'])).exists()
         if is_User_Profile_Image:
             User_Profile_Image = UserProfileImage.objects.get(user_profile_id=str(request.data['user_profile']))
-            os.remove(os.getenv('MEDIA_ROOT')+str(User_Profile_Image.image))
+            # os.remove(os.getenv('MEDIA_ROOT')+str(User_Profile_Image.image))
             User_Profile_Image.delete()
         
         Create_User_Profile_Image_Serializer = CreateUserProfileImageSerializer(data=request.data, context={ 'request': request })
