@@ -3,8 +3,8 @@ from rest_framework import serializers
 from users.models import *
 from utils.helpers import create_uid
 from PIL import Image
-import stripe, requests, os, calendar, time
 from utils.helpers import create_uid
+import stripe, requests, os, calendar, time
 
 env = os.getenv
 
@@ -21,18 +21,11 @@ class UserSerializer(serializers.ModelSerializer):
             'agreed_to_toa',
             'is_active',
             'stripe_customer_id',
-            #relationships
             'addresses',
             'logins',
             'profiles',
             'gender_choice'
         ]
-
-        # extra_kwargs = {
-        #     'logins': {'required': False},
-        #     'profiles': {'required': False},
-        #     'gender_choice': {'required': False}
-        # }
 
 class EditUserSerializer(serializers.ModelSerializer):
     class Meta:
