@@ -36,6 +36,14 @@ def get_merchant_data(instance: Merchant):
         many=True
     )
 
+    Merchant_Store_Instances = MerchantStore.objects.filter(
+        pk__in=Merchant_Serializer.data['stores']
+    )
+    Merchant_Store_Serializer = MerchantStoreSerializer(
+        Merchant_Store_Instances, 
+        many=True
+    )
+
     subscription_data = None
     if Merchant_Serializer.data['subscription']:
         Merchant_Subcription_Instance = MerchantSubcription.objects.get(pk=Merchant_Serializer.data['subscription'])
@@ -47,5 +55,6 @@ def get_merchant_data(instance: Merchant):
         'uid': Merchant_Serializer.data['uid'], 
         'title': Merchant_Serializer.data['title'],
         'payment_methods': Merchant_Payment_Method_Serializer.data,
-        'subscription': subscription_data
+        'subscription': subscription_data,
+        'stores': Merchant_Store_Serializer.data
     }

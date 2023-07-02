@@ -15,7 +15,8 @@ class MerchantSerializer(serializers.ModelSerializer):
             'user',
             'is_active',
             'payment_methods',
-            'subscription'
+            'subscription',
+            'stores'
         ]
 
 class CreateMerchantSerializer(serializers.ModelSerializer):
@@ -146,6 +147,16 @@ class CreateMerchantSubscriptionSerializer(serializers.ModelSerializer):
         except: 
             msg = 'Please use a different payment method.'
             raise serializers.ValidationError({"payment_method": msg}, code='authorization')
+        
+class MerchantStoreSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = MerchantStore
+        fields = [
+            'pk',
+            'name',
+            'description'
+        ]
         
 class CreateMerchantStoreSerializer(serializers.ModelSerializer):
 

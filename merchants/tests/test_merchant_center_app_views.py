@@ -696,7 +696,7 @@ class TestMCMerchantStoreViewSet(TestCase):
     def test_mc_merchant_store_create(self):
         data = {
             'name': 'Fenty Beauty',
-            'Description': 'Fenty Beauty by Rihanna was created with promise of inclusion for all women. With an unmatched offering of shades and colors for ALL skin tones, you&#39;ll never look elsewhere for your beauty staples. Browse our foundation line, lip colors, and so much more.'
+            'description': 'Fenty Beauty by Rihanna was created with promise of inclusion for all women. With an unmatched offering of shades and colors for ALL skin tones, you&#39;ll never look elsewhere for your beauty staples. Browse our foundation line, lip colors, and so much more.'
         }
 
         res = self.client.post(
@@ -704,5 +704,7 @@ class TestMCMerchantStoreViewSet(TestCase):
             data = data,
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
+
+        # print(res.data)
 
         # self.assertEqual(res.status_code, 201)
