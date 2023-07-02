@@ -177,17 +177,27 @@ class CreateMerchantStoreSerializer(serializers.ModelSerializer):
             capabilities={
                 "card_payments": {"requested": True},
                 "transfers": {"requested": True},
-            },
+            }
         )
 
+        Merchant_Instance = Merchant.objects.get(user_id=str(request.user.id))
         Merchant_Store_Instance = MerchantStore.objects.create(
-            merchant = Merchant.objects.get(user_id=str(request.user.id)),
+            merchant = Merchant_Instance,
             uid = create_uid('ms-'),
             stripe_account_id = Stripe_Account.id,
             name = attrs.get('name'),
             description = attrs.get('description')
         )
-        
         Merchant_Store_Instance.save()
+
+        stripe.Account.modify(
+            Stripe_Account.id,
+            metadata={
+                "user_id": request.user.id,
+                "merchant_id": Merchant_Instance.id,
+                "store_id": Merchant_Store_Instance.id
+            },
+        )
+        
         attrs['merchant_store'] = Merchant_Store_Instance
         return attrs
