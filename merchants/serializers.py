@@ -157,7 +157,7 @@ class MerchantStoreSerializer(serializers.ModelSerializer):
             'name',
             'description'
         ]
-        
+
 class CreateMerchantStoreSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -171,7 +171,6 @@ class CreateMerchantStoreSerializer(serializers.ModelSerializer):
         request = self.context['request']
 
         Stripe_Account = stripe.Account.create(
-            currency="usd",
             type="custom",
             country="US",
             email=request.user.email,
