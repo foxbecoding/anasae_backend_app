@@ -154,8 +154,10 @@ class MerchantStoreSerializer(serializers.ModelSerializer):
         model = MerchantStore
         fields = [
             'pk',
+            'uid',
             'name',
-            'description'
+            'description',
+            'stripe_account_id'
         ]
 
 class CreateMerchantStoreSerializer(serializers.ModelSerializer):
