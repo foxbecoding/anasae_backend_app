@@ -61,3 +61,10 @@ class MerchantSubscriptionPermission(BasePermission):
             payment_methods = [pm.stripe_pm_id for pm in Merchant_Payment_Method_Instances]
             if request.data['payment_method'] not in payment_methods: return False
         return True
+    
+class MerchantStorePermission(BasePermission):
+    
+    message = "Access Denied!"
+
+    def has_permission(self, request, view) -> bool:
+        return Merchant.objects.filter(user_id=str(request.user.id)).exists() 
