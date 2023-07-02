@@ -109,3 +109,15 @@ class MCMerchantPlanViewSet(viewsets.ViewSet):
     def list(self, request, pk=None):
         data = get_merchant_plan_data()
         return Response(data, status=status.HTTP_200_OK)  
+
+class MCMerchantStoreViewSet(viewsets.ViewSet):
+
+    def get_permissions(self):
+        permission_classes = [IsAuthenticated]
+        return [permission() for permission in permission_classes]
+    
+    def create(self, request):
+        return Response(None, status=status.HTTP_200_OK)  
+    
+    def retrieve(self, request, pk=None):
+        return Response(None, status=status.HTTP_200_OK)  
