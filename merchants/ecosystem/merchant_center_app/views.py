@@ -144,10 +144,16 @@ class MCMerchantStoreLogoViewSet(viewsets.ViewSet):
         return [permission() for permission in permission_classes]
     
     def create(self, request):
-        # Create_Merchant_Store_Serializer = CreateMerchantStoreSerializer(data=request.data, context={'request': request})
-        # if not Create_Merchant_Store_Serializer.is_valid():
-        #     return Response(Create_Merchant_Store_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        # Merchant_Instance = Create_Merchant_Store_Serializer.validated_data['merchant']
-        # data = get_merchant_data(Merchant_Instance)
-        # return Response(data, status=status.HTTP_201_CREATED) 
-        return Response(None, status=status.HTTP_201_CREATED) 
+        is_merchant_store_logo = MerchantStoreLogo.objects.filter(merchant_store_id=str(request.data['merchant_store'])).exists()
+        if is_merchant_store_logo:
+            Merchant_Store_Logo = MerchantStoreLogo.objects.get(merchant_store_id=str(request.data['merchant_store']))
+            # remove image from cdn maybe??? idk yet
+            Merchant_Store_Logo.delete()
+        
+        Create_Merchant_Store_Logo_Serializer = CreateMerchantStoreLogoSerializer(data=request.data, context={ 'request': request })
+        if not Create_Merchant_Store_Logo_Serializer.is_valid():
+            return Response(Create_Merchant_Store_Logo_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+        Merchant = Merchant.objects.get(user_id=str(request.user.id))
+        data = get_merchant_data(Merchant)
+        return Response(data, status=status.HTTP_201_CREATED)
