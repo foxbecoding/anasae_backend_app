@@ -160,7 +160,8 @@ class MerchantStoreSerializer(serializers.ModelSerializer):
             'name',
             'description',
             'stripe_account_id',
-            'logo'
+            'logo',
+            'banner'
         ]
 
 class EditMerchantStoreSerializer(serializers.ModelSerializer):
@@ -289,7 +290,6 @@ class MerchantStoreBannerSerializer(serializers.ModelSerializer):
             'pk',
             'merchant_store',
             'image',
-            'banner'
         ]
 
 class CreateMerchantStoreBannerSerializer(serializers.ModelSerializer):
@@ -322,7 +322,7 @@ class CreateMerchantStoreBannerSerializer(serializers.ModelSerializer):
         
         current_GMT = time.gmtime()
         time_stamp = calendar.timegm(current_GMT)
-        image_name = create_uid('msl-')+f'-{time_stamp}.{img.format.lower()}'
+        image_name = create_uid('msb-')+f'-{time_stamp}.{img.format.lower()}'
         image_path = str(env('CDN_MERCHANT_STORE_BANNER_DIR')+image_name)
     
         upload = requests.post(
