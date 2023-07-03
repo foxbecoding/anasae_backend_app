@@ -180,7 +180,7 @@ class TestMCMerchantStoreLogoViewSet(TestCase):
         )
         
         store_pk = store_res.data['stores'][0]['pk']
-        
+
         self.client.post(
             reverse('mc-merchant-store-logo-list'),
             data={
@@ -195,5 +195,3 @@ class TestMCMerchantStoreLogoViewSet(TestCase):
     # def test_mc_merchant_store_create_error(self):
        
     #     self.assertEqual(res.status_code, 400)
-    
-  
