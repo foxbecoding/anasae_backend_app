@@ -83,3 +83,25 @@ class MerchantStorePermission(BasePermission):
                 return False
 
         return True
+    
+class MerchantStoreLogoPermission(BasePermission):
+    
+    message = "Access Denied!"
+
+    def has_permission(self, request, view) -> bool:
+        return Merchant.objects.filter(user_id=str(request.user.id)).exists() 
+    
+    def has_object_permission(self, request, view, obj):
+        store_pk = str(obj['pk'])
+        # Merchant_Instance = Merchant.objects.get(user_id=str(request.user.id))
+        # Merchant_Store_Instances = MerchantStore.objects.filter(merchant_id=Merchant_Instance.id)
+        # merchant_store_pks = [str(ms.id) for ms in Merchant_Store_Instances]
+        
+        # if request.method == 'PUT':  
+        #     if not MerchantStore.objects.filter(pk=obj['pk']).exists():
+        #         return False 
+
+        #     if store_pk not in merchant_store_pks:
+        #         return False
+
+        return True

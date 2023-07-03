@@ -136,3 +136,18 @@ class MCMerchantStoreViewSet(viewsets.ViewSet):
         Merchant_Instance = Merchant.objects.get(user_id=str(request.user.id))
         data = get_merchant_data(Merchant_Instance)
         return Response(data, status=status.HTTP_202_ACCEPTED)  
+    
+class MCMerchantStoreLogoViewSet(viewsets.ViewSet):
+
+    def get_permissions(self):
+        permission_classes = [IsAuthenticated, MerchantStoreLogoPermission]
+        return [permission() for permission in permission_classes]
+    
+    def create(self, request):
+        # Create_Merchant_Store_Serializer = CreateMerchantStoreSerializer(data=request.data, context={'request': request})
+        # if not Create_Merchant_Store_Serializer.is_valid():
+        #     return Response(Create_Merchant_Store_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        # Merchant_Instance = Create_Merchant_Store_Serializer.validated_data['merchant']
+        # data = get_merchant_data(Merchant_Instance)
+        # return Response(data, status=status.HTTP_201_CREATED) 
+        return Response(None, status=status.HTTP_201_CREATED) 

@@ -271,7 +271,7 @@ class CreateUserProfileImageSerializer(serializers.ModelSerializer):
             msg = 'Please try again'
             raise serializers.ValidationError({"image": msg}, code='authorization')
 
-        user_profile_image = UserProfileImage(
+        user_profile_image = UserProfileImage.objects.create(
             user_profile = user_profile,
             image = image_path
         )
