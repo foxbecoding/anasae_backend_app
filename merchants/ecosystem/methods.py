@@ -55,6 +55,11 @@ def get_merchant_data(instance: Merchant):
             Merchant_Store_Logo_Instance = MerchantStoreLogo.objects.get(pk=store['logo'])
             Merchant_Store_Logo_Serializer = MerchantStoreLogoSerializer(Merchant_Store_Logo_Instance)
             store['logo'] = Merchant_Store_Logo_Serializer.data
+        
+        if store['banner']:
+            Merchant_Store_Banner_Instance = MerchantStoreBanner.objects.get(pk=store['banner'])
+            Merchant_Store_Banner_Serializer = MerchantStoreLogoSerializer(Merchant_Store_Banner_Instance)
+            store['banner'] = Merchant_Store_Banner_Serializer.data
 
     return {
         'pk': Merchant_Serializer.data['pk'], 
