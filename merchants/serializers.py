@@ -288,7 +288,8 @@ class MerchantStoreBannerSerializer(serializers.ModelSerializer):
         fields = [
             'pk',
             'merchant_store',
-            'image'
+            'image',
+            'banner'
         ]
 
 class CreateMerchantStoreBannerSerializer(serializers.ModelSerializer):
