@@ -144,6 +144,7 @@ class MCMerchantStoreLogoViewSet(viewsets.ViewSet):
         return [permission() for permission in permission_classes]
     
     def create(self, request):
+        self.check_object_permissions(request=request, obj={'store_pk': request.data['merchant_store']})
         is_merchant_store_logo = MerchantStoreLogo.objects.filter(merchant_store_id=str(request.data['merchant_store'])).exists()
         if is_merchant_store_logo:
             Merchant_Store_Logo_Instance = MerchantStoreLogo.objects.get(merchant_store_id=str(request.data['merchant_store']))
