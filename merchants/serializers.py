@@ -159,7 +159,8 @@ class MerchantStoreSerializer(serializers.ModelSerializer):
             'uid',
             'name',
             'description',
-            'stripe_account_id'
+            'stripe_account_id',
+            'logo'
         ]
 
 class EditMerchantStoreSerializer(serializers.ModelSerializer):

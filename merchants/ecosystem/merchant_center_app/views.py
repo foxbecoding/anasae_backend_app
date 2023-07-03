@@ -156,4 +156,5 @@ class MCMerchantStoreLogoViewSet(viewsets.ViewSet):
         
         Merchant_Instance = Merchant.objects.get(user_id=str(request.user.id))
         data = get_merchant_data(Merchant_Instance)
+        pprint(data)
         return Response(data, status=status.HTTP_201_CREATED)
