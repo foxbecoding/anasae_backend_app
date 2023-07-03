@@ -50,6 +50,12 @@ def get_merchant_data(instance: Merchant):
         Merchant_Subscription_Serializer = MerchantSubscriptionSerializer(Merchant_Subcription_Instance)
         subscription_data = Merchant_Subscription_Serializer.data
     
+    for store in Merchant_Store_Serializer.data:
+        if store['logo']:
+            Merchant_Store_Logo_Instance = MerchantStoreLogo.objects.get(pk=store['logo'])
+            Merchant_Store_Logo_Serializer = MerchantStoreLogoSerializer(Merchant_Store_Logo_Instance)
+            store['logo'] = Merchant_Store_Logo_Serializer.data
+
     return {
         'pk': Merchant_Serializer.data['pk'], 
         'uid': Merchant_Serializer.data['uid'], 

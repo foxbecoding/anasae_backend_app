@@ -181,7 +181,7 @@ class TestMCMerchantStoreLogoViewSet(TestCase):
         
         store_pk = store_res.data['stores'][0]['pk']
 
-        self.client.post(
+        res = self.client.post(
             reverse('mc-merchant-store-logo-list'),
             data={
                 'merchant_store': store_pk,
@@ -190,7 +190,7 @@ class TestMCMerchantStoreLogoViewSet(TestCase):
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
         # self.assertGreater(len(res.data['stores']), 0)
-        # self.assertEqual(res.status_code, 201)
+        self.assertEqual(res.status_code, 201)
     
     # def test_mc_merchant_store_create_error(self):
        

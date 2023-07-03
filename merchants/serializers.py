@@ -221,6 +221,7 @@ class MerchantStoreLogoSerializer(serializers.ModelSerializer):
     class Meta:
         model = MerchantStoreLogo
         fields = [
+            'pk',
             'merchant_store',
             'image'
         ]
