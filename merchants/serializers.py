@@ -160,6 +160,15 @@ class MerchantStoreSerializer(serializers.ModelSerializer):
             'stripe_account_id'
         ]
 
+class EditMerchantStoreSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = MerchantStore
+        fields = [
+            'name',
+            'description',
+        ]
+
 class CreateMerchantStoreSerializer(serializers.ModelSerializer):
 
     class Meta:
