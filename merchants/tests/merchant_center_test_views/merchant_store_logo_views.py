@@ -189,9 +189,50 @@ class TestMCMerchantStoreLogoViewSet(TestCase):
             },
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
-        # self.assertGreater(len(res.data['stores']), 0)
+
         self.assertEqual(res.status_code, 201)
     
-    # def test_mc_merchant_store_create_error(self):
-       
-    #     self.assertEqual(res.status_code, 400)
+    def test_mc_merchant_store_logo_create_permissions_failed(self):
+        store_res = self.client.post(
+            reverse('mc-merchant-store-list'),
+            data={
+                'name': 'ANASAE Store',
+                'description': 'Shop our store and find all of your basic needs and essentials'
+            },
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
+        
+        store_pk = store_res.data['stores'][0]['pk']
+
+        res = self.client.post(
+            reverse('mc-merchant-store-logo-list'),
+            data={
+                'merchant_store': 1111,
+                'image': tmp_image()
+            },
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
+
+        self.assertEqual(res.status_code, 403)
+    
+    def test_mc_merchant_store_logo_create_error(self):
+        store_res = self.client.post(
+            reverse('mc-merchant-store-list'),
+            data={
+                'name': 'ANASAE Store',
+                'description': 'Shop our store and find all of your basic needs and essentials'
+            },
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
+        
+        store_pk = store_res.data['stores'][0]['pk']
+
+        res = self.client.post(
+            reverse('mc-merchant-store-logo-list'),
+            data={
+                'merchant_store': store_pk
+            },
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
+
+        self.assertEqual(res.status_code, 400)
