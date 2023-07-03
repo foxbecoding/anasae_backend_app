@@ -170,25 +170,23 @@ class TestMCMerchantStoreLogoViewSet(TestCase):
         )
 
     def test_mc_merchant_store_logo_create(self):
-        store_data = {
-            'name': 'ANASAE Store',
-            'description': 'Shop our store and find all of your basic needs and essentials'
-        }
-
         store_res = self.client.post(
             reverse('mc-merchant-store-list'),
-            data = store_data,
+            data={
+                'name': 'ANASAE Store',
+                'description': 'Shop our store and find all of your basic needs and essentials'
+            },
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
         
         store_pk = store_res.data['stores'][0]['pk']
-
+        
         self.client.post(
             reverse('mc-merchant-store-logo-list'),
             data={
                 'merchant_store': store_pk,
                 'image': tmp_image()
-            }
+            },
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
         # self.assertGreater(len(res.data['stores']), 0)
