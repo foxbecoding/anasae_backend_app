@@ -8,4 +8,5 @@ router.register(r"mc-merchant-payment-method", MCMerchantPaymentMethodViewSet, b
 router.register(r"mc-merchant-plans", MCMerchantPlanViewSet, basename="mc-merchant-plan")
 router.register(r"mc-merchant-store", MCMerchantStoreViewSet, basename="mc-merchant-store")
 router.register(r"mc-merchant-store-logo", MCMerchantStoreLogoViewSet, basename="mc-merchant-store-logo")
+router.register(r"mc-merchant-store-banner", MCMerchantStoreBannerViewSet, basename="mc-merchant-store-banner")
 urlpatterns = router.urls
