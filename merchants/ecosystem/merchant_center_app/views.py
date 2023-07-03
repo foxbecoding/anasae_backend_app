@@ -125,5 +125,13 @@ class MCMerchantStoreViewSet(viewsets.ViewSet):
         return Response(data, status=status.HTTP_201_CREATED)  
     
     def update(self, request, pk=None):
-        #work on tomorrow
-        return Response(None, status=status.HTTP_200_OK)  
+        self.check_object_permissions(request=request, obj={'pk': pk})
+        Merchant_Store_Instance = MerchantStore.objects.get(pk=pk)
+        Edit_Merchant_Store_Serializer = EditMerchantStoreSerializer(Merchant_Store_Instance, data=request.data)
+        
+        if not Edit_Merchant_Store_Serializer.is_valid():
+            return Response(Edit_Merchant_Store_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+        Merchant_Instance = Merchant.objects.get(user_id=str(request.user.id))
+        data = get_merchant_data(Merchant_Instance)
+        return Response(data, status=status.HTTP_200_OK)  
