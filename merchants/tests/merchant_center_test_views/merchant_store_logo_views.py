@@ -183,7 +183,14 @@ class TestMCMerchantStoreLogoViewSet(TestCase):
         
         store_pk = store_res.data['stores'][0]['pk']
 
-
+        self.client.post(
+            reverse('mc-merchant-store-logo-list'),
+            data={
+                'merchant_store': store_pk,
+                'image': tmp_image()
+            }
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
         # self.assertGreater(len(res.data['stores']), 0)
         # self.assertEqual(res.status_code, 201)
     
