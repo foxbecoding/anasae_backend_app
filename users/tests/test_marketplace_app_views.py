@@ -2,20 +2,9 @@ from django.test import TestCase, Client
 from django.urls import reverse
 from users.models import User, UserGender, UserProfile, UserAddress
 from datetime import datetime
-from PIL import Image
-import tempfile
+from utils.helpers import tmp_image
 
 is_CSRF = True
-
-def tmp_image(img_format = 'jpg'):
-    image = Image.new('RGB', (100, 100))
-    tmp_file = tempfile.NamedTemporaryFile(suffix='.{}'.format(img_format), prefix="test_img_")
-    if img_format == 'jpg':
-        img_format = 'jpeg'
-    image.save(tmp_file, img_format)
-    tmp_file.seek(0)
-    return tmp_file
-
 
 class TestMPAUserViewSet(TestCase):
     

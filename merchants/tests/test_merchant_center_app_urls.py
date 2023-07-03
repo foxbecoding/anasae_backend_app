@@ -46,3 +46,9 @@ class TestMCMerchantStoreUrls(SimpleTestCase):
     def test_mc_merchant_store_detail_url_resolves(self):
         url = reverse('mc-merchant-store-detail', kwargs={'pk': 1})
         self.assertEqual(resolve(url).view_name, 'mc-merchant-store-detail')
+
+class TestMCMerchantStoreLogoUrls(SimpleTestCase):
+
+    def test_mc_merchant_store_logo_list_url_resolves(self):
+        url = reverse('mc-merchant-store-logo-list')
+        self.assertEqual(resolve(url).view_name, 'mc-merchant-store-logo-list')
