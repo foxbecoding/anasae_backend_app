@@ -693,17 +693,6 @@ class TestMCMerchantStoreViewSet(TestCase):
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
 
-        store_data = {
-            'name': 'ANASAE Essentials',
-            'description': 'Shop and discover all of your basic needs with ANASAE'
-        }
-
-        self.store_res = self.client.post(
-            reverse('mc-merchant-store-list'),
-            data = store_data,
-            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
-        )
-
     def test_mc_merchant_store_create(self):
         data = {
             'name': 'Fenty Beauty',
@@ -719,18 +708,97 @@ class TestMCMerchantStoreViewSet(TestCase):
         self.assertGreater(len(res.data['stores']), 0)
         self.assertEqual(res.status_code, 201)
     
-    def test_mc_merchant_store_create(self):
+    def test_mc_merchant_store_create_error(self):
+        data = {
+            'name': '',
+            'description': 'Fenty Beauty by Rihanna was created with promise of inclusion for all women. With an unmatched offering of shades and colors for ALL skin tones, you&#39;ll never look elsewhere for your beauty staples. Browse our foundation line, lip colors, and so much more.'
+        }
+
+        res = self.client.post(
+            reverse('mc-merchant-store-list'),
+            data = data,
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
+
+        self.assertEqual(res.status_code, 400)
+    
+    def test_mc_merchant_store_update(self):
+        store_data = {
+            'name': 'ANASAE Essentials',
+            'description': 'Shop and discover all of your basic needs with ANASAE'
+        }
+
+        self.store_res = self.client.post(
+            reverse('mc-merchant-store-list'),
+            data = store_data,
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
+
+        data = {
+            'name': 'ANASAE Store',
+            'description': 'Shop and discover all of your basic needs with ANASAE'
+        }
+        
+        store_pk = self.store_res.data['stores'][0]['pk']
+        res = self.client.put(
+            reverse('mc-merchant-store-detail', kwargs={'pk': store_pk}),
+            content_type='application/json',
+            data=data,
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
+
+        self.assertEqual(res.data['stores'][0]['name'], 'ANASAE Store')
+        self.assertEqual(res.status_code, 202)
+    
+    def test_mc_merchant_store_update_permissions_failed(self):
+        store_data = {
+            'name': 'ANASAE Essentials',
+            'description': 'Shop and discover all of your basic needs with ANASAE'
+        }
+
+        self.store_res = self.client.post(
+            reverse('mc-merchant-store-list'),
+            data = store_data,
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
+
         data = {
             'name': 'ANASAE Store',
             'description': 'Shop and discover all of your basic needs with ANASAE'
         }
 
         res = self.client.put(
-            reverse('mc-merchant-store-detail', kwargs={'pk': self.store_res.data['pk']}),
+            reverse('mc-merchant-store-detail', kwargs={'pk': 1111}),
+            content_type='application/json',
+            data=data,
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
+        
+        self.assertEqual(res.status_code, 403)
+    
+    def test_mc_merchant_store_update_error(self):
+        store_data = {
+            'name': 'ANASAE Essentials',
+            'description': 'Shop and discover all of your basic needs with ANASAE'
+        }
+
+        self.store_res = self.client.post(
+            reverse('mc-merchant-store-list'),
+            data = store_data,
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
+
+        data = {
+            'name': '',
+            'description': 'Shop and discover all of your basic needs with ANASAE'
+        }
+          
+        store_pk = self.store_res.data['stores'][0]['pk']
+        res = self.client.put(
+            reverse('mc-merchant-store-detail', kwargs={'pk': store_pk}),
             content_type='application/json',
             data=data,
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
 
-        # self.assertGreater(len(res.data['stores']), 0)
-        # self.assertEqual(res.status_code, 201)
+        self.assertEqual(res.status_code, 400)

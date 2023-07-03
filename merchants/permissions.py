@@ -75,10 +75,10 @@ class MerchantStorePermission(BasePermission):
         Merchant_Store_Instances = MerchantStore.objects.filter(merchant_id=Merchant_Instance.id)
         merchant_store_pks = [str(ms.id) for ms in Merchant_Store_Instances]
         
-        if request.method == 'PUT':    
-            if not MerchantStore.objects.filter(pk=store_pk).exists():
+        if request.method == 'PUT':  
+            if not MerchantStore.objects.filter(pk=obj['pk']).exists():
                 return False 
-            
+
             if store_pk not in merchant_store_pks:
                 return False
 

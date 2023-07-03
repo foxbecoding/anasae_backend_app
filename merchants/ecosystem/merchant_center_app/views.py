@@ -132,6 +132,7 @@ class MCMerchantStoreViewSet(viewsets.ViewSet):
         if not Edit_Merchant_Store_Serializer.is_valid():
             return Response(Edit_Merchant_Store_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
+        Edit_Merchant_Store_Serializer.save()
         Merchant_Instance = Merchant.objects.get(user_id=str(request.user.id))
         data = get_merchant_data(Merchant_Instance)
-        return Response(data, status=status.HTTP_200_OK)  
+        return Response(data, status=status.HTTP_202_ACCEPTED)  
