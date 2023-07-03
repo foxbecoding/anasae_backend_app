@@ -693,6 +693,17 @@ class TestMCMerchantStoreViewSet(TestCase):
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
 
+        store_data = {
+            'name': 'ANASAE Essentials',
+            'description': 'Shop and discover all of your basic needs with ANASAE'
+        }
+
+        self.store_res = self.client.post(
+            reverse('mc-merchant-store-list'),
+            data = store_data,
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
+
     def test_mc_merchant_store_create(self):
         data = {
             'name': 'Fenty Beauty',
@@ -707,3 +718,19 @@ class TestMCMerchantStoreViewSet(TestCase):
 
         self.assertGreater(len(res.data['stores']), 0)
         self.assertEqual(res.status_code, 201)
+    
+    def test_mc_merchant_store_create(self):
+        data = {
+            'name': 'ANASAE Store',
+            'description': 'Shop and discover all of your basic needs with ANASAE'
+        }
+
+        res = self.client.put(
+            reverse('mc-merchant-store-detail', kwargs={'pk': self.store_res.data['pk']}),
+            content_type='application/json',
+            data=data,
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
+
+        # self.assertGreater(len(res.data['stores']), 0)
+        # self.assertEqual(res.status_code, 201)
