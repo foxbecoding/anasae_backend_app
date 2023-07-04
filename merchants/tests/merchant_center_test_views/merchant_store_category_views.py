@@ -218,3 +218,25 @@ class TestMCMerchantStoreCategoryViewSet(TestCase):
         )
         
         self.assertEqual(res.status_code, 400)
+
+    def test_mc_merchant_store_category_update(self):
+        category_res = self.client.post(
+            reverse('mc-merchant-store-category-list'),
+            data={
+                'merchant_store': self.store_pk,
+                'title': 'Footware',
+                'description': 'Browse our Footware category'
+            },
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
+
+        res = self.client.put(
+            reverse('mc-merchant-store-category-detail', kwargs={'pk': ''}),
+            data={
+                'title': 'Footware',
+                'description': 'Browse our Footware category'
+            },
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
+        # self.assertEqual(res.data['stores'][0]['categories'][0]['title'], 'Footware')
+        self.assertEqual(res.status_code, 202)
