@@ -66,6 +66,8 @@ def get_merchant_data(instance: Merchant):
             for cat in store['categories']:
                 Merchant_Store_Category_Instance = MerchantStoreCategory.objects.get(pk=cat)
                 Merchant_Store_Category_Serializer = MerchantStoreCategorySerializer(Merchant_Store_Category_Instance)
+                Merchant_Store_Category_Banner_Instance = MerchantStoreCategoryBanner.objects.get(pk=Merchant_Store_Category_Serializer.data['banner'])
+                Merchant_Store_Category_Serializer.data['banner'] = MerchantStoreCategoryBannerSerializer(Merchant_Store_Category_Banner_Instance)
                 store_categories.append(Merchant_Store_Category_Serializer.data)
         store['categories'] = store_categories  
         
