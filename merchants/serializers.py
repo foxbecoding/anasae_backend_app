@@ -359,6 +359,15 @@ class MerchantStoreCategorySerializer(serializers.ModelSerializer):
             'description'
         ]
 
+class EditMerchantStoreCategorySerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = MerchantStoreCategory
+        fields = [
+            'title',
+            'description'
+        ]
+
 class CreateMerchantStoreCategorySerializer(serializers.ModelSerializer):
 
     class Meta:

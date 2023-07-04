@@ -161,12 +161,17 @@ class MerchantStoreCategoryPermission(BasePermission):
                 return False
         
         if request.method == 'PUT':
-            store_pk = str(obj['store_pk'])
-            
-            if not MerchantStore.objects.filter(pk=store_pk).exists():
-                return False 
-
-            if store_pk not in merchant_store_pks:
+            category_pk = str(obj['category_pk'])
+            if not MerchantStoreCategory.objects.filter(pk=category_pk).exists():
                 return False
+            
+            Merchant_Store_Category_Instance = MerchantStoreCategory.objects.get(pk=category_pk)
+            store_pk = Merchant_Store_Category_Instance.merchant_store_id
+            print(store_pk)
+            # if not MerchantStore.objects.filter(pk=store_pk).exists():
+            #     return False 
+
+            # if store_pk not in merchant_store_pks:
+            #     return False
 
         return True

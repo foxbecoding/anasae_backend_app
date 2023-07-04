@@ -200,6 +200,8 @@ class MCMerchantStoreCategoryViewSet(viewsets.ViewSet):
         return Response(data, status=status.HTTP_201_CREATED)
     
     def update(self, request, pk=None):
-        # self.check_object_permissions(request=request, obj={'store_pk': request.data['merchant_store']})
+        self.check_object_permissions(request=request, obj={'category_pk': pk})
+        MerchantStoreCategory.objects.get(pk=pk)
+        EditMerchantStoreCategorySerializer()
         
         return Response(None, status=status.HTTP_201_CREATED)
