@@ -180,3 +180,19 @@ class MCMerchantStoreBannerViewSet(viewsets.ViewSet):
         Merchant_Instance = Merchant.objects.get(user_id=str(request.user.id))
         data = get_merchant_data(Merchant_Instance)
         return Response(data, status=status.HTTP_201_CREATED)
+
+class MCMerchantStoreCategoryViewSet(viewsets.ViewSet):
+
+    def get_permissions(self):
+        permission_classes = [IsAuthenticated, MerchantStoreCategoryPermission]
+        return [permission() for permission in permission_classes]
+    
+    def create(self, request):
+        self.check_object_permissions(request=request, obj={'store_pk': request.data['merchant_store']})
+        MerchantStoreCategorySerializer()
+        return Response(None, status=status.HTTP_201_CREATED)
+    
+    def update(self, request, pk=None):
+        # self.check_object_permissions(request=request, obj={'store_pk': request.data['merchant_store']})
+        
+        return Response(None, status=status.HTTP_201_CREATED)

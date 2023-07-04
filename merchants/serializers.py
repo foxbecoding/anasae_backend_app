@@ -346,3 +346,24 @@ class CreateMerchantStoreBannerSerializer(serializers.ModelSerializer):
         Merchant_Store_Banner_Instance.save()
         attrs['merchant_store_banner'] = Merchant_Store_Banner_Instance
         return attrs
+    
+class MerchantStoreCategorySerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = MerchantStoreCategory
+        fields = [
+            'pk',
+            'merchant_store',
+            'title',
+            'description'
+        ]
+
+class CreateMerchantStoreCategorySerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = MerchantStoreCategory
+        fields = [
+            'merchant_store',
+            'title',
+            'description'
+        ]
