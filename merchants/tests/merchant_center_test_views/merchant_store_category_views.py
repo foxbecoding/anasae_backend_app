@@ -169,7 +169,6 @@ class TestMCMerchantStoreCategoryViewSet(TestCase):
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
 
-    def test_mc_merchant_store_category_create(self):
         store_res = self.client.post(
             reverse('mc-merchant-store-list'),
             data={
@@ -179,12 +178,13 @@ class TestMCMerchantStoreCategoryViewSet(TestCase):
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
         
-        store_pk = store_res.data['stores'][0]['pk']
+        self.store_pk = store_res.data['stores'][0]['pk']
 
+    def test_mc_merchant_store_category_create(self):
         res = self.client.post(
             reverse('mc-merchant-store-category-list'),
             data={
-                'merchant_store': store_pk,
+                'merchant_store': self.store_pk,
                 'title': 'Footware',
                 'description': 'Browse our Footware category'
             },
@@ -195,17 +195,6 @@ class TestMCMerchantStoreCategoryViewSet(TestCase):
         self.assertEqual(res.status_code, 201)
     
     def test_mc_merchant_store_category_create_permissions_failed(self):
-        store_res = self.client.post(
-            reverse('mc-merchant-store-list'),
-            data={
-                'name': 'ANASAE Store',
-                'description': 'Shop our store and find all of your basic needs and essentials'
-            },
-            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
-        )
-        
-        store_pk = store_res.data['stores'][0]['pk']
-
         res = self.client.post(
             reverse('mc-merchant-store-category-list'),
             data={
@@ -216,3 +205,16 @@ class TestMCMerchantStoreCategoryViewSet(TestCase):
         )
         
         self.assertEqual(res.status_code, 403)
+    
+    def test_mc_merchant_store_category_create_error(self):
+        res = self.client.post(
+            reverse('mc-merchant-store-category-list'),
+            data={
+                'merchant_store': self.store_pk,
+                'title': '',
+                'description': 'Browse our Footware category'
+            },
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
+        
+        self.assertEqual(res.status_code, 400)
