@@ -189,8 +189,15 @@ class MCMerchantStoreCategoryViewSet(viewsets.ViewSet):
     
     def create(self, request):
         self.check_object_permissions(request=request, obj={'store_pk': request.data['merchant_store']})
-        MerchantStoreCategorySerializer()
-        return Response(None, status=status.HTTP_201_CREATED)
+        Merchant_Store_Category_Serializer = MerchantStoreCategorySerializer(data=request.data)
+        
+        if not Merchant_Store_Category_Serializer.is_valid():
+            return Response(Merchant_Store_Category_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+        Merchant_Store_Category_Serializer.save()
+        Merchant_Instance = Merchant.objects.get(user_id=str(request.user.id)) 
+        data = get_merchant_data(Merchant_Instance)
+        return Response(data, status=status.HTTP_201_CREATED)
     
     def update(self, request, pk=None):
         # self.check_object_permissions(request=request, obj={'store_pk': request.data['merchant_store']})
