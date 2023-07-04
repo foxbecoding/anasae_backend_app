@@ -166,12 +166,9 @@ class MerchantStoreCategoryPermission(BasePermission):
                 return False
             
             Merchant_Store_Category_Instance = MerchantStoreCategory.objects.get(pk=category_pk)
-            store_pk = Merchant_Store_Category_Instance.merchant_store_id
-            print(store_pk)
-            # if not MerchantStore.objects.filter(pk=store_pk).exists():
-            #     return False 
+            store_pk = Merchant_Store_Category_Instance.merchant_store_id 
 
-            # if store_pk not in merchant_store_pks:
-            #     return False
+            if store_pk not in merchant_store_pks:
+                return False
 
         return True
