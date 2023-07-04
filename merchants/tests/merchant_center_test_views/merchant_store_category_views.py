@@ -230,13 +230,16 @@ class TestMCMerchantStoreCategoryViewSet(TestCase):
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
 
+        category_pk = category_res.data['stores'][0]['categories'][0]['pk']
         res = self.client.put(
-            reverse('mc-merchant-store-category-detail', kwargs={'pk': ''}),
+            reverse('mc-merchant-store-category-detail', kwargs={'pk': category_pk}),
+            content_type='application/json',
             data={
                 'title': "Men's Footware",
                 'description': 'Browse our Footware category'
             },
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
-        # self.assertEqual(res.data['stores'][0]['categories'][0]['title'], 'Footware')
+
+        self.assertEqual(res.data['stores'][0]['categories'][0]['title'], "Men's Footware")
         self.assertEqual(res.status_code, 202)
