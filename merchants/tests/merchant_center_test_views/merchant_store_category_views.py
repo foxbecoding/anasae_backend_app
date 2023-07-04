@@ -3,7 +3,6 @@ from django.urls import reverse
 from merchants.models import *
 from users.models import UserGender
 from datetime import datetime
-from utils.helpers import tmp_image
 import stripe
 
 class TestMCMerchantStoreCategoryViewSet(TestCase):
