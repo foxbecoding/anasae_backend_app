@@ -241,7 +241,5 @@ class TestMCMerchantStoreCategoryViewSet(TestCase):
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
 
-        # print(res.data)
-
-        # self.assertEqual(res.data['stores'][0]['categories'][0]['title'], "Men's Footware")
-        # self.assertEqual(res.status_code, 202)
+        self.assertEqual(res.data['stores'][0]['categories'][0]['title'], "Men's Footware")
+        self.assertEqual(res.status_code, 202)
