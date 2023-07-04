@@ -204,6 +204,30 @@ class TestMCMerchantStoreCategoryBannerViewSet(TestCase):
         
         self.assertEqual(res.status_code, 201)
     
+    def test_mc_merchant_store_category_banner_create_error(self):
+        category_res = self.client.post(
+            reverse('mc-merchant-store-category-list'),
+            data={
+                'merchant_store': self.store_pk,
+                'title': 'Footware',
+                'description': 'Browse our Footware category'
+            },
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
+
+        category_pk = category_res.data['stores'][0]['categories'][0]['pk']
+
+        res = self.client.post(
+            reverse('mc-merchant-store-category-banner-list'),
+            data={
+                'merchant_store_category': category_pk,
+                'image': ''
+            },
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
+        
+        self.assertEqual(res.status_code, 400)
+
     def test_mc_merchant_store_category_banner_create_permissions_failed(self):
         category_res = self.client.post(
             reverse('mc-merchant-store-category-list'),
