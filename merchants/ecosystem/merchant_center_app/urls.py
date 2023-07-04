@@ -10,4 +10,5 @@ router.register(r"mc-merchant-store", MCMerchantStoreViewSet, basename="mc-merch
 router.register(r"mc-merchant-store-logo", MCMerchantStoreLogoViewSet, basename="mc-merchant-store-logo")
 router.register(r"mc-merchant-store-banner", MCMerchantStoreBannerViewSet, basename="mc-merchant-store-banner")
 router.register(r"mc-merchant-store-category", MCMerchantStoreCategoryViewSet, basename="mc-merchant-store-category")
+router.register(r"mc-merchant-store-category-banner", MCMerchantStoreCategoryBannerViewSet, basename="mc-merchant-store-category-banner")
 urlpatterns = router.urls

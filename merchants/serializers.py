@@ -368,12 +368,67 @@ class EditMerchantStoreCategorySerializer(serializers.ModelSerializer):
             'description'
         ]
 
-class CreateMerchantStoreCategorySerializer(serializers.ModelSerializer):
+class MerchantStoreCategoryBannerSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = MerchantStoreCategory
+        model = MerchantStoreBanner
         fields = [
-            'merchant_store',
-            'title',
-            'description'
+            'pk',
+            'merchant_store_category',
+            'image',
         ]
+
+class CreateMerchantStoreCategoryBannerSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = MerchantStoreCategoryBanner
+        fields = [
+            'merchant_store_category'
+        ]
+
+    def validate(self, attrs):
+        request_data = self.context['request'].data
+
+        if 'image' not in request_data:
+            msg = 'Please upload an image'
+            raise serializers.ValidationError({"image": msg}, code='authorization')
+        
+        if not request_data['image']:
+            msg = 'Please upload an image'
+            raise serializers.ValidationError({"image": msg}, code='authorization')
+
+        image = request_data['image']
+        merchant_store_category = attrs.get('merchant_store_category')
+
+        img = Image.open(image)
+        valid_formats = ['PNG', 'JPEG']
+        if img.format not in valid_formats:
+            msg = 'Image must be in PNG or JPEG format'
+            raise serializers.ValidationError({"image": msg}, code='authorization')
+        
+        current_GMT = time.gmtime()
+        time_stamp = calendar.timegm(current_GMT)
+        image_name = create_uid('mscb-')+f'-{time_stamp}.{img.format.lower()}'
+        image_path = str(env('CDN_MERCHANT_STORE_CATEGORY_BANNER_DIR')+image_name)
+    
+        upload = requests.post(
+            f'{env("CDN_HOST_API")}{env("CDN_UPLOAD_IMAGE")}',
+            data = {
+                "file_path": env('CDN_MERCHANT_STORE_CATEGORY_BANNER_DIR'),
+                "image_name": image_name
+            },
+            files={ "image": image.file.getvalue() }
+        )
+
+        if upload.status_code != 200:
+            msg = 'Please try again'
+            raise serializers.ValidationError({"image": msg}, code='authorization')
+
+        Merchant_Store_Category_Banner_Instance = MerchantStoreCategoryBanner.objects.create(
+            merchant_store_category = merchant_store_category,
+            image = image_path
+        )
+
+        Merchant_Store_Category_Banner_Instance.save()
+        attrs['merchant_store_category_banner'] = Merchant_Store_Category_Banner_Instance
+        return attrs
