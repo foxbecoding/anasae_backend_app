@@ -167,7 +167,7 @@ class MCMerchantStoreBannerViewSet(viewsets.ViewSet):
     
     def create(self, request):
         self.check_object_permissions(request=request, obj={})
-        is_merchant_store_banner = MerchantStoreLogo.objects.filter(merchant_store_id=str(request.data['merchant_store'])).exists()
+        is_merchant_store_banner = MerchantStoreBanner.objects.filter(merchant_store_id=str(request.data['merchant_store'])).exists()
         if is_merchant_store_banner:
             Merchant_Store_Banner_Instance = MerchantStoreBanner.objects.get(merchant_store_id=str(request.data['merchant_store']))
             # remove image from cdn maybe??? idk yet
@@ -211,3 +211,25 @@ class MCMerchantStoreCategoryViewSet(viewsets.ViewSet):
         Merchant_Instance = Merchant.objects.get(user_id=str(request.user.id)) 
         data = get_merchant_data(Merchant_Instance)
         return Response(data, status=status.HTTP_202_ACCEPTED)
+    
+class MCMerchantStoreCategoryBannerViewSet(viewsets.ViewSet):
+
+    def get_permissions(self):
+        permission_classes = [IsAuthenticated, MerchantStoreCategoryBannerPermission]
+        return [permission() for permission in permission_classes]
+    
+    def create(self, request):
+        self.check_object_permissions(request=request, obj={})
+        is_merchant_store_category_banner = MerchantStoreCategoryBanner.objects.filter(merchant_store_category_id=str(request.data['merchant_store_category'])).exists()
+        if is_merchant_store_category_banner:
+            Merchant_Store_Category_Banner_Instance = MerchantStoreCategoryBanner.objects.get(merchant_store_category_id=str(request.data['merchant_store_category']))
+            # remove image from cdn maybe??? idk yet
+            Merchant_Store_Category_Banner_Instance.delete()
+        
+        Create_Merchant_Store_Category_Banner_Serializer = CreateMerchantStoreCategoryBannerSerializer(data=request.data, context={ 'request': request })
+        if not Create_Merchant_Store_Category_Banner_Serializer.is_valid():
+            return Response(Create_Merchant_Store_Category_Banner_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+        Merchant_Instance = Merchant.objects.get(user_id=str(request.user.id))
+        data = get_merchant_data(Merchant_Instance)
+        return Response(data, status=status.HTTP_201_CREATED)
