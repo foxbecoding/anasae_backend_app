@@ -188,7 +188,7 @@ class MCMerchantStoreCategoryViewSet(viewsets.ViewSet):
         return [permission() for permission in permission_classes]
     
     def create(self, request):
-        self.check_object_permissions(request=request, obj={'store_pk': request.data['merchant_store']})
+        self.check_object_permissions(request=request, obj={})
         Merchant_Store_Category_Serializer = MerchantStoreCategorySerializer(data=request.data)
         
         if not Merchant_Store_Category_Serializer.is_valid():
