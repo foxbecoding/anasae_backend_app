@@ -356,7 +356,8 @@ class MerchantStoreCategorySerializer(serializers.ModelSerializer):
             'pk',
             'merchant_store',
             'title',
-            'description'
+            'description',
+            'banner'
         ]
 
 class EditMerchantStoreCategorySerializer(serializers.ModelSerializer):
