@@ -142,6 +142,9 @@ class MerchantStoreCategoryPermission(BasePermission):
         merchant_store_pks = [str(ms.id) for ms in Merchant_Store_Instances]
 
         if request.method == 'POST':
+            if 'merchant_store' not in request.data:
+                return False
+            
             if not MerchantStore.objects.filter(pk=store_pk).exists():
                 return False 
 
