@@ -197,7 +197,6 @@ class MCMerchantStoreCategoryViewSet(viewsets.ViewSet):
         Merchant_Store_Category_Serializer.save()
         Merchant_Instance = Merchant.objects.get(user_id=str(request.user.id)) 
         data = get_merchant_data(Merchant_Instance)
-        pprint(data)
         return Response(data, status=status.HTTP_201_CREATED)
     
     def update(self, request, pk=None):
