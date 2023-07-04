@@ -172,3 +172,31 @@ class MerchantStoreCategoryPermission(BasePermission):
                 return False
 
         return True
+
+class MerchantStoreCategoryBannerPermission(BasePermission):
+    
+    message = "Access Denied!"
+
+    def has_permission(self, request, view) -> bool:
+        return Merchant.objects.filter(user_id=str(request.user.id)).exists() 
+    
+    def has_object_permission(self, request, view, obj):
+        Merchant_Instance = Merchant.objects.get(user_id=str(request.user.id))
+        Merchant_Store_Instances = MerchantStore.objects.filter(merchant_id=Merchant_Instance.id)
+        merchant_store_pks = [str(ms.id) for ms in Merchant_Store_Instances]
+
+        if request.method == 'POST':
+            if 'merchant_store_category' not in request.data:
+                return False
+            
+            category_pk = str(request.data['merchant_store_category']) 
+            if not MerchantStoreCategory.objects.filter(pk=category_pk).exists():
+                return False
+            
+            Merchant_Store_Category_Instance = MerchantStoreCategory.objects.get(pk=category_pk)
+            store_pk = Merchant_Store_Category_Instance.merchant_store_id 
+
+            if str(store_pk) not in merchant_store_pks:
+                return False
+
+        return True
