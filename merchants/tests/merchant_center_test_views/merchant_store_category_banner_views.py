@@ -190,17 +190,16 @@ class TestMCMerchantStoreCategoryBannerViewSet(TestCase):
             },
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
-        print(category_res.data)
-        # category_pk = category_res.data['stores'][0]['categories'][0]['pk']
 
-        # res = self.client.post(
-        #     reverse('mc-merchant-store-banner-list'),
-        #     data={
-        #         'merchant_store_category': category_pk,
-        #         'image': tmp_image()
-        #     },
-        #     **{'HTTP_X_CSRFTOKEN': self.csrftoken}
-        # )
-        # print(res.data)
-        # self.assertEqual(res.data['stores'][0]['categories'][0]['title'], 'Footware')
-        # self.assertEqual(res.status_code, 201)
+        category_pk = category_res.data['stores'][0]['categories'][0]['pk']
+
+        res = self.client.post(
+            reverse('mc-merchant-store-category-banner-list'),
+            data={
+                'merchant_store_category': category_pk,
+                'image': tmp_image()
+            },
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
+        
+        self.assertEqual(res.status_code, 201)

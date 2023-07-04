@@ -189,6 +189,7 @@ class MerchantStoreCategoryBannerPermission(BasePermission):
             if 'merchant_store_category' not in request.data:
                 return False
             
+            
             category_pk = str(request.data['merchant_store_category']) 
             if not MerchantStoreCategory.objects.filter(pk=category_pk).exists():
                 return False
