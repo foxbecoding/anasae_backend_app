@@ -360,6 +360,16 @@ class MerchantStoreCategorySerializer(serializers.ModelSerializer):
             'banner'
         ]
 
+class CreateMerchantStoreCategorySerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = MerchantStoreCategory
+        fields = [
+            'merchant_store',
+            'title',
+            'description'
+        ]
+
 class EditMerchantStoreCategorySerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -372,7 +382,7 @@ class EditMerchantStoreCategorySerializer(serializers.ModelSerializer):
 class MerchantStoreCategoryBannerSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = MerchantStoreBanner
+        model = MerchantStoreCategoryBanner
         fields = [
             'pk',
             'merchant_store_category',

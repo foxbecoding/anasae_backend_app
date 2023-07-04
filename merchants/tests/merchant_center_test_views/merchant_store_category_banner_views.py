@@ -6,7 +6,7 @@ from datetime import datetime
 from utils.helpers import tmp_image
 import stripe
 
-class TestMCMerchantStoreCategoryViewSet(TestCase):
+class TestMCMerchantStoreCategoryBannerViewSet(TestCase):
     
     def setUp(self):
         self.client = Client(enforce_csrf_checks=True)
@@ -180,7 +180,7 @@ class TestMCMerchantStoreCategoryViewSet(TestCase):
         
         self.store_pk = store_res.data['stores'][0]['pk']
 
-    def test_mc_merchant_store_category_create(self):
+    def test_mc_merchant_store_category_banner_create(self):
         category_res = self.client.post(
             reverse('mc-merchant-store-category-list'),
             data={
@@ -190,6 +190,17 @@ class TestMCMerchantStoreCategoryViewSet(TestCase):
             },
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
-        
+        print(category_res.data)
+        # category_pk = category_res.data['stores'][0]['categories'][0]['pk']
+
+        # res = self.client.post(
+        #     reverse('mc-merchant-store-banner-list'),
+        #     data={
+        #         'merchant_store_category': category_pk,
+        #         'image': tmp_image()
+        #     },
+        #     **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        # )
+        # print(res.data)
         # self.assertEqual(res.data['stores'][0]['categories'][0]['title'], 'Footware')
         # self.assertEqual(res.status_code, 201)
