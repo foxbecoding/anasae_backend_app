@@ -233,7 +233,7 @@ class TestMCMerchantStoreCategoryViewSet(TestCase):
         res = self.client.put(
             reverse('mc-merchant-store-category-detail', kwargs={'pk': ''}),
             data={
-                'title': 'Footware',
+                'title': "Men's Footware",
                 'description': 'Browse our Footware category'
             },
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
